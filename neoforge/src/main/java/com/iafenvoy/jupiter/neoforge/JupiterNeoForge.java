@@ -36,7 +36,7 @@ public final class JupiterNeoForge {
     public static void register(RegisterPayloadHandlerEvent event) {
         final IPayloadRegistrar registrar = event.registrar(Jupiter.MOD_ID).versioned("1");
         registrar.play(PacketByteBufC2S.ID, PacketByteBufC2S::decode, handler -> handler.server(PacketByteBufC2S::handle));
-        registrar.play(PacketByteBufS2C.ID, PacketByteBufS2C::decode, handler -> handler.server(PacketByteBufS2C::handle));
+        registrar.play(PacketByteBufS2C.ID, PacketByteBufS2C::decode, handler -> handler.client(PacketByteBufS2C::handle));
     }
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
