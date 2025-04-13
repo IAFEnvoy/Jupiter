@@ -9,10 +9,10 @@ import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -129,16 +129,16 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(context);
-        super.render(context, mouseX, mouseY, partialTicks);
-        context.drawText(this.textRenderer, this.title, 35, 10, -1, true);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
+        this.textRenderer.drawWithShadow(matrices, this.title, 35, 10, -1);
         String currentText = this.getCurrentEditText();
         int textWidth = this.textRenderer.getWidth(currentText);
-        context.drawTextWithShadow(this.textRenderer, currentText, this.width - textWidth - 10, 10, -1);
-        this.groupScrollBar.render(mouseX, mouseY, partialTicks, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
+        this.textRenderer.drawWithShadow(matrices, currentText, this.width - textWidth - 10, 10, -1);
+        this.groupScrollBar.render(mouseX, mouseY, delta, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
         if (this.groupScrollBar.isDragging()) this.updateTabPos();
-        this.itemScrollBar.render(mouseX, mouseY, partialTicks, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
+        this.itemScrollBar.render(mouseX, mouseY, delta, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 

@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.render.widget;
 
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class TextFieldWithErrorWidget extends TextFieldWidget {
@@ -13,12 +13,12 @@ public class TextFieldWithErrorWidget extends TextFieldWidget {
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         if (this.hasError) {
             this.setUneditableColor(0xFFFF0000);
             this.setEditable(false);
         }
-        super.renderButton(context, mouseX, mouseY, delta);
+        super.renderButton(matrices, mouseX, mouseY, delta);
         this.setEditable(true);
     }
 
