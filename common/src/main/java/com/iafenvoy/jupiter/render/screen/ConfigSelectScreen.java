@@ -65,7 +65,7 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         if (this.connectedToDedicatedServer()) {
             this.fakeServerConfig = new FakeConfigContainer(this.serverConfig);
             serverButton.active = false;
-            ClientConfigNetwork.startConfigSync(this.serverConfig.getConfigId(), nbt -> {
+            ClientConfigNetwork.syncConfig(this.serverConfig.getConfigId(), nbt -> {
                 if (nbt == null)
                     serverButton.setTooltip(Tooltip.of(Text.translatable("jupiter.screen.disable_server")));
                 else {

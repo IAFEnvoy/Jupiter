@@ -1,8 +1,10 @@
 package com.iafenvoy.jupiter.network;
 
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
+import com.iafenvoy.jupiter.util.Comment;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.toast.SystemToast;
@@ -18,8 +20,12 @@ import java.util.function.Consumer;
 public class ClientConfigNetwork {
     private static final Map<Identifier, Consumer<NbtCompound>> CALLBACKS = new HashMap<>();
 
-    // will pass null to string if not allowed
-    public static void startConfigSync(Identifier id, Consumer<NbtCompound> callback) {
+    public static void syncConfig(AbstractConfigContainer container) {
+        syncConfig(container.getConfigId(), container::deserializeNbt);
+    }
+
+    @Comment("will pass null to nbt if not allowed")
+    public static void syncConfig(Identifier id, Consumer<NbtCompound> callback) {
         CALLBACKS.put(id, callback);
         ClientNetworkHelper.sendToServer(new ConfigRequestPayload(id));
     }
