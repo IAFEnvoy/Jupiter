@@ -11,9 +11,9 @@ public class ServerConfigNetwork {
     public static void init() {
         ServerNetworkHelper.registerReceiver(NetworkConstants.CONFIG_REQUEST_C2S, (server, player, buf) -> {
             Identifier id = buf.readIdentifier();
-            Jupiter.LOGGER.info("Player {} request to open config {}", player.getName().getString(), id);
+            Jupiter.LOGGER.info("Player {} request to get config {}", player.getName().getString(), id);
             PacketByteBuf b = ByteBufUtil.create().writeIdentifier(id);
-            if (ServerConfigManager.checkPermission(id, server, player)) {
+            if (ServerConfigManager.checkPermission(id, server, player, false)) {
                 b.writeBoolean(true);
                 AbstractConfigContainer data = ServerConfigManager.getConfig(id);
                 assert data != null;
@@ -26,7 +26,7 @@ public class ServerConfigNetwork {
             Jupiter.LOGGER.info("Player {} request to change config {}", player.getName().getString(), id);
             NbtCompound data = buf.readNbt();
             return () -> {
-                if (ServerConfigManager.checkPermission(id, server, player)) {
+                if (ServerConfigManager.checkPermission(id, server, player, true)) {
                     AbstractConfigContainer container = ServerConfigManager.getConfig(id);
                     if (container != null) {
                         Jupiter.LOGGER.info(data.toString());
