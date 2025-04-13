@@ -15,7 +15,11 @@ public class ServerConfigManager implements SynchronousResourceReloader {
     private static final Map<Identifier, ServerConfigHolder> CONFIGS = new HashMap<>();
 
     public static void registerServerConfig(AbstractConfigContainer data, PermissionChecker checker) {
-        CONFIGS.put(data.getConfigId(), new ServerConfigHolder(data, checker));
+        registerServerConfig(data, checker, false);
+    }
+
+    public static void registerServerConfig(AbstractConfigContainer data, PermissionChecker checker, boolean allowManualSync) {
+        CONFIGS.put(data.getConfigId(), new ServerConfigHolder(data, checker, allowManualSync));
     }
 
     @Nullable
@@ -25,10 +29,10 @@ public class ServerConfigManager implements SynchronousResourceReloader {
         return holder.data;
     }
 
-    public static boolean checkPermission(Identifier id, MinecraftServer server, ServerPlayerEntity player) {
+    public static boolean checkPermission(Identifier id, MinecraftServer server, ServerPlayerEntity player, boolean modify) {
         ServerConfigHolder holder = CONFIGS.get(id);
         if (holder == null) return false;
-        return holder.checker.check(server, player);
+        return !modify && holder.allowManualSync || holder.checker.check(server, player);
     }
 
     @Override
@@ -48,6 +52,7 @@ public class ServerConfigManager implements SynchronousResourceReloader {
         boolean check(MinecraftServer server, ServerPlayerEntity player);
     }
 
-    private record ServerConfigHolder(AbstractConfigContainer data, PermissionChecker checker) {
+    private record ServerConfigHolder(AbstractConfigContainer data, PermissionChecker checker,
+                                      boolean allowManualSync) {
     }
 }

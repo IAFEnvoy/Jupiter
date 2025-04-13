@@ -10,7 +10,6 @@ import com.mojang.serialization.*;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,6 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
         return GSON.toJson(element);
     }
 
-    @ApiStatus.Internal
     @Comment("For Network Usage Only")
     public NbtElement serializeNbt() {
         if (this.cache == null) this.cache = this.buildCodec();
@@ -79,15 +77,13 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
         }
     }
 
-    @ApiStatus.Internal
     public final void deserializeJson(JsonElement element) {
         if (this.cache == null) this.cache = this.buildCodec();
         this.cache.parse(JsonOps.INSTANCE, element);
     }
 
-    @ApiStatus.Internal
-    @Comment("For Network Usage Only")
     public final void deserializeNbt(NbtElement element) {
+        if (element == null) return;
         if (this.cache == null) this.cache = this.buildCodec();
         this.cache.parse(NbtOps.INSTANCE, element);
     }
