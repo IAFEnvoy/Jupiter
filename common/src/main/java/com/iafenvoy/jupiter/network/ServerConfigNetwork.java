@@ -13,8 +13,8 @@ public class ServerConfigNetwork {
     public static void init() {
         ServerNetworkHelper.registerReceiver(ConfigRequestPayload.ID, (server, player, payload) -> {
             Identifier id = payload.id();
-            Jupiter.LOGGER.info("Player {} request to open config {}", player.getName().getString(), id);
-            boolean b = ServerConfigManager.checkPermission(id, server, player);
+            Jupiter.LOGGER.info("Player {} request to get config {}", player.getName().getString(), id);
+            boolean b = ServerConfigManager.checkPermission(id, server, player, false);
             NbtCompound compound;
             if (b) {
                 AbstractConfigContainer data = ServerConfigManager.getConfig(id);
@@ -28,7 +28,7 @@ public class ServerConfigNetwork {
             Jupiter.LOGGER.info("Player {} request to change config {}", player.getName().getString(), id);
             NbtCompound data = payload.compound();
             return () -> {
-                if (ServerConfigManager.checkPermission(id, server, player)) {
+                if (ServerConfigManager.checkPermission(id, server, player, true)) {
                     AbstractConfigContainer container = ServerConfigManager.getConfig(id);
                     if (container != null) {
                         Jupiter.LOGGER.info(data.toString());
