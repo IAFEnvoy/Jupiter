@@ -14,6 +14,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     private int textMaxLength;
 
     public AbstractConfigScreen(Screen parent, AbstractConfigContainer configContainer) {
-        super(Text.translatable(configContainer.getTitleNameKey()));
+        super(new TranslatableText(configContainer.getTitleNameKey()));
         this.parent = parent;
         this.configContainer = configContainer;
         this.currentGroup = configContainer.getConfigTabs().get(0);
@@ -44,7 +45,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(new ButtonWidget(10, 5, 20, 15, Text.of("<"), button -> this.close()));
+        this.addDrawableChild(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.close()));
         int x = 10, y = 22;
         this.groupButtons.clear();
         List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
@@ -53,7 +54,8 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
             TabButton tabButton = this.addDrawableChild(new TabButton(category, x, y, this.textRenderer.getWidth(I18n.translate(category.getTranslateKey())) + 10, 20, button -> {
                 currentTab = this.configContainer.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
-                this.clearAndInit();
+                this.clearChildren();
+                this.init();
             }));
             tabButton.active = i != currentTab;
             this.groupButtons.add(tabButton);
@@ -175,7 +177,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
         private final int baseX;
 
         public TabButton(ConfigGroup group, int baseX, int y, int width, int height, Consumer<TabButton> listener) {
-            super(baseX, y, width, height, Text.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button));
+            super(baseX, y, width, height, new TranslatableText(group.getTranslateKey()), button -> listener.accept((TabButton) button));
             this.group = group;
             this.baseX = baseX;
         }

@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 @Environment(EnvType.CLIENT)
 public class Dialog<T> extends Screen implements IJupiterScreen {
@@ -14,7 +14,7 @@ public class Dialog<T> extends Screen implements IJupiterScreen {
     private final Screen parent;
 
     protected Dialog(Screen parent, IConfigEntry<T> entry) {
-        super(Text.translatable(entry.getNameKey()));
+        super(new TranslatableText(entry.getNameKey()));
         this.parent = parent;
         this.entry = entry;
     }
@@ -29,5 +29,10 @@ public class Dialog<T> extends Screen implements IJupiterScreen {
     public void close() {
         assert this.client != null;
         this.client.setScreen(this.parent);
+    }
+
+    protected void clearAndInit() {
+        this.clearChildren();
+        this.init();
     }
 }

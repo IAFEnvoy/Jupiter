@@ -1,16 +1,16 @@
 package com.iafenvoy.jupiter.forge;
 
+import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.forge.network.PacketByteBufC2S;
 import com.iafenvoy.jupiter.forge.network.PacketByteBufS2C;
-import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.render.screen.ConfigSelectScreen;
 import com.iafenvoy.jupiter.test.TestConfig;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,7 +43,7 @@ public final class JupiterForge {
         public static void processClient(FMLClientSetupEvent event) {
             Jupiter.processClient();
             ForgeEntryPointLoader.INSTANCE.getEntries().forEach(x -> x.initializeClientConfig(ConfigManager.getInstance()));
-            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, screen) -> new ConfigSelectScreen<>(Text.translatable("jupiter.test_config"), screen, TestConfig.INSTANCE, null)));
+            ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, screen) -> new ConfigSelectScreen<>(new TranslatableText("jupiter.test_config"), screen, TestConfig.INSTANCE, null)));
         }
 
         @SubscribeEvent

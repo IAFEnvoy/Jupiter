@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -39,6 +39,6 @@ public class ClientConfigNetwork {
             } else
                 return () -> callback.accept(null);
         });
-        ClientNetworkHelper.registerReceiver(NetworkConstants.CONFIG_ERROR_S2C, (client, buf) -> () -> client.getToastManager().add(new SystemToast(SystemToast.Type.WORLD_ACCESS_FAILURE, Text.translatable("jupiter.toast.upload_config_error_title"), Text.translatable("jupiter.toast.upload_config_error_content"))));
+        ClientNetworkHelper.registerReceiver(NetworkConstants.CONFIG_ERROR_S2C, (client, buf) -> () -> client.getToastManager().add(new SystemToast(SystemToast.Type.WORLD_ACCESS_FAILURE, new TranslatableText("jupiter.toast.upload_config_error_title"), new TranslatableText("jupiter.toast.upload_config_error_content"))));
     }
 }

@@ -3,13 +3,13 @@ package com.iafenvoy.jupiter.render.widget;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 
 public class TextFieldWithErrorWidget extends TextFieldWidget {
     private boolean hasError = false;
 
     public TextFieldWithErrorWidget(TextRenderer textRenderer, int x, int y, int width, int height) {
-        super(textRenderer, x, y, width, height, Text.empty());
+        super(textRenderer, x, y, width, height, new LiteralText(""));
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
@@ -26,7 +26,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
 
     @Override
     public void addCustomElements(Consumer<ClickableWidget> appender, int x, int y, int width, int height) {
-        this.keyWidget = new TextFieldWidget(CLIENT.get().textRenderer, x, y, width / 2 - 5, height, Text.empty());
+        this.keyWidget = new TextFieldWidget(CLIENT.get().textRenderer, x, y, width / 2 - 5, height, new LiteralText(""));
         this.keyWidget.setText(this.config.getValue().getKey());
         this.keyWidget.setChangedListener(s -> this.config.setValue(new AbstractMap.SimpleEntry<>(s, this.config.getValue().getValue())));
         appender.accept(this.keyWidget);

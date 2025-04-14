@@ -11,6 +11,7 @@ import com.iafenvoy.jupiter.render.widget.builder.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class WidgetBuilderManager {
         register(ConfigTypes.INTEGER, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
         register(ConfigTypes.STRING, TextFieldWidgetBuilder::new);
-        register(ConfigTypes.ENUM, config -> new ButtonWidgetBuilder<>(config, button -> config.setValue(config.getValue().cycle(true)), () -> Text.translatable(config.getValue().getName())));
+        register(ConfigTypes.ENUM, config -> new ButtonWidgetBuilder<>(config, button -> config.setValue(config.getValue().cycle(true)), () -> new TranslatableText(config.getValue().getName())));
         register(ConfigTypes.LIST_STRING, config -> new ListWidgetBuilder<>((ListBaseEntry<String>) config));
         register(ConfigTypes.LIST_INTEGER, config -> new ListWidgetBuilder<>((ListBaseEntry<Integer>) config));
         register(ConfigTypes.LIST_DOUBLE, config -> new ListWidgetBuilder<>((ListBaseEntry<Double>) config));
