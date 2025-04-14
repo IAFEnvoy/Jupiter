@@ -7,10 +7,12 @@ import com.iafenvoy.jupiter.network.NetworkConstants;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 
+import java.util.stream.Collectors;
+
 public class FakeConfigContainer extends AbstractConfigContainer {
     public FakeConfigContainer(AbstractConfigContainer parent) {
         super(parent.getConfigId(), parent.titleNameKey);
-        this.configTabs.addAll(parent.getConfigTabs().stream().map(ConfigGroup::copy).toList());
+        this.configTabs.addAll(parent.getConfigTabs().stream().map(ConfigGroup::copy).collect(Collectors.toList()));
     }
 
     @Override

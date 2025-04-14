@@ -57,8 +57,8 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
     public String serialize() {
         if (this.cache == null) this.cache = this.buildCodec();
         JsonElement element = this.cache.encodeStart(JsonOps.INSTANCE, this.configTabs).getOrThrow(false, Jupiter.LOGGER::error);
-        if (element instanceof JsonObject obj)
-            this.writeCustomData(obj);
+        if (element instanceof JsonObject)
+            this.writeCustomData((JsonObject) element);
         return GSON.toJson(element);
     }
 
@@ -70,10 +70,10 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
 
     public void deserialize(String data) {
         JsonElement element = new JsonParser().parse(data);
-        if (element instanceof JsonObject obj) {
-            if (!this.shouldLoad(obj)) return;
-            this.deserializeJson(obj);
-            this.readCustomData(obj);
+        if (element instanceof JsonObject) {
+            if (!this.shouldLoad((JsonObject) element)) return;
+            this.deserializeJson(element);
+            this.readCustomData((JsonObject) element);
         }
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
     }
 
     protected Codec<List<ConfigGroup>> buildCodec() {
-        return MapCodec.<List<ConfigGroup>>of(new MapEncoder.Implementation<>() {
+        return MapCodec.of(new MapEncoder.Implementation<List<ConfigGroup>>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
                 return AbstractConfigContainer.this.configTabs.stream().map(ConfigGroup::getId).map(ops::createString);
@@ -100,7 +100,7 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
             public <T> RecordBuilder<T> encode(List<ConfigGroup> input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
                 return input.stream().reduce(prefix, (p, c) -> p.add(c.getId(), c.encode(ops)), (a, b) -> null);
             }
-        }, new MapDecoder.Implementation<>() {
+        }, new MapDecoder.Implementation<List<ConfigGroup>>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
                 return AbstractConfigContainer.this.configTabs.stream().map(ConfigGroup::getId).map(ops::createString);

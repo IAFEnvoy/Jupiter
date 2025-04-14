@@ -21,8 +21,9 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
         TextRenderer textRenderer = CLIENT.get().textRenderer;
         int w = textRenderer.getWidth("-"), k = 0;
         while ((k + 1) * w <= width) k++;
-        String name = "-".repeat(k);
-        this.textWidget = new TextWidget(20, y, textRenderer.getWidth(name), height, Text.of(name), textRenderer);
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < k; i++) name.append("-");
+        this.textWidget = new TextWidget(20, y, textRenderer.getWidth(name.toString()), height, Text.of(name.toString()), textRenderer);
         appender.accept(this.textWidget);
     }
 

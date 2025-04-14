@@ -25,7 +25,7 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     @Override
     public void addCustomElements(Consumer<ClickableWidget> appender, int x, int y, int width, int height) {
         MinecraftClient client = CLIENT.get();
-        this.button = new ButtonWidget(x, y, width, height, Text.of(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.currentScreen, this.config)));
+        this.button = new ButtonWidget(x, y, width, height, Text.of(String.valueOf(this.config.getValue())), button -> client.openScreen(new ListDialog<>(client.currentScreen, this.config)));
         appender.accept(this.button);
     }
 

@@ -52,7 +52,27 @@ public class ServerConfigManager implements SynchronousResourceReloader {
         boolean check(MinecraftServer server, ServerPlayerEntity player);
     }
 
-    private record ServerConfigHolder(AbstractConfigContainer data, PermissionChecker checker,
-                                      boolean allowManualSync) {
+    private static final class ServerConfigHolder {
+        private final AbstractConfigContainer data;
+        private final PermissionChecker checker;
+        private final boolean allowManualSync;
+
+        private ServerConfigHolder(AbstractConfigContainer data, PermissionChecker checker, boolean allowManualSync) {
+            this.data = data;
+            this.checker = checker;
+            this.allowManualSync = allowManualSync;
+        }
+
+        public AbstractConfigContainer data() {
+            return this.data;
+        }
+
+        public PermissionChecker checker() {
+            return this.checker;
+        }
+
+        public boolean allowManualSync() {
+            return this.allowManualSync;
+        }
     }
 }

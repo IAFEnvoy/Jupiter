@@ -1,10 +1,13 @@
 package com.iafenvoy.jupiter.config;
 
+import com.google.common.collect.ImmutableList;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ConfigGroup {
@@ -14,7 +17,7 @@ public class ConfigGroup {
     private Codec<ConfigGroup> cache;
 
     public ConfigGroup(String id, String translateKey) {
-        this(id, translateKey, List.of());
+        this(id, translateKey, ImmutableList.of());
     }
 
     public ConfigGroup(String id, String translateKey, List<IConfigEntry<?>> configs) {
@@ -43,11 +46,11 @@ public class ConfigGroup {
 
     @SuppressWarnings("unchecked")
     public ConfigGroup copy() {
-        return new ConfigGroup(this.id, this.translateKey, (List<IConfigEntry<?>>) (Object) this.configs.stream().map(IConfigEntry::newInstance).toList());
+        return new ConfigGroup(this.id, this.translateKey, (List<IConfigEntry<?>>) (Object) this.configs.stream().map(IConfigEntry::newInstance).collect(Collectors.toList()));
     }
 
     public Codec<ConfigGroup> getCodec() {
-        return MapCodec.<ConfigGroup>of(new MapEncoder.Implementation<>() {
+        return MapCodec.of(new MapEncoder.Implementation<ConfigGroup>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
                 return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).map(ops::createString);
@@ -57,7 +60,7 @@ public class ConfigGroup {
             public <T> RecordBuilder<T> encode(ConfigGroup input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
                 return input.configs.stream().reduce(prefix, (p, c) -> p.add(c.getJsonKey(), c.encode(ops)), (a, b) -> null);
             }
-        }, new MapDecoder.Implementation<>() {
+        }, new MapDecoder.Implementation<ConfigGroup>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
                 return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).map(ops::createString);

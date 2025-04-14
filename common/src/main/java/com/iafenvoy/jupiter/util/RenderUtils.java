@@ -2,7 +2,10 @@ package com.iafenvoy.jupiter.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
     public static void setupBlend() {
@@ -20,22 +23,23 @@ public class RenderUtils {
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
 
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.applyModelViewMatrix();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
+        RenderSystem.disableTexture();
         setupBlend();
+        RenderSystem.color4f(r, g, b, a);
 
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION);
 
-        buffer.vertex(x, y, zLevel).color(r, g, b, a).next();
-        buffer.vertex(x, y + height, zLevel).color(r, g, b, a).next();
-        buffer.vertex(x + width, y + height, zLevel).color(r, g, b, a).next();
-        buffer.vertex(x + width, y, zLevel).color(r, g, b, a).next();
+        buffer.vertex(x, y, zLevel).next();
+        buffer.vertex(x, y + height, zLevel).next();
+        buffer.vertex(x + width, y + height, zLevel).next();
+        buffer.vertex(x + width, y, zLevel).next();
 
         tessellator.draw();
 
+        RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
 }

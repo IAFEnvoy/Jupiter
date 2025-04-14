@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[37,)"
+loaderVersion = "[36,)"
 issueTrackerURL = "https://github.com/ArkTechMC/Jupiter/issues"
 license = "GNU LGPL 3.0"
 
@@ -16,13 +16,13 @@ logoFile = "logo.jpg"
 [[dependencies.jupiter]]
 modId = "forge"
 mandatory = true
-versionRange = "[37,)"
+versionRange = "[36,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.jupiter]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.17,1.18)"
+versionRange = "[1.16,1.17)"
 ordering = "NONE"
 side = "BOTH"

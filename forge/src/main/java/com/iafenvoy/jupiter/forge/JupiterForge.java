@@ -7,19 +7,19 @@ import com.iafenvoy.jupiter.forge.network.PacketByteBufC2S;
 import com.iafenvoy.jupiter.forge.network.PacketByteBufS2C;
 import com.iafenvoy.jupiter.render.screen.ConfigSelectScreen;
 import com.iafenvoy.jupiter.test.TestConfig;
+import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fmlclient.ConfigGuiHandler;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 @Mod(Jupiter.MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -43,12 +43,10 @@ public final class JupiterForge {
         public static void processClient(FMLClientSetupEvent event) {
             Jupiter.processClient();
             ForgeEntryPointLoader.INSTANCE.getEntries().forEach(x -> x.initializeClientConfig(ConfigManager.getInstance()));
-            ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, screen) -> new ConfigSelectScreen<>(new TranslatableText("jupiter.test_config"), screen, TestConfig.INSTANCE, null)));
-        }
-
-        @SubscribeEvent
-        public static void registerClientListener(RegisterClientReloadListenersEvent event) {
-            event.registerReloadListener(ConfigManager.getInstance());
+            ReloadableResourceManager resourceManager = ((ReloadableResourceManager) event.getMinecraftSupplier().get().getResourceManager());
+            resourceManager.registerReloader(ConfigManager.getInstance());
+            ConfigManager.getInstance().reload(resourceManager);
+            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (client, screen) -> new ConfigSelectScreen<>(new TranslatableText("jupiter.test_config"), screen, TestConfig.INSTANCE, null));
         }
     }
 

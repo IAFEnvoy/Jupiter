@@ -24,9 +24,4 @@ public class TextTooltip implements ButtonWidget.TooltipSupplier {
     public void onTooltip(ButtonWidget button, MatrixStack matrices, int mouseX, int mouseY) {
         this.screen.renderTooltip(matrices, this.text, mouseX, mouseY);
     }
-
-    @Override
-    public void supply(Consumer<Text> consumer) {
-        consumer.accept(this.text);
-    }
 }

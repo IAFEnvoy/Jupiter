@@ -11,6 +11,7 @@ import org.objectweb.asm.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ForgeEntryPointLoader extends EntryPointLoader {
     public static final ForgeEntryPointLoader INSTANCE = new ForgeEntryPointLoader();
@@ -28,14 +29,14 @@ public class ForgeEntryPointLoader extends EntryPointLoader {
                 .stream()
                 .map(scanData -> scanData.getAnnotations()
                         .stream()
-                        .filter(x -> x.annotationType().equals(configAnnotation))
-                        .map(ModFileScanData.AnnotationData::memberName)
+                        .filter(x -> x.getAnnotationType().equals(configAnnotation))
+                        .map(ModFileScanData.AnnotationData::getMemberName)
                         .map(ReflectUtil::getClassUnsafely)
                         .filter(Objects::nonNull)
                         .map(ReflectUtil::constructUnsafely)
                         .filter(x -> x instanceof JupiterConfigEntry)
                         .map(x -> (JupiterConfigEntry) x)
-                        .toList())
+                        .collect(Collectors.toList()))
                 .reduce(new ArrayList<>(), ForgeEntryPointLoader::combine);
     }
 }

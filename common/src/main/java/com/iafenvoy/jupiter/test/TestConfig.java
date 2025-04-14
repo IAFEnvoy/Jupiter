@@ -1,14 +1,13 @@
 package com.iafenvoy.jupiter.test;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
 
 public class TestConfig extends FileConfigContainer {
     public static final TestConfig INSTANCE = new TestConfig();
@@ -24,8 +23,8 @@ public class TestConfig extends FileConfigContainer {
                 .add(new IntegerEntry("this is int", 0))
                 .add(new IntegerEntry("this is int with range", 0, -10, 10))
                 .add(new StringEntry("this is string", ""))
-                .add(new ListStringEntry("this is string list", List.of("1", "2", "3", "4", "5")))
-                .add(new MapStringEntry("this is string map", Map.of("1", "1", "2", "2")))
+                .add(new ListStringEntry("this is string list", ImmutableList.of("1", "2", "3", "4", "5")))
+                .add(new MapStringEntry("this is string map", ImmutableMap.of("1", "1", "2", "2")))
                 .add(new SeparatorEntry())
                 .add(new IntegerEntry("this is int", 0).restartRequired())
                 .add(new IntegerEntry("this is int", 0))

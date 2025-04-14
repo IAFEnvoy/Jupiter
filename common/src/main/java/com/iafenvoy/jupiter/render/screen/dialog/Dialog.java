@@ -28,11 +28,12 @@ public class Dialog<T> extends Screen implements IJupiterScreen {
     @Override
     public void onClose() {
         assert this.client != null;
-        this.client.setScreen(this.parent);
+        this.client.openScreen(this.parent);
     }
 
     protected void clearAndInit() {
-        this.clearChildren();
+        this.buttons.clear();
+        this.children.clear();
         this.init();
     }
 }

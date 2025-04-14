@@ -30,8 +30,8 @@ public class ListDialog<T> extends Dialog<List<T>> {
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
-        this.addDrawableChild(new ButtonWidget(this.width - 60, 5, 20, 20, Text.of("+"), button -> {
+        this.addButton(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
+        this.addButton(new ButtonWidget(this.width - 60, 5, 20, 20, Text.of("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
             this.clearAndInit();
         }));
@@ -41,7 +41,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
         for (int i = 0; i < values.size(); i++) {
             WidgetBuilder<T> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(values.get(i), i, this::clearAndInit));
             this.widgets.add(widget);
-            widget.addDialogElements(this::addDrawableChild, i + ":", 40, 0, Math.max(10, this.width - 70), ITEM_HEIGHT);
+            widget.addDialogElements(this::addButton, i + ":", 40, 0, Math.max(10, this.width - 70), ITEM_HEIGHT);
         }
         this.updateItemPos();
     }

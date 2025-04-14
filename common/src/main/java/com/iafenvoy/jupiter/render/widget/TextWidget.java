@@ -1,7 +1,6 @@
 package com.iafenvoy.jupiter.render.widget;
 
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -30,10 +29,6 @@ public class TextWidget extends ClickableWidget {
         int x = this.x + Math.round(0.5F * (float) (this.getWidth() - textRenderer.getWidth(text)));
         int y = this.y + (this.getHeight() - 9) / 2;
         textRenderer.drawWithShadow(matrices, text, x, y, -1);
-    }
-
-    @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
     }
 
     protected final TextRenderer getTextRenderer() {

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 public abstract class AbstractConfigScreen extends Screen implements IJupiterScreen {
@@ -45,16 +46,17 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
+        this.addButton(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
         int x = 10, y = 22;
         this.groupButtons.clear();
         List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
         for (int i = 0; i < configTabs.size(); i++) {
             ConfigGroup category = configTabs.get(i);
-            TabButton tabButton = this.addDrawableChild(new TabButton(category, x, y, this.textRenderer.getWidth(I18n.translate(category.getTranslateKey())) + 10, 20, button -> {
+            TabButton tabButton = this.addButton(new TabButton(category, x, y, this.textRenderer.getWidth(I18n.translate(category.getTranslateKey())) + 10, 20, button -> {
                 currentTab = this.configContainer.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
-                this.clearChildren();
+                this.buttons.clear();
+                this.children.clear();
                 this.init();
             }));
             tabButton.active = i != currentTab;
@@ -66,8 +68,8 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
         this.calculateMaxItems();
         this.textMaxLength = this.currentGroup.getConfigs().stream().map(IConfigEntry::getNameKey).map(I18n::translate).map(t -> this.textRenderer.getWidth(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
-        this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(WidgetBuilderManager::get).toList());
-        this.configWidgets.forEach(b -> b.addElements(this::addDrawableChild, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
+        this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(WidgetBuilderManager::get).collect(Collectors.toList()));
+        this.configWidgets.forEach(b -> b.addElements(this::addButton, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
         this.updateItemPos();
     }
 
@@ -127,7 +129,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     public void onClose() {
         this.configContainer.onConfigsChanged();
         assert this.client != null;
-        this.client.setScreen(this.parent);
+        this.client.openScreen(this.parent);
     }
 
     @Override

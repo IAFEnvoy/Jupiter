@@ -39,23 +39,23 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         int x = this.width / 2;
         int y = this.height / 2;
         //Back
-        this.addDrawableChild(new ButtonWidget(x - 100, y - 25 - 10, 200, 20, new TranslatableText("jupiter.screen.back"), button -> {
+        this.addButton(new ButtonWidget(x - 100, y - 25 - 10, 200, 20, new TranslatableText("jupiter.screen.back"), button -> {
             assert this.client != null;
-            this.client.setScreen(this.parent);
+            this.client.openScreen(this.parent);
         }));
         //Server
         final TextTooltip serverTooltip = new TextTooltip(this, new TranslatableText("jupiter.screen.check_server"));
-        final ButtonWidget serverButton = this.addDrawableChild(new ButtonWidget(x - 100, y - 10, 200, 20, new TranslatableText("jupiter.screen.server_config"), button -> {
+        final ButtonWidget serverButton = this.addButton(new ButtonWidget(x - 100, y - 10, 200, 20, new TranslatableText("jupiter.screen.server_config"), button -> {
             assert this.client != null;
             assert this.serverConfig != null;
-            this.client.setScreen(new ServerConfigScreen(this, this.getServerConfig()));
+            this.client.openScreen(new ServerConfigScreen(this, this.getServerConfig()));
         }, serverTooltip));
         serverButton.active = true;
         //Client
-        final ButtonWidget clientButton = this.addDrawableChild(new ButtonWidget(x - 100, y + 25 - 10, 200, 20, new TranslatableText("jupiter.screen.client_config"), button -> {
+        final ButtonWidget clientButton = this.addButton(new ButtonWidget(x - 100, y + 25 - 10, 200, 20, new TranslatableText("jupiter.screen.client_config"), button -> {
             assert this.client != null;
             assert this.clientConfig != null;
-            this.client.setScreen(new ClientConfigScreen(this, this.clientConfig));
+            this.client.openScreen(new ClientConfigScreen(this, this.clientConfig));
         }, new TextTooltip(this, new TranslatableText(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client"))));
         clientButton.active = this.clientConfig != null;
 
@@ -91,7 +91,7 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
     @Override
     public void onClose() {
         assert this.client != null;
-        this.client.setScreen(this.parent);
+        this.client.openScreen(this.parent);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
 
     public TextFieldWidgetBuilder(IConfigEntry<T> config) {
         super(config);
-        if (config instanceof ITextFieldConfig t) this.textFieldConfig = t;
+        if (config instanceof ITextFieldConfig) this.textFieldConfig = (ITextFieldConfig) config;
         else throw new IllegalArgumentException("TextFieldWidgetBuilder only accept ITextFieldConfig");
     }
 

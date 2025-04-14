@@ -31,8 +31,8 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
-        this.addDrawableChild(new ButtonWidget(this.width - 60, 5, 20, 20, Text.of("+"), button -> {
+        this.addButton(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
+        this.addButton(new ButtonWidget(this.width - 60, 5, 20, 20, Text.of("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
             this.clearAndInit();
         }));
@@ -42,7 +42,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
         for (Map.Entry<String, T> entry : values.entrySet()) {
             WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(entry.getValue(), entry.getKey(), this::clearAndInit));
             this.widgets.add(widget);
-            widget.addDialogElements(this::addDrawableChild, "", 10, 0, Math.max(10, this.width - 40), ITEM_HEIGHT);
+            widget.addDialogElements(this::addButton, "", 10, 0, Math.max(10, this.width - 40), ITEM_HEIGHT);
         }
         this.updateItemPos();
     }
