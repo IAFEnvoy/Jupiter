@@ -89,13 +89,13 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         assert this.client != null;
         this.client.setScreen(this.parent);
     }
 
     @Override
-    public boolean shouldPause() {
+    public boolean isPauseScreen() {
         return true;
     }
 

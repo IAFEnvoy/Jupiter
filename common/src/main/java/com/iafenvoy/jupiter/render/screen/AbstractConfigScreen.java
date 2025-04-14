@@ -45,7 +45,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.close()));
+        this.addDrawableChild(new ButtonWidget(10, 5, 20, 20, Text.of("<"), button -> this.onClose()));
         int x = 10, y = 22;
         this.groupButtons.clear();
         List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
@@ -102,7 +102,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            this.close();
+            this.onClose();
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -124,7 +124,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         this.configContainer.onConfigsChanged();
         assert this.client != null;
         this.client.setScreen(this.parent);

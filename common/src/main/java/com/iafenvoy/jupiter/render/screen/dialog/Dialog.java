@@ -26,7 +26,7 @@ public class Dialog<T> extends Screen implements IJupiterScreen {
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         assert this.client != null;
         this.client.setScreen(this.parent);
     }

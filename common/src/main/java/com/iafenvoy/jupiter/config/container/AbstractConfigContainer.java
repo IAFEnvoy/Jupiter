@@ -69,7 +69,7 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
     }
 
     public void deserialize(String data) {
-        JsonElement element = JsonParser.parseString(data);
+        JsonElement element = new JsonParser().parse(data);
         if (element instanceof JsonObject obj) {
             if (!this.shouldLoad(obj)) return;
             this.deserializeJson(obj);
