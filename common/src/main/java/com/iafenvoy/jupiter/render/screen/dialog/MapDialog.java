@@ -31,11 +31,11 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(ButtonWidget.builder(Text.of("<"), button -> this.close()).dimensions(10, 5, 20, 15).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.of("+"), button -> {
+        this.addDrawableChild(new ButtonWidget(10, 5, 20, 15, Text.of("<"), button -> this.close()));
+        this.addDrawableChild(new ButtonWidget(this.width - 60, 5, 20, 20, Text.of("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
             this.clearAndInit();
-        }).dimensions(this.width - 60, 5, 20, 20).build());
+        }));
         this.calculateMaxItems();
         this.widgets.clear();
         Map<String, T> values = this.entry.getValue();

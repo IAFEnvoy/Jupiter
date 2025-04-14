@@ -2,11 +2,7 @@ package com.iafenvoy.jupiter.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.*;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 
 public class RenderUtils {
     public static void setupBlend() {
@@ -24,7 +20,7 @@ public class RenderUtils {
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
 
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         RenderSystem.applyModelViewMatrix();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();

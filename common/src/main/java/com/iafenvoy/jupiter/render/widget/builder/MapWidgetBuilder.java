@@ -25,7 +25,7 @@ public class MapWidgetBuilder<T> extends WidgetBuilder<Map<String, T>> {
     @Override
     public void addCustomElements(Consumer<ClickableWidget> appender, int x, int y, int width, int height) {
         MinecraftClient client = CLIENT.get();
-        this.button = ButtonWidget.builder(Text.of(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.currentScreen, this.config))).dimensions(x, y, width, height).build();
+        this.button = new ButtonWidget(x, y, width, height, Text.of(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.currentScreen, this.config)));
         appender.accept(this.button);
     }
 
@@ -33,7 +33,7 @@ public class MapWidgetBuilder<T> extends WidgetBuilder<Map<String, T>> {
     public void updateCustom(boolean visible, int y) {
         if (this.button == null) return;
         this.button.visible = visible;
-        this.button.setY(y);
+        this.button.y = y;
     }
 
     @Override

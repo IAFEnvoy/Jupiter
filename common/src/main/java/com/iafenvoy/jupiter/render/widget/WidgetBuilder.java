@@ -7,8 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.TextWidget;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
@@ -30,24 +28,24 @@ public abstract class WidgetBuilder<T> {
         TextRenderer textRenderer = CLIENT.get().textRenderer;
         this.textWidget = new TextWidget(20, y, textRenderer.getWidth(text), height, Text.of(text), textRenderer);
         appender.accept(this.textWidget);
-        this.resetButton = ButtonWidget.builder(Text.translatable("jupiter.screen.button.remove"), button -> {
+        this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, Text.translatable("jupiter.screen.button.remove"), button -> {
             this.config.reset();
             this.refresh();
-        }).dimensions(x + width - 50, y, 50, height).build();
+        });
         this.refreshResetButton(true);
         appender.accept(this.resetButton);
         this.addCustomElements(appender, x, y, width - 55, height);
     }
 
     public void addElements(Consumer<ClickableWidget> appender, int x, int y, int width, int height) {
-        String name =this.config.getPrettyName();
+        String name = this.config.getPrettyName();
         TextRenderer textRenderer = CLIENT.get().textRenderer;
         this.textWidget = new TextWidget(20, y, textRenderer.getWidth(name), height, Text.of(name), textRenderer);
         appender.accept(this.textWidget);
-        this.resetButton = ButtonWidget.builder(Text.translatable("jupiter.screen.button.reset"), button -> {
+        this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, Text.translatable("jupiter.screen.button.reset"), button -> {
             this.config.reset();
             this.refresh();
-        }).dimensions(x + width - 50, y, 50, height).build();
+        });
         this.refreshResetButton(false);
         this.config.registerCallback(v -> this.refreshResetButton(false));
         appender.accept(this.resetButton);
@@ -67,11 +65,11 @@ public abstract class WidgetBuilder<T> {
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {
             this.textWidget.visible = visible;
-            this.textWidget.setY(y);
+            this.textWidget.y = y;
         }
         if (this.resetButton != null) {
             this.resetButton.visible = visible;
-            this.resetButton.setY(y);
+            this.resetButton.y = y;
         }
         this.updateCustom(visible, y);
     }

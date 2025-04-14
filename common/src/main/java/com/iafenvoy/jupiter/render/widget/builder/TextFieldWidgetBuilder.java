@@ -45,7 +45,7 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
     public void updateCustom(boolean visible, int y) {
         if (this.widget == null) return;
         this.widget.visible = visible;
-        this.widget.setY(y);
+        this.widget.y = y;
     }
 
     @Override

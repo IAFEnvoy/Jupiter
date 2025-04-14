@@ -1,11 +1,11 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.widget.TextWidget;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.Text;
 
 import java.util.function.Consumer;

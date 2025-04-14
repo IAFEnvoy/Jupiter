@@ -5,10 +5,10 @@ import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
+import com.iafenvoy.jupiter.util.TextTooltip;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.util.math.MatrixStack;
@@ -38,28 +38,24 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         int x = this.width / 2;
         int y = this.height / 2;
         //Back
-        this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("jupiter.screen.back"), button -> {
+        this.addDrawableChild(new ButtonWidget(x - 100, y - 25 - 10, 200, 20, Text.translatable("jupiter.screen.back"), button -> {
             assert this.client != null;
             this.client.setScreen(this.parent);
-        }).dimensions(x - 100, y - 25 - 10, 200, 20)
-                .build());
+        }));
         //Server
-        final ButtonWidget serverButton = this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("jupiter.screen.server_config"), button -> {
+        final TextTooltip serverTooltip = new TextTooltip(this, Text.translatable("jupiter.screen.check_server"));
+        final ButtonWidget serverButton = this.addDrawableChild(new ButtonWidget(x - 100, y - 10, 200, 20, Text.translatable("jupiter.screen.server_config"), button -> {
             assert this.client != null;
             assert this.serverConfig != null;
             this.client.setScreen(new ServerConfigScreen(this, this.getServerConfig()));
-        }).tooltip(Tooltip.of(Text.translatable("jupiter.screen.check_server")))
-                .dimensions(x - 100, y - 10, 200, 20)
-                .build());
+        }, serverTooltip));
         serverButton.active = true;
         //Client
-        final ButtonWidget clientButton = this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("jupiter.screen.client_config"), button -> {
+        final ButtonWidget clientButton = this.addDrawableChild(new ButtonWidget(x - 100, y + 25 - 10, 200, 20, Text.translatable("jupiter.screen.client_config"), button -> {
             assert this.client != null;
             assert this.clientConfig != null;
             this.client.setScreen(new ClientConfigScreen(this, this.clientConfig));
-        }).tooltip(Tooltip.of(Text.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")))
-                .dimensions(x - 100, y + 25 - 10, 200, 20)
-                .build());
+        }, new TextTooltip(this, Text.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client"))));
         clientButton.active = this.clientConfig != null;
 
         if (this.connectedToDedicatedServer()) {
@@ -67,20 +63,20 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
             serverButton.active = false;
             ClientConfigNetwork.syncConfig(this.serverConfig.getConfigId(), nbt -> {
                 if (nbt == null)
-                    serverButton.setTooltip(Tooltip.of(Text.translatable("jupiter.screen.disable_server")));
+                    serverTooltip.update(Text.translatable("jupiter.screen.disable_server"));
                 else {
                     try {
                         assert this.fakeServerConfig != null;
                         this.fakeServerConfig.deserializeNbt(nbt);
-                        serverButton.setTooltip(Tooltip.of(Text.translatable("jupiter.screen.open_server")));
+                        serverTooltip.update(Text.translatable("jupiter.screen.open_server"));
                         serverButton.active = true;
                     } catch (Exception e) {
                         Jupiter.LOGGER.error("Failed to parse server config data from server: {}", this.serverConfig.getConfigId(), e);
-                        serverButton.setTooltip(Tooltip.of(Text.translatable("jupiter.screen.error_server")));
+                        serverTooltip.update(Text.translatable("jupiter.screen.error_server"));
                     }
                 }
             });
-        } else serverButton.setTooltip(Tooltip.of(Text.translatable("jupiter.screen.open_server")));
+        } else serverTooltip.update(Text.translatable("jupiter.screen.open_server"));
     }
 
     @Override

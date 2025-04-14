@@ -30,7 +30,7 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
 
     @Override
     public void addCustomElements(Consumer<ClickableWidget> appender, int x, int y, int width, int height) {
-        this.button = ButtonWidget.builder(this.nameSupplier.get(), this.action).dimensions(x, y, width, height).build();
+        this.button = new ButtonWidget(x, y, width, height, this.nameSupplier.get(), this.action);
         appender.accept(this.button);
     }
 
@@ -38,7 +38,7 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     public void updateCustom(boolean visible, int y) {
         if (this.button == null) return;
         this.button.visible = visible;
-        this.button.setY(y);
+        this.button.y = y;
     }
 
     @Override

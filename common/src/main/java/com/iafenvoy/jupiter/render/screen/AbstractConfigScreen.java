@@ -44,7 +44,7 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
     @Override
     protected void init() {
         super.init();
-        this.addDrawableChild(ButtonWidget.builder(Text.of("<"), button -> this.close()).dimensions(10, 5, 20, 15).build());
+        this.addDrawableChild(new ButtonWidget(10, 5, 20, 15, Text.of("<"), button -> this.close()));
         int x = 10, y = 22;
         this.groupButtons.clear();
         List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
@@ -175,13 +175,13 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
         private final int baseX;
 
         public TabButton(ConfigGroup group, int baseX, int y, int width, int height, Consumer<TabButton> listener) {
-            super(baseX, y, width, height, Text.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button), DEFAULT_NARRATION_SUPPLIER);
+            super(baseX, y, width, height, Text.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button));
             this.group = group;
             this.baseX = baseX;
         }
 
         public void updatePos(int offsetX) {
-            this.setX(this.baseX - offsetX);
+            this.x = this.baseX - offsetX;
         }
     }
 }
