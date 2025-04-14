@@ -35,8 +35,7 @@ iii.`ServerConfigScreen`: Create a server config edit screen. **Not include perm
 
 ## Other Version
 
-We will only update to newer versions when our other mods are needed. Request if you want other versions. (Except 1.16
-and below.)
+We will only update to newer versions when our other mods are needed.
 
 ## Discord
 
