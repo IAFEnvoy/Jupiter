@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ConfigManager implements SynchronousResourceReloader {
     private static final ConfigManager INSTANCE = new ConfigManager();
@@ -34,7 +35,11 @@ public class ConfigManager implements SynchronousResourceReloader {
 
     @Override
     public void reload(ResourceManager manager) {
-        configHandlers.values().forEach(IConfigHandler::load);
-        Jupiter.LOGGER.info("Successfully reload {} common config(s).", configHandlers.size());
+        this.configHandlers.values().forEach(IConfigHandler::load);
+        Jupiter.LOGGER.info("Successfully reload {} common config(s).", this.configHandlers.size());
+    }
+
+    public Stream<IConfigHandler> getAllHandlers() {
+        return this.configHandlers.values().stream();
     }
 }

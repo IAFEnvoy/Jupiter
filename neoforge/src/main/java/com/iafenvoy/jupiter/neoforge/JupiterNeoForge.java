@@ -5,12 +5,10 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.network.neoforge.ClientNetworkHelperImpl;
 import com.iafenvoy.jupiter.network.neoforge.ServerNetworkHelperImpl;
-import com.iafenvoy.jupiter.render.screen.ConfigSelectScreen;
-import com.iafenvoy.jupiter.test.TestConfig;
+import com.iafenvoy.jupiter.render.internal.JupiterConfigListScreen;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.text.Text;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
@@ -60,7 +58,7 @@ public final class JupiterNeoForge {
         public static void processClient(FMLClientSetupEvent event) {
             Jupiter.processClient();
             NeoForgeEntryPointLoader.INSTANCE.getEntries().forEach(x -> x.initializeClientConfig(ConfigManager.getInstance()));
-            ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, screen) -> new ConfigSelectScreen<>(Text.translatable("jupiter.test_config"), screen, TestConfig.INSTANCE, null));
+            ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, parent) -> new JupiterConfigListScreen(parent));
         }
 
         @SubscribeEvent
