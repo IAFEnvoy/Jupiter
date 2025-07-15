@@ -23,9 +23,6 @@
     ],
     "modmenu": [
       "com.iafenvoy.jupiter.fabric.compat.ModMenu"
-    ],
-    "jupiter": [
-      "com.iafenvoy.jupiter.test.TestConfigEntry"
     ]
   },
   "depends": {
