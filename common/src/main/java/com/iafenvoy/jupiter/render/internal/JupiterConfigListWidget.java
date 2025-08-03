@@ -19,6 +19,7 @@ public class JupiterConfigListWidget extends AlwaysSelectedEntryListWidget<Jupit
     public JupiterConfigListWidget(JupiterConfigListScreen screen, MinecraftClient client, int left, int right, int top, int bottom, int entryHeight) {
         super(client, right - left, bottom - top, top, bottom, entryHeight);
         this.screen = screen;
+        this.setRenderHorizontalShadows(false);
         this.updateSize(left, right, top, bottom);
     }
 
