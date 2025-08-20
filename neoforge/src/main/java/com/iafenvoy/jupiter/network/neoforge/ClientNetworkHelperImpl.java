@@ -3,7 +3,7 @@ package com.iafenvoy.jupiter.network.neoforge;
 import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.CustomPayload;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class ClientNetworkHelperImpl {
     public static final Map<CustomPayload.Id<CustomPayload>, ClientNetworkHelper.Handler<CustomPayload>> RECEIVERS = new HashMap<>();
 
     public static void sendToServer(CustomPayload payload) {
-        PacketDistributor.sendToServer(payload);
+        ClientPacketDistributor.sendToServer(payload);
     }
 
     @SuppressWarnings("unchecked")

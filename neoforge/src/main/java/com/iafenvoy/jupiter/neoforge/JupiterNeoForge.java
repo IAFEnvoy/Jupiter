@@ -19,9 +19,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.Map;
@@ -43,7 +43,7 @@ public final class JupiterNeoForge {
         Jupiter.init();
         final PayloadRegistrar registrar = event.registrar("1");
         for (Map.Entry<CustomPayload.Id<CustomPayload>, PacketCodec<PacketByteBuf, CustomPayload>> entry : ServerNetworkHelperImpl.TYPES.entrySet())
-            registrar.playBidirectional(entry.getKey(), entry.getValue(), new DirectionalPayloadHandler<>(ServerNetworkHelperImpl::handleData, ClientNetworkHelperImpl::handleData));
+            registrar.playBidirectional(entry.getKey(), entry.getValue(), ServerNetworkHelperImpl::handleData);
     }
 
     @SubscribeEvent
@@ -63,6 +63,12 @@ public final class JupiterNeoForge {
         @SubscribeEvent
         public static void registerClientListener(AddClientReloadListenersEvent event) {
             event.addListener(Identifier.of(Jupiter.MOD_ID, "client_config_reload"), ConfigManager.getInstance());
+        }
+
+        @SubscribeEvent
+        public static void register(RegisterClientPayloadHandlersEvent event) {
+            for (Map.Entry<CustomPayload.Id<CustomPayload>, PacketCodec<PacketByteBuf, CustomPayload>> entry : ServerNetworkHelperImpl.TYPES.entrySet())
+                event.register(entry.getKey(), ClientNetworkHelperImpl::handleData);
         }
     }
 }
