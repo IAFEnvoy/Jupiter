@@ -25,16 +25,16 @@ public class ConfigGroup {
 
     public ConfigGroup add(IConfigEntry<?> config) {
         this.configs.add(config);
-        cache = null;
+        this.cache = null;
         return this;
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public String getTranslateKey() {
-        return translateKey;
+        return this.translateKey;
     }
 
     public List<IConfigEntry<?>> getConfigs() {

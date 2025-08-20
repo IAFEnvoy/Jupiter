@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.render.screen.scrollbar;
 
-import com.iafenvoy.jupiter.util.RenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
@@ -51,16 +51,16 @@ public class HorizontalScrollBar {
         this.dragging = isDragging;
     }
 
-    public void render(int mouseX, int mouseY, float partialTicks, int xPosition, int yPosition, int width, int height, int totalWidth) {
+    public void render(DrawContext context, int mouseX, int mouseY, int xPosition, int yPosition, int width, int height, int totalWidth) {
         if (this.renderScrollbarBackground)
-            RenderUtils.drawRect(xPosition, yPosition, width, height, this.backgroundColor);
+            context.fill(xPosition, yPosition, width, height, this.backgroundColor);
         if (totalWidth > 0) {
             int slideWidth = width - 2;
             float relative = Math.min(1.0F, (float) slideWidth / (float) totalWidth);
             int barWidth = (int) (relative * slideWidth);
             int barTravel = slideWidth - barWidth;
             int barPosition = xPosition + 1 + (this.maxValue > 0 ? (int) ((this.currentValue / (float) this.maxValue) * barTravel) : 0);
-            RenderUtils.drawRect(barPosition, yPosition + 1, barWidth, height - 2, this.foregroundColor);
+            context.fill(barPosition, yPosition + 1, barWidth, height - 2, this.foregroundColor);
             this.mouseOver = mouseY > yPosition && mouseY < yPosition + height && mouseX > barPosition && mouseX < barPosition + barWidth;
             this.handleDrag(mouseX, barTravel);
         }
@@ -77,6 +77,6 @@ public class HorizontalScrollBar {
     }
 
     public boolean isDragging() {
-        return dragging;
+        return this.dragging;
     }
 }

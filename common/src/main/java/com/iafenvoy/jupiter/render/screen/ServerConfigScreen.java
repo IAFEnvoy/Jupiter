@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 
 @Environment(EnvType.CLIENT)
-public class ServerConfigScreen extends AbstractConfigScreen{
+public class ServerConfigScreen extends AbstractConfigScreen {
     public ServerConfigScreen(Screen parent, AbstractConfigContainer configContainer) {
         super(parent, configContainer);
     }

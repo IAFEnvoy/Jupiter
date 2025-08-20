@@ -11,6 +11,6 @@ public class ListConfigType<T> extends ConfigType<List<T>> {
     }
 
     public ConfigType<T> getSingleType() {
-        return singleType;
+        return this.singleType;
     }
 }

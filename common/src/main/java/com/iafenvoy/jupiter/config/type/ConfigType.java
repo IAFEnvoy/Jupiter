@@ -8,7 +8,7 @@ public class ConfigType<T> {
     }
 
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     public enum Type {

@@ -11,6 +11,6 @@ public class MapConfigType<T> extends ConfigType<Map<String, T>> {
     }
 
     public ConfigType<T> getSingleType() {
-        return singleType;
+        return this.singleType;
     }
 }

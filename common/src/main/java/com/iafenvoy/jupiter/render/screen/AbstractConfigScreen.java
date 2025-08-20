@@ -51,11 +51,11 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
         for (int i = 0; i < configTabs.size(); i++) {
             ConfigGroup category = configTabs.get(i);
             TabButton tabButton = this.addDrawableChild(new TabButton(category, x, y, this.textRenderer.getWidth(I18n.translate(category.getTranslateKey())) + 10, 20, button -> {
-                currentTab = this.configContainer.getConfigTabs().indexOf(button.group);
+                this.currentTab = this.configContainer.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
                 this.clearAndInit();
             }));
-            tabButton.active = i != currentTab;
+            tabButton.active = i != this.currentTab;
             this.groupButtons.add(tabButton);
             x += tabButton.getWidth() + 2;
         }
@@ -136,9 +136,9 @@ public abstract class AbstractConfigScreen extends Screen implements IJupiterScr
         String currentText = this.getCurrentEditText();
         int textWidth = this.textRenderer.getWidth(currentText);
         context.drawTextWithShadow(this.textRenderer, currentText, this.width - textWidth - 10, 10, -1);
-        this.groupScrollBar.render(mouseX, mouseY, partialTicks, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
+        this.groupScrollBar.render(context, mouseX, mouseY, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
         if (this.groupScrollBar.isDragging()) this.updateTabPos();
-        this.itemScrollBar.render(mouseX, mouseY, partialTicks, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
+        this.itemScrollBar.render(context, mouseX, mouseY, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 

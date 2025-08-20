@@ -81,7 +81,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
     public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(context, mouseX, mouseY, partialTicks);
         super.render(context, mouseX, mouseY, partialTicks);
-        this.itemScrollBar.render(mouseX, mouseY, partialTicks, this.width - 18, 25, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
+        this.itemScrollBar.render(context, mouseX, mouseY, this.width - 18, 25, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 

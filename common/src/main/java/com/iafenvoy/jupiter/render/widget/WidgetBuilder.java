@@ -8,7 +8,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextWidget;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
@@ -40,7 +39,7 @@ public abstract class WidgetBuilder<T> {
     }
 
     public void addElements(Consumer<ClickableWidget> appender, int x, int y, int width, int height) {
-        String name =this.config.getPrettyName();
+        String name = this.config.getPrettyName();
         TextRenderer textRenderer = CLIENT.get().textRenderer;
         this.textWidget = new TextWidget(20, y, textRenderer.getWidth(name), height, Text.of(name), textRenderer);
         appender.accept(this.textWidget);
@@ -81,6 +80,6 @@ public abstract class WidgetBuilder<T> {
     public abstract void refresh();
 
     public boolean canSave() {
-        return canSave;
+        return this.canSave;
     }
 }

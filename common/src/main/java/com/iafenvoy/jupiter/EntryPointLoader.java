@@ -10,11 +10,11 @@ public abstract class EntryPointLoader {
     private List<JupiterConfigEntry> entries;
 
     public List<JupiterConfigEntry> getEntries() {
-        if (entries == null) {
-            entries = loadEntries();
-            Jupiter.LOGGER.info("{} Jupiter entrypoint(s) detected: {}", entries.size(), entries.stream().map(JupiterConfigEntry::getId).map(Identifier::toString).collect(Collectors.joining(", ")));
+        if (this.entries == null) {
+            this.entries = this.loadEntries();
+            Jupiter.LOGGER.info("{} Jupiter entrypoint(s) detected: {}", this.entries.size(), this.entries.stream().map(JupiterConfigEntry::getId).map(Identifier::toString).collect(Collectors.joining(", ")));
         }
-        return entries;
+        return this.entries;
     }
 
     protected abstract List<JupiterConfigEntry> loadEntries();
