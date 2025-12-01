@@ -1,32 +1,27 @@
 {
   "schemaVersion": 1,
-  "id": "modtemplate",
-  "name": "Mod Template",
+  "id": "jupiter",
+  "name": "Jupiter",
   "version": "${version}",
-  "authors": ["A Mod Author"],
+  "authors": [
+    "IAFEnvoy"
+  ],
   "contact": {
-    "sources": "",
-    "issues": ""
+    "sources": "https://github.com/IAFEnvoy/Jupiter",
+    "issues": "https://github.com/IAFEnvoy/Jupiter/issues"
   },
-  "description": "A Mod Description",
-  "icon": "assets/icon.png",
-  "license": "MIT",
+  "description": "A powerful, auto sync config library.",
+  "icon": "logo.png",
+  "license": "LGPL-3.0",
   "environment": "*",
-  "accessWidener": "modtemplate.accesswidener",
   "entrypoints": {
     "main": [
-      "dev.spagurder.modtemplate.fabric.FabricEntrypoint"
+      "com.iafenvoy.jupiter.jupiter.fabric.FabricEntrypoint"
     ],
     "client": [
-      "dev.spagurder.modtemplate.fabric.FabricClientEntrypoint"
-    ],
-    "fabric-datagen": [
-      "dev.spagurder.modtemplate.fabric.datagen.FabricDataGeneratorEntrypoint"
+      "com.iafenvoy.jupiter.jupiter.fabric.FabricClientEntrypoint"
     ]
   },
-  "mixins": [
-    "modtemplate.mixins.json"
-  ],
   "depends": {
     "fabric-api": "*"
   }

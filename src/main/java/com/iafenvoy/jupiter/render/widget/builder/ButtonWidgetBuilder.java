@@ -1,0 +1,46 @@
+package com.iafenvoy.jupiter.render.widget.builder;
+
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
+    private final Button.OnPress action;
+    private final Supplier<Component> nameSupplier;
+    @Nullable
+    private Button button;
+
+    public ButtonWidgetBuilder(IConfigEntry<T> config, Button.OnPress action, Supplier<Component> nameSupplier) {
+        super(config);
+        this.action = button -> {
+            action.onPress(button);
+            this.refresh();
+        };
+        this.nameSupplier = nameSupplier;
+    }
+
+    @Override
+    public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        this.button = Button.builder(this.nameSupplier.get(), this.action).bounds(x, y, width, height).build();
+        appender.accept(this.button);
+    }
+
+    @Override
+    public void updateCustom(boolean visible, int y) {
+        if (this.button == null) return;
+        this.button.visible = visible;
+        this.button.setY(y);
+    }
+
+    @Override
+    public void refresh() {
+        if (this.button == null) return;
+        this.button.setMessage(this.nameSupplier.get());
+    }
+}

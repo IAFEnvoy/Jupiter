@@ -22,10 +22,6 @@ tasks.named<ProcessResources>("processResources") {
 version = "${property("mod.version")}+${property("deps.minecraft")}-fabric"
 base.archivesName = property("mod.id") as String
 
-loom {
-    accessWidenerPath = rootProject.file("src/main/resources/${property("mod.id")}.accesswidener")
-}
-
 jsonlang {
     languageDirectories = listOf("assets/${property("mod.id")}/lang")
     prettyPrint = true
@@ -74,9 +70,12 @@ java {
     withSourcesJar()
     val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.21")) {
         JavaVersion.VERSION_21
-    } else {
+    } else if (stonecutter.eval(stonecutter.current.version, ">=1.18")) {
         JavaVersion.VERSION_17
-    }
+    } else if (stonecutter.eval(stonecutter.current.version, ">=1.17")) {
+        JavaVersion.VERSION_16
+    } else
+        JavaVersion.VERSION_1_8
     sourceCompatibility = javaCompat
     targetCompatibility = javaCompat
 }

@@ -1,0 +1,186 @@
+package com.iafenvoy.jupiter.render.screen;
+
+import com.iafenvoy.jupiter.config.ConfigGroup;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
+import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
+import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Consumer;
+
+public abstract class AbstractConfigScreen extends Screen implements JupiterScreen {
+    private final Screen parent;
+    protected final AbstractConfigContainer configContainer;
+    protected final List<TabButton> groupButtons = new ArrayList<>();
+    protected final List<WidgetBuilder<?>> configWidgets = new ArrayList<>();
+    protected final HorizontalScrollBar groupScrollBar = new HorizontalScrollBar();
+    protected final VerticalScrollBar itemScrollBar = new VerticalScrollBar();
+    private int currentTab = 0;
+    private ConfigGroup currentGroup;
+    private int configPerPage;
+    private int textMaxLength;
+
+    public AbstractConfigScreen(Screen parent, AbstractConfigContainer configContainer) {
+        super(Component.translatable(configContainer.getTitleNameKey()));
+        this.parent = parent;
+        this.configContainer = configContainer;
+        this.currentGroup = configContainer.getConfigTabs().getFirst();
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.addRenderableWidget(Button.builder(Component.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+        int x = 10, y = 22;
+        this.groupButtons.clear();
+        List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
+        for (int i = 0; i < configTabs.size(); i++) {
+            ConfigGroup category = configTabs.get(i);
+            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, 20, button -> {
+                this.currentTab = this.configContainer.getConfigTabs().indexOf(button.group);
+                this.currentGroup = button.group;
+                this.rebuildWidgets();
+            }));
+            tabButton.active = i != this.currentTab;
+            this.groupButtons.add(tabButton);
+            x += tabButton.getWidth() + 2;
+        }
+        x += 10;
+        this.groupScrollBar.setMaxValue(Math.max(0, x - this.width));
+        this.calculateMaxItems();
+        this.textMaxLength = this.currentGroup.getConfigs().stream().map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.configWidgets.clear();
+        this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(WidgetBuilderManager::get).toList());
+        this.configWidgets.forEach(b -> b.addElements(this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
+        this.updateItemPos();
+    }
+
+    protected void updateTabPos() {
+        for (TabButton button : this.groupButtons)
+            button.updatePos(this.groupScrollBar.getValue());
+    }
+
+    @Override
+    public void resize(@NotNull Minecraft minecraft, int width, int height) {
+        super.resize(minecraft, width, height);
+        this.calculateMaxItems();
+        this.updateItemPos();
+    }
+
+    public void calculateMaxItems() {
+        this.configPerPage = Math.max(0, (this.height - 55) / (ITEM_HEIGHT + ITEM_SEP));
+        this.itemScrollBar.setMaxValue(Math.max(0, this.currentGroup.getConfigs().size() - this.configPerPage));
+    }
+
+    public void updateItemPos() {
+        int top = this.itemScrollBar.getValue();
+        List<IConfigEntry<?>> entries = this.currentGroup.getConfigs();
+        for (int i = 0; i < top && i < entries.size(); i++)
+            this.configWidgets.get(i).update(false, 0);
+        for (int i = top; i < top + this.configPerPage && i < entries.size(); i++)
+            this.configWidgets.get(i).update(true, 55 + ITEM_SEP + (i - top) * (ITEM_HEIGHT + ITEM_SEP));
+        for (int i = top + this.configPerPage; i < entries.size(); i++)
+            this.configWidgets.get(i).update(false, 0);
+    }
+
+    @Override
+    public boolean keyPressed(KeyEvent event) {
+        if (event.key() == GLFW.GLFW_KEY_ESCAPE) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(event);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)) return true;
+        if (mouseX >= 10 && mouseX <= this.width - 20 && mouseY >= 22 && mouseY <= 42) {
+            this.groupScrollBar.setValue(this.groupScrollBar.getValue() + (scrollY > 0 ? -20 : 20));
+            this.updateTabPos();
+            return true;
+        } else if (mouseY > 42) {
+            this.itemScrollBar.setValue(this.itemScrollBar.getValue() + (scrollY > 0 ? -1 : 1) * ITEM_PER_SCROLL);
+            this.updateItemPos();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onClose() {
+        this.configContainer.onConfigsChanged();
+        assert this.minecraft != null;
+        this.minecraft.setScreen(this.parent);
+    }
+
+    @Override
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        graphics.drawString(this.font, this.title, 35, 10, -1, true);
+        String currentText = this.getCurrentEditText();
+        int textWidth = this.font.width(currentText);
+        graphics.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
+        this.groupScrollBar.render(graphics, mouseX, mouseY, partialTicks, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
+        if (this.groupScrollBar.isDragging()) this.updateTabPos();
+        this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
+        if (this.itemScrollBar.isDragging()) this.updateItemPos();
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        if (event.button() == 0 && this.groupScrollBar.wasMouseOver()) {
+            this.groupScrollBar.setIsDragging(true);
+            this.updateTabPos();
+            return true;
+        }
+        if (event.button() == 0 && this.itemScrollBar.wasMouseOver()) {
+            this.itemScrollBar.setIsDragging(true);
+            this.updateItemPos();
+            return true;
+        }
+        boolean b = super.mouseClicked(event, isDoubleClick);
+        if (!b) this.setFocused(null);
+        return b;
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (event.button() == 0) {
+            this.groupScrollBar.setIsDragging(false);
+            this.itemScrollBar.setIsDragging(false);
+        }
+        return super.mouseReleased(event);
+    }
+
+    protected abstract String getCurrentEditText();
+
+    public static class TabButton extends Button {
+        private final ConfigGroup group;
+        private final int baseX;
+
+        public TabButton(ConfigGroup group, int baseX, int y, int width, int height, Consumer<TabButton> listener) {
+            super(baseX, y, width, height, Component.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button), DEFAULT_NARRATION);
+            this.group = group;
+            this.baseX = baseX;
+        }
+
+        public void updatePos(int offsetX) {
+            this.setX(this.baseX - offsetX);
+        }
+    }
+}
