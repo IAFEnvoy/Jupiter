@@ -60,7 +60,7 @@ legacyForge {
 
 tasks {
     processResources {
-        exclude("**/fabric.mod.json", "**/*.accesswidener", "**/mods.toml")
+        exclude("**/fabric.mod.json", "**/*.accesswidener", "**/neoforge.mods.toml")
     }
 
     named("createMinecraftArtifacts") {

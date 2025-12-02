@@ -1,6 +1,8 @@
 package com.iafenvoy.jupiter.network.payload;
 
-import com.iafenvoy.jupiter.Jupiter;
+//? >=1.20.5 {
+
+/*import com.iafenvoy.jupiter.Jupiter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -26,3 +28,4 @@ public record ConfigSyncPayload(ResourceLocation id, boolean allow,
         return TYPE;
     }
 }
+*/

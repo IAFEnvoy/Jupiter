@@ -4,20 +4,28 @@ package com.iafenvoy.jupiter._loader.neoforge.network;
 
 /*import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 //? >=1.21.7 {
 /^import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  ^///?} else {
 import net.neoforged.neoforge.network.PacketDistributor;
 //?}
+//? >=1.20.5 {
+/^import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+^///?} else {
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufC2S;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+//?}
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ClientNetworkHelperImpl implements ClientNetworkHelper {
-    public static final Map<CustomPacketPayload.Type<CustomPacketPayload>, ClientNetworkHelper.Handler<CustomPacketPayload>> RECEIVERS = new HashMap<>();
+    //? >=1.20.5 {
+    /^public static final Map<CustomPacketPayload.Type<CustomPacketPayload>, ClientNetworkHelper.Handler<CustomPacketPayload>> RECEIVERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -32,10 +40,31 @@ public class ClientNetworkHelperImpl implements ClientNetworkHelper {
     @Override
     public void sendToServer(CustomPacketPayload payload) {
         //? >=1.21.7 {
-        /^ClientPacketDistributor.sendToServer(payload);
-         ^///?} else {
+        /^¹ClientPacketDistributor.sendToServer(payload);
+         ¹^///?} else {
         PacketDistributor.sendToServer(payload);
         //?}
     }
+    ^///?} else {
+    private static final Map<ResourceLocation, ClientNetworkHelper.Handler> RECEIVERS = new HashMap<>();
+
+    @Override
+    public void sendToServer(ResourceLocation id, FriendlyByteBuf buf) {
+        PacketDistributor.SERVER.noArg().send(new ByteBufC2S(id, buf));
+    }
+
+    @Override
+    public void registerReceiver(ResourceLocation id, Handler handler) {
+        RECEIVERS.put(id, handler);
+    }
+
+    public static boolean onReceive(ResourceLocation id, FriendlyByteBuf buf, PlayPayloadContext context) {
+        ClientNetworkHelper.Handler handler = RECEIVERS.get(id);
+        if (handler == null) return false;
+        Runnable runnable = handler.handle(Minecraft.getInstance(), buf);
+        if (runnable != null) Minecraft.getInstance().execute(runnable);
+        return true;
+    }
+    //?}
 }
 */

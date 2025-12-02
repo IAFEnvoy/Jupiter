@@ -8,12 +8,10 @@ import com.iafenvoy.jupiter.render.internal.JupiterConfigListScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //? >=1.21.4 {
 /^import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
-^///?} else {
+ ^///?} else {
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 //?}
 //? >=1.21.7 {
@@ -26,13 +24,30 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import java.util.Map;
 ^///?}
+//? >=1.20.5 {
+/^import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+^///?} else {
+import net.neoforged.neoforge.client.ConfigScreenHandler;
+import net.neoforged.fml.common.Mod;
+//?}
 
-@EventBusSubscriber(Dist.CLIENT)
+//? >=1.21 {
+/^@EventBusSubscriber(Dist.CLIENT)
+ ^///?} elif >=1.20.5 {
+/^@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+ ^///?} else {
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+//?}
 public class JupiterNeoForgeClient {
     @SubscribeEvent
     public static void processClient(FMLClientSetupEvent event) {
         Jupiter.processClient();
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (container, parent) -> new JupiterConfigListScreen(parent));
+        //? >=1.20.5 {
+        /^ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (container, parent) -> new JupiterConfigListScreen(parent));
+        ^///?} else {
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, parent) -> new JupiterConfigListScreen(parent)));
+        //?}
     }
 
     //? >=1.21.4 {

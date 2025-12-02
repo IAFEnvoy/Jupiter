@@ -5,7 +5,9 @@ import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
 import com.iafenvoy.jupiter.render.screen.ServerConfigScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
+//? >=1.20.5 {
+/*import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
+*///?}
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
@@ -28,7 +30,11 @@ public class JupiterConfigListScreen extends Screen {
     protected void init() {
         super.init();
         if (this.initialized)
-            this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 64, 32));
+            //? >=1.20.5 {
+            /*this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 64, 32));
+             *///?} else {
+            this.widget.setSize(this.width - 80, this.height - 70);
+            //?}
         else {
             this.initialized = true;
             this.widget = new JupiterConfigListWidget(this, this.minecraft, this.width - 80, this.height - 70, 64, 24);

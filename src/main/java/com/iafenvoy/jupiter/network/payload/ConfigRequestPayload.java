@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.network.payload;
 
-import com.iafenvoy.jupiter.Jupiter;
+//? >=1.20.5 {
+/*import com.iafenvoy.jupiter.Jupiter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -16,3 +17,4 @@ public record ConfigRequestPayload(ResourceLocation id) implements CustomPacketP
         return TYPE;
     }
 }
+*/

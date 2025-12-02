@@ -1,16 +1,23 @@
 package com.iafenvoy.jupiter._loader.fabric.network;
 
 //? fabric {
+
 import com.iafenvoy.jupiter.network.ServerNetworkHelper;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+//? >=1.20.5 {
+/*import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.level.ServerPlayer;
+ *///?} else {
+import net.minecraft.resources.ResourceLocation;
+//?}
 
 public class ServerNetworkHelperImpl implements ServerNetworkHelper {
-    @Override
+    //? >=1.20.5 {
+    /*@Override
     public void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
         ServerPlayNetworking.send(player, payload);
     }
@@ -28,4 +35,15 @@ public class ServerNetworkHelperImpl implements ServerNetworkHelper {
             if (runnable != null) ctx.server().execute(runnable);
         });
     }
+     *///?} else {
+    @Override
+    public void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
+        ServerPlayNetworking.send(player, id, buf);
+    }
+
+    @Override
+    public void registerReceiver(ResourceLocation id, Handler handler) {
+        ServerPlayNetworking.registerGlobalReceiver(id, (server, player, listener, buf, sender) -> server.execute(handler.handle(server, player, buf)));
+    }
+    //?}
 }

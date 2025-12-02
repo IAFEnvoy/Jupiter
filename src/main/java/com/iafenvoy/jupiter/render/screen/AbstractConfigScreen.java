@@ -9,6 +9,7 @@ import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.TabButton;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.KeyEvent;
@@ -40,7 +41,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         super(Component.translatable(configContainer.getTitleNameKey()));
         this.parent = parent;
         this.configContainer = configContainer;
-        this.currentGroup = configContainer.getConfigTabs().getFirst();
+        this.currentGroup = configContainer.getConfigTabs()/*? >=1.20.5 {*//*.getFirst()*//*?} else {*/.get(0)/*?}*/;
     }
 
     @Override

@@ -1,10 +1,15 @@
 package com.iafenvoy.jupiter.network;
 
-import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
+//? >=1.20.5 {
+
+/*import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
+*///?}
+
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.util.Comment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,19 +29,33 @@ public class ClientConfigNetwork {
     @Comment("will pass null to nbt if not allowed")
     public static void syncConfig(ResourceLocation id, Consumer<CompoundTag> callback) {
         CALLBACKS.put(id, callback);
-        ClientNetworkHelper.INSTANCE.sendToServer(new ConfigRequestPayload(id));
+        //? >=1.20.5 {
+        /*ClientNetworkHelper.INSTANCE.sendToServer(new ConfigRequestPayload(id));
+        *///?} else {
+        ClientNetworkHelper.INSTANCE.sendToServer(NetworkConstants.CONFIG_REQUEST_C2S, ByteBufHelper.create().writeResourceLocation(id));
+         //?}
     }
 
     public static void init() {
-        ClientNetworkHelper.INSTANCE.registerReceiver(ConfigSyncPayload.TYPE, (client, payload) -> {
-            Consumer<CompoundTag> callback = CALLBACKS.get(payload.id());
-            if (callback == null) return null;
-            if (payload.allow()) {
-                CompoundTag data = payload.compound();
-                return () -> callback.accept(data);
-            } else
-                return () -> callback.accept(null);
-        });
-        ClientNetworkHelper.INSTANCE.registerReceiver(ConfigErrorPayload.TYPE, (client, buf) -> () -> client./*? >=1.21.2 {*//*getToastManager*//*?} else {*/getToasts/*?}*/().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title"), Component.translatable("jupiter.toast.upload_config_error_content"))));
+        //? >=1.20.5 {
+        /*ClientNetworkHelper.INSTANCE.registerReceiver(ConfigSyncPayload.TYPE, (client, payload) -> onConfigSync(payload.id(), payload.allow(), payload.compound()));
+        ClientNetworkHelper.INSTANCE.registerReceiver(ConfigErrorPayload.TYPE, (minecraft, buf) -> onConfigError(minecraft));
+        *///?} else {
+        ClientNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_SYNC_S2C, (minecraft, buf) -> onConfigSync(buf.readResourceLocation(), buf.readBoolean(), buf.readNbt()));
+        ClientNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_ERROR_S2C, (minecraft, buf) -> onConfigError(minecraft));
+        //?}
+    }
+
+    private static Runnable onConfigSync(ResourceLocation id, boolean allow, CompoundTag data) {
+        Consumer<CompoundTag> callback = CALLBACKS.get(id);
+        if (callback == null) return null;
+        if (allow) {
+            return () -> callback.accept(data);
+        } else
+            return () -> callback.accept(null);
+    }
+
+    private static Runnable onConfigError(Minecraft minecraft) {
+        return () -> minecraft./*? >=1.21.2 {*//*getToastManager*//*?} else {*/getToasts/*?}*/().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title"), Component.translatable("jupiter.toast.upload_config_error_content")));
     }
 }

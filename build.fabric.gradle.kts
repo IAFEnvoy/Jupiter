@@ -29,6 +29,7 @@ repositories {
     mavenLocal()
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
     maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
+    maven("https://maven.nucleoid.xyz/") { name = "Placeholder API" }
 }
 
 dependencies {
