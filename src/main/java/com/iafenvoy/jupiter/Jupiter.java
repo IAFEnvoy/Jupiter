@@ -2,28 +2,33 @@ package com.iafenvoy.jupiter;
 
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.network.ServerConfigNetwork;
+import com.iafenvoy.jupiter.test.TestConfig;
+import net.minecraft.resources.ResourceLocation;
+
 //? >=1.20.5 {
-/*import com.iafenvoy.jupiter.network.ServerNetworkHelper;
+import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
-*///?}
-import com.iafenvoy.jupiter.test.TestConfig;
+//?}
+//? >=1.18 {
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
+//?} else {
+/*import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+*///?}
 
 public final class Jupiter {
     public static final String MOD_ID = "jupiter";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = /*? >=1.18 {*/LogUtils/*?} else {*//*LogManager*//*?}*/.getLogger();
 
     public static void init(boolean development) {
         //? >=1.20.5 {
-        /*ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
+        ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
         ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigRequestPayload.TYPE, ConfigRequestPayload.CODEC);
         ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigErrorPayload.TYPE, ConfigErrorPayload.CODEC);
-        *///?}
+        //?}
 
         if (development) ConfigManager.getInstance().registerConfigHandler(new TestConfig());
     }
@@ -37,13 +42,13 @@ public final class Jupiter {
     }
 
     //? forge {
-    @SuppressWarnings("removal")
-            //?}
+    /*@SuppressWarnings("removal")
+     *///?}
     public static ResourceLocation id(String id) {
         //? >=1.21 {
-        /*return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
-         *///?} else {
-        return new ResourceLocation(MOD_ID, id);
-        //?}
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
+         //?} else {
+        /*return new ResourceLocation(MOD_ID, id);
+        *///?}
     }
 }

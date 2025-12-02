@@ -1,14 +1,14 @@
 package com.iafenvoy.jupiter.render.widget;
 
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 //? >=1.19.3 {
-/*import net.minecraft.client.gui.components.StringWidget;
- *///?}
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.components.StringWidget;
+ //?}
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -26,19 +26,19 @@ public abstract class WidgetBuilder<T> {
 
     public void addDialogElements(Consumer<AbstractWidget> appender, String text, int x, int y, int width, int height) {
         Font font = CLIENT.get().font;
-        this.textWidget = new StringWidget(20, y, font.width(text), height, Component.literal(text), font);
+        this.textWidget = new StringWidget(20, y, font.width(text), height, TextUtil.literal(text), font);
         appender.accept(this.textWidget);
         //? >=1.19.3 {
-        /*this.resetButton = Button.builder(Component.translatable("jupiter.screen.button.remove"), button -> {
+        this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.remove"), button -> {
             this.config.reset();
             this.refresh();
         }).bounds(x + width - 50, y, 50, height).build();
-        *///?} else {
-        this.resetButton = new Button(x + width - 50, y, 50, height, Component.translatable("jupiter.screen.button.remove"), button -> {
+        //?} else {
+        /*this.resetButton = new Button(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.remove"), button -> {
             this.config.reset();
             this.refresh();
         });
-        //?}
+        *///?}
         this.refreshResetButton(true);
         appender.accept(this.resetButton);
         this.addCustomElements(appender, x, y, width - 55, height);
@@ -47,19 +47,19 @@ public abstract class WidgetBuilder<T> {
     public void addElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         String name = this.config.getPrettyName();
         Font font = CLIENT.get().font;
-        this.textWidget = new StringWidget(20, y, font.width(name), height, Component.literal(name), font);
+        this.textWidget = new StringWidget(20, y, font.width(name), height, TextUtil.literal(name), font);
         appender.accept(this.textWidget);
         //? >=1.19.3 {
-        /*this.resetButton = Button.builder(Component.translatable("jupiter.screen.button.reset"), button -> {
+        this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.reset"), button -> {
             this.config.reset();
             this.refresh();
         }).bounds(x + width - 50, y, 50, height).build();
-        *///?} else {
-        this.resetButton = new Button(x + width - 50, y, 50, height, Component.translatable("jupiter.screen.button.reset"), button -> {
+        //?} else {
+        /*this.resetButton = new Button(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.reset"), button -> {
             this.config.reset();
             this.refresh();
         });
-        //?}
+        *///?}
         this.refreshResetButton(false);
         this.config.registerCallback(v -> this.refreshResetButton(false));
         appender.accept(this.resetButton);
@@ -79,11 +79,11 @@ public abstract class WidgetBuilder<T> {
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {
             this.textWidget.visible = visible;
-            this.textWidget./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
+            this.textWidget./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
         }
         if (this.resetButton != null) {
             this.resetButton.visible = visible;
-            this.resetButton./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
+            this.resetButton./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
         }
         this.updateCustom(visible, y);
     }

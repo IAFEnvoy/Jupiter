@@ -2,23 +2,23 @@ package com.iafenvoy.jupiter._loader.neoforge.network;
 
 //? neoforge {
 
-/*import com.iafenvoy.jupiter.network.ServerNetworkHelper;
+import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import net.minecraft.network.FriendlyByteBuf;
 //? >=1.20.5 {
-/^import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.minecraft.server.level.ServerLevel;
 import java.util.Objects;
-^///?} else {
-import net.minecraft.resources.ResourceLocation;
+//?} else {
+/*import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufS2C;
-//?}
+*///?}
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class ServerNetworkHelperImpl implements ServerNetworkHelper {
     //? >=1.20.5 {
-    /^public static final Map<CustomPacketPayload.Type<CustomPacketPayload>, StreamCodec<FriendlyByteBuf, CustomPacketPayload>> TYPES = new HashMap<>();
+    public static final Map<CustomPacketPayload.Type<CustomPacketPayload>, StreamCodec<FriendlyByteBuf, CustomPacketPayload>> TYPES = new HashMap<>();
     public static final Map<CustomPacketPayload.Type<CustomPacketPayload>, ServerNetworkHelper.Handler<CustomPacketPayload>> RECEIVERS = new HashMap<>();
 
     @Override
@@ -49,8 +49,8 @@ public class ServerNetworkHelperImpl implements ServerNetworkHelper {
     public static void handleData(CustomPacketPayload payload, IPayloadContext ctx) {
         RECEIVERS.entrySet().stream().filter(x -> x.getKey().id().equals(payload.type().id())).map(e -> e.getValue().handle(((ServerLevel) ctx.player().level()).getServer(), (ServerPlayer) ctx.player(), payload)).filter(Objects::nonNull).forEach(Runnable::run);
     }
-    ^///?} else {
-    private static final Map<ResourceLocation, ServerNetworkHelper.Handler> RECEIVERS = new HashMap<>();
+    //?} else {
+    /*private static final Map<ResourceLocation, ServerNetworkHelper.Handler> RECEIVERS = new HashMap<>();
 
     @Override
     public void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
@@ -72,7 +72,6 @@ public class ServerNetworkHelperImpl implements ServerNetworkHelper {
         if (server != null && runnable != null) server.execute(runnable);
         return true;
     }
-    //?}
+    *///?}
 }
 
-*/

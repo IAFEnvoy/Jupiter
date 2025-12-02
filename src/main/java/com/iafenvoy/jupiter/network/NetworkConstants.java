@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.network;
 
 //? <=1.20.4 {
-import com.iafenvoy.jupiter.Jupiter;
+/*import com.iafenvoy.jupiter.Jupiter;
 import net.minecraft.resources.ResourceLocation;
 
 public class NetworkConstants {
@@ -10,3 +10,4 @@ public class NetworkConstants {
     public static final ResourceLocation CONFIG_REQUEST_C2S = Jupiter.id("config_request_c2s");
     public static final ResourceLocation CONFIG_ERROR_S2C = Jupiter.id("config_error_s2c");
 }
+*/

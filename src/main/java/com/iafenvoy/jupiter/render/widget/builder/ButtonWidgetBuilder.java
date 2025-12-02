@@ -28,10 +28,10 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     @Override
     public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         //? >=1.19.3 {
-        /*this.button = Button.builder(this.nameSupplier.get(), this.action).bounds(x, y, width, height).build();
-         *///?} else {
-        this.button = new Button(x, y, width, height, this.nameSupplier.get(), this.action);
-        //?}
+        this.button = Button.builder(this.nameSupplier.get(), this.action).bounds(x, y, width, height).build();
+         //?} else {
+        /*this.button = new Button(x, y, width, height, this.nameSupplier.get(), this.action);
+        *///?}
         appender.accept(this.button);
     }
 
@@ -39,7 +39,7 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     public void updateCustom(boolean visible, int y) {
         if (this.button == null) return;
         this.button.visible = visible;
-        this.button./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
+        this.button./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
     }
 
     @Override

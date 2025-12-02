@@ -4,10 +4,10 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 //? >=1.20.5 {
-/*import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
+import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
-*///?}
+//?}
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -17,12 +17,12 @@ import net.minecraft.server.level.ServerPlayer;
 public class ServerConfigNetwork {
     public static void init() {
         //? >=1.20.5 {
-        /*ServerNetworkHelper.INSTANCE.registerReceiver(ConfigRequestPayload.TYPE, (server, player, payload) -> onConfigRequest(server, player, payload.id()));
+        ServerNetworkHelper.INSTANCE.registerReceiver(ConfigRequestPayload.TYPE, (server, player, payload) -> onConfigRequest(server, player, payload.id()));
         ServerNetworkHelper.INSTANCE.registerReceiver(ConfigSyncPayload.TYPE, (server, player, payload) -> onConfigSync(server, player, payload.id(), payload.compound()));
-        *///?} else {
-        ServerNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_REQUEST_C2S, (server, player, buf) -> onConfigRequest(server, player, buf.readResourceLocation()));
+        //?} else {
+        /*ServerNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_REQUEST_C2S, (server, player, buf) -> onConfigRequest(server, player, buf.readResourceLocation()));
         ServerNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_SYNC_C2S, (server, player, buf) -> onConfigSync(server, player, buf.readResourceLocation(), buf.readNbt()));
-        //?}
+        *///?}
     }
 
     private static Runnable onConfigRequest(MinecraftServer server, ServerPlayer player, ResourceLocation id) {
@@ -35,14 +35,14 @@ public class ServerConfigNetwork {
             compound = data.serializeNbt();
         } else compound = new CompoundTag();
         //? >=1.20.5 {
-        /*return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, new ConfigSyncPayload(id, b, compound));
-         *///?} else {
-        FriendlyByteBuf buf = ByteBufHelper.create();
+        return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, new ConfigSyncPayload(id, b, compound));
+         //?} else {
+        /*FriendlyByteBuf buf = ByteBufHelper.create();
         buf.writeResourceLocation(id);
         buf.writeBoolean(b);
         buf.writeNbt(compound);
         return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, NetworkConstants.CONFIG_SYNC_S2C, buf);
-        //?}
+        *///?}
     }
 
     private static Runnable onConfigSync(MinecraftServer server, ServerPlayer player, ResourceLocation id, CompoundTag data) {
@@ -57,7 +57,7 @@ public class ServerConfigNetwork {
                     Jupiter.LOGGER.info("Player {} changed config {}", player.getName().getString(), id);
                 }
             } else
-                ServerNetworkHelper.INSTANCE.sendToPlayer(player, /*? >=1.20.5 {*//*new ConfigErrorPayload()*//*?} else {*/NetworkConstants.CONFIG_ERROR_S2C, ByteBufHelper.create()/*?}*/);
+                ServerNetworkHelper.INSTANCE.sendToPlayer(player, /*? >=1.20.5 {*/new ConfigErrorPayload()/*?} else {*//*NetworkConstants.CONFIG_ERROR_S2C, ByteBufHelper.create()*//*?}*/);
         };
     }
 }

@@ -5,22 +5,24 @@ import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
-//? >=1.20 {
-/*import net.minecraft.client.gui.GuiGraphics;
- *///?} else {
-import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
-import com.iafenvoy.jupiter.util.JupiterRenderContext;
-import com.mojang.blaze3d.vertex.PoseStack;
-//?}
-//? >=1.19.3 {
-/*import net.minecraft.client.gui.components.Tooltip;
- *///?}
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+//? >=1.20 {
+import net.minecraft.client.gui.GuiGraphics;
+ //?} else {
+/*import com.iafenvoy.jupiter.util.JupiterRenderContext;
+import com.mojang.blaze3d.vertex.PoseStack;
+*///?}
+//? >=1.19.3 {
+import net.minecraft.client.gui.components.Tooltip;
+ //?} else {
+/*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
+*///?}
 
 public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileConfigContainer> extends Screen {
     private final Screen parent;
@@ -44,41 +46,41 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         int y = this.height / 2;
         //Back
         //? >=1.19.3 {
-        /*this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.back"), button -> {
+        this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.back"), button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(this.parent);
         }).bounds(x - 100, y - 25 - 10, 200, 20).build());
-        final Button serverButton = this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.server_config"), button -> {
+        final Button serverButton = this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.server_config"), button -> {
             assert this.minecraft != null;
             assert this.serverConfig != null;
             this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig()));
-        }).tooltip(Tooltip.create(Component.translatable("jupiter.screen.check_server")))
+        }).tooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.check_server")))
                 .bounds(x - 100, y - 10, 200, 20)
                 .build());
-        final Button clientButton = this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.client_config"), button -> {
+        final Button clientButton = this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.client_config"), button -> {
             assert this.minecraft != null;
             assert this.clientConfig != null;
             this.minecraft.setScreen(new ClientConfigScreen(this, this.clientConfig));
-        }).tooltip(Tooltip.create(Component.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")))
+        }).tooltip(Tooltip.create(TextUtil.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")))
                 .bounds(x - 100, y + 25 - 10, 200, 20)
                 .build());
-        *///?} else {
-        this.addRenderableWidget(new Button(x - 100, y - 25 - 10, 200, 20, Component.translatable("jupiter.screen.back"), button -> {
+        //?} else {
+        /*this.addRenderableWidget(new Button(x - 100, y - 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.back"), button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(this.parent);
         }));
-        SimpleButtonTooltip serverButtonTooltip = new SimpleButtonTooltip(this, Component.translatable("jupiter.screen.check_server"));
-        final Button serverButton = this.addRenderableWidget(new Button(x - 100, y - 10, 200, 20, Component.translatable("jupiter.screen.server_config"), button -> {
+        SimpleButtonTooltip serverButtonTooltip = new SimpleButtonTooltip(this, TextUtil.translatable("jupiter.screen.check_server"));
+        final Button serverButton = this.addRenderableWidget(new Button(x - 100, y - 10, 200, 20, TextUtil.translatable("jupiter.screen.server_config"), button -> {
             assert this.minecraft != null;
             assert this.serverConfig != null;
             this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig()));
         }, serverButtonTooltip));
-        final Button clientButton = this.addRenderableWidget(new Button(x - 100, y + 25 - 10, 200, 20, Component.translatable("jupiter.screen.client_config"), button -> {
+        final Button clientButton = this.addRenderableWidget(new Button(x - 100, y + 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
             assert this.minecraft != null;
             assert this.clientConfig != null;
             this.minecraft.setScreen(new ClientConfigScreen(this, this.clientConfig));
-        }, new SimpleButtonTooltip(this, Component.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client"))));
-        //?}
+        }, new SimpleButtonTooltip(this, TextUtil.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client"))));
+        *///?}
         serverButton.active = true;
         clientButton.active = this.clientConfig != null;
 
@@ -88,50 +90,50 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
             ClientConfigNetwork.syncConfig(this.serverConfig.getConfigId(), nbt -> {
                 if (nbt == null)
                     //? >=1.19.3 {
-                    /*serverButton.setTooltip(Tooltip.create(Component.translatable("jupiter.screen.disable_server")));
-                     *///?} else {
-                    serverButtonTooltip.setTooltip(Component.translatable("jupiter.screen.disable_server"));
-                    //?}
+                    serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.disable_server")));
+                     //?} else {
+                    /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.disable_server"));
+                    *///?}
                 else {
                     try {
                         assert this.fakeServerConfig != null;
                         this.fakeServerConfig.deserializeNbt(nbt);
                         //? >=1.19.3 {
-                        /*serverButton.setTooltip(Tooltip.create(Component.translatable("jupiter.screen.open_server")));
-                         *///?} else {
-                        serverButtonTooltip.setTooltip(Component.translatable("jupiter.screen.open_server"));
-                        //?}
+                        serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.open_server")));
+                         //?} else {
+                        /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.open_server"));
+                        *///?}
                         serverButton.active = true;
                     } catch (Exception e) {
                         Jupiter.LOGGER.error("Failed to parse server config data from server: {}", this.serverConfig.getConfigId(), e);
                         //? >=1.19.3 {
-                        /*serverButton.setTooltip(Tooltip.create(Component.translatable("jupiter.screen.error_server")));
-                         *///?} else {
-                        serverButtonTooltip.setTooltip(Component.translatable("jupiter.screen.error_server"));
-                        //?}
+                        serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.error_server")));
+                         //?} else {
+                        /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.error_server"));
+                        *///?}
                     }
                 }
             });
         } else
             //? >=1.19.3 {
-            /*serverButton.setTooltip(Tooltip.create(Component.translatable("jupiter.screen.open_server")));
-             *///?} else {
-            serverButtonTooltip.setTooltip(Component.translatable("jupiter.screen.open_server"));
-        //?}
+            serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.open_server")));
+             //?} else {
+            /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.open_server"));
+        *///?}
     }
 
     @Override
-    public void render(/*? >=1.20 {*//*GuiGraphics*//*?} else {*/PoseStack/*?}*/ graphics, int mouseX, int mouseY, float delta) {
+    public void render(/*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float delta) {
         //? <=1.20.1 {
-        this.renderBackground(graphics);
-        //?}
+        /*this.renderBackground(graphics);
+        *///?}
         assert this.minecraft != null;
         //? >=1.20 {
-        /*graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
-         *///?} else {
-        JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
+        graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
+         //?} else {
+        /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
         context.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
-        //?}
+        *///?}
         super.render(graphics, mouseX, mouseY, delta);
     }
 

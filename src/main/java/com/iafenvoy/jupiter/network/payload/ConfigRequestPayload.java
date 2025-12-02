@@ -1,12 +1,11 @@
 package com.iafenvoy.jupiter.network.payload;
 
 //? >=1.20.5 {
-/*import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.Jupiter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 public record ConfigRequestPayload(ResourceLocation id) implements CustomPacketPayload {
     public static final Type<ConfigRequestPayload> TYPE = new Type<>(Jupiter.id("config_request"));
@@ -17,4 +16,3 @@ public record ConfigRequestPayload(ResourceLocation id) implements CustomPacketP
         return TYPE;
     }
 }
-*/

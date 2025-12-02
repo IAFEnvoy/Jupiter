@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;

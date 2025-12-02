@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter._loader.forge.network.packet;
 
 //? forge {
 
-import com.iafenvoy.jupiter._loader.forge.network.ServerNetworkHelperImpl;
+/*import com.iafenvoy.jupiter._loader.forge.network.ServerNetworkHelperImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
@@ -31,4 +31,4 @@ public class ByteBufC2S {
         if (ServerNetworkHelperImpl.onReceive(message.id, message.buf, context))
             context.setPacketHandled(true);
     }
-}
+}*/

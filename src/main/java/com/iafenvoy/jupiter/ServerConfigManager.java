@@ -6,7 +6,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class ServerConfigManager implements ResourceManagerReloadListener {
         PermissionChecker ALWAYS_FALSE = (server, player) -> false;
         PermissionChecker IS_DEDICATE_SERVER = (server, player) -> server.isDedicatedServer();
         PermissionChecker IS_LOCAL_GAME = (server, player) -> !IS_DEDICATE_SERVER.check(server, player);
-        PermissionChecker IS_OPERATOR = (server, player) -> IS_LOCAL_GAME.check(server, player) || player.hasPermissions(server./*? >=1.21.9 {*//*operatorUserPermissionLevel*//*?} else {*/getOperatorUserPermissionLevel/*?}*/());
+        PermissionChecker IS_OPERATOR = (server, player) -> IS_LOCAL_GAME.check(server, player) || player.hasPermissions(server./*? >=1.21.9 {*/operatorUserPermissionLevel/*?} else {*//*getOperatorUserPermissionLevel*//*?}*/());
 
         boolean check(MinecraftServer server, ServerPlayer player);
     }

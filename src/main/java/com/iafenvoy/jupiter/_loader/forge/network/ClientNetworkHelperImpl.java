@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter._loader.forge.network;
 
 //? forge {
 
-import com.iafenvoy.jupiter._loader.forge.JupiterForge;
+/*import com.iafenvoy.jupiter._loader.forge.JupiterForge;
 import com.iafenvoy.jupiter._loader.forge.network.packet.ByteBufC2S;
 import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.Minecraft;
@@ -35,3 +35,4 @@ public class ClientNetworkHelperImpl implements ClientNetworkHelper {
         return true;
     }
 }
+*/

@@ -4,6 +4,7 @@ import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
 import com.iafenvoy.jupiter.render.screen.dialog.MapDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -27,10 +28,10 @@ public class MapWidgetBuilder<T> extends WidgetBuilder<Map<String, T>> {
     public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         Minecraft client = CLIENT.get();
         //? >=1.19.3 {
-        /*this.button = Button.builder(Component.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.screen, this.config))).bounds(x, y, width, height).build();
-         *///?} else {
-        this.button = new Button(x, y, width, height, Component.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.screen, this.config)));
-        //?}
+        this.button = Button.builder(TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.screen, this.config))).bounds(x, y, width, height).build();
+         //?} else {
+        /*this.button = new Button(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.screen, this.config)));
+        *///?}
         appender.accept(this.button);
     }
 
@@ -38,12 +39,12 @@ public class MapWidgetBuilder<T> extends WidgetBuilder<Map<String, T>> {
     public void updateCustom(boolean visible, int y) {
         if (this.button == null) return;
         this.button.visible = visible;
-        this.button./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
+        this.button./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
     }
 
     @Override
     public void refresh() {
         if (this.button == null) return;
-        this.button.setMessage(Component.literal(String.valueOf(this.config.getValue())));
+        this.button.setMessage(TextUtil.literal(String.valueOf(this.config.getValue())));
     }
 }

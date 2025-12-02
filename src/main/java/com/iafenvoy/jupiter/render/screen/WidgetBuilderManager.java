@@ -8,6 +8,7 @@ import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.render.widget.builder.*;
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class WidgetBuilderManager {
 
     static {
         register(ConfigTypes.SEPARATOR, SeparatorWidgetBuilder::new);
-        register(ConfigTypes.BOOLEAN, config -> new ButtonWidgetBuilder<>(config, button -> config.setValue(!config.getValue()), () -> Component.literal(config.getValue() ? "§atrue" : "§cfalse")));
+        register(ConfigTypes.BOOLEAN, config -> new ButtonWidgetBuilder<>(config, button -> config.setValue(!config.getValue()), () -> TextUtil.literal(config.getValue() ? "§atrue" : "§cfalse")));
         register(ConfigTypes.INTEGER, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
         register(ConfigTypes.STRING, TextFieldWidgetBuilder::new);

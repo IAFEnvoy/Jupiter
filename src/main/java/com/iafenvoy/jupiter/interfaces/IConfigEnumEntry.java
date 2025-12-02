@@ -1,11 +1,11 @@
 package com.iafenvoy.jupiter.interfaces;
 
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 public interface IConfigEnumEntry {
     default Component getDisplayText() {
-        return Component.translatable(this.getName());
+        return TextUtil.translatable(this.getName());
     }
 
     String getName();

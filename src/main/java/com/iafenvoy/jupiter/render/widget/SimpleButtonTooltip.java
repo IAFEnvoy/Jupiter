@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget;
 
 //? <=1.19.2 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,3 +25,4 @@ public class SimpleButtonTooltip implements Button.OnTooltip {
         this.parent.renderTooltip(poseStack, Minecraft.getInstance().font.split(this.tooltip, Math.max(this.parent.width / 2 - 43, 170)), mouseX, mouseY);
     }
 }
+*/

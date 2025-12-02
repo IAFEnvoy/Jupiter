@@ -2,14 +2,15 @@ package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 //? >=1.19.3 {
-/*import net.minecraft.client.gui.components.StringWidget;
- *///?} else {
-import com.iafenvoy.jupiter.render.widget.StringWidget;
-//?}
+import net.minecraft.client.gui.components.StringWidget;
+ //?} else {
+/*import com.iafenvoy.jupiter.render.widget.StringWidget;
+*///?}
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;
@@ -26,7 +27,7 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
         int w = textRenderer.width("-"), k = 0;
         while ((k + 1) * w <= width) k++;
         String name = "-".repeat(k);
-        this.textWidget = new StringWidget(20, y, textRenderer.width(name), height, Component.literal(name), textRenderer);
+        this.textWidget = new StringWidget(20, y, textRenderer.width(name), height, TextUtil.literal(name), textRenderer);
         appender.accept(this.textWidget);
     }
 

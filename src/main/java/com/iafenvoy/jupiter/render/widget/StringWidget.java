@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget;
 
 //? <=1.19.2 {
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -42,3 +42,4 @@ public class StringWidget extends AbstractWidget {
     }
 }
 
+*/

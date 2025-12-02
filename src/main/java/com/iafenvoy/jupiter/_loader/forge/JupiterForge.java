@@ -2,14 +2,13 @@ package com.iafenvoy.jupiter._loader.forge;
 
 //? forge {
 
-import com.iafenvoy.jupiter.ConfigManager;
+/*import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter._loader.forge.network.packet.ByteBufC2S;
 import com.iafenvoy.jupiter._loader.forge.network.packet.ByteBufS2C;
 import com.iafenvoy.jupiter.render.internal.JupiterConfigListScreen;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,6 +19,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+//? >=1.19 {
+/^import net.minecraftforge.client.ConfigScreenHandler;
+ ^///?} else {
+import net.minecraftforge.client.ConfigGuiHandler;
+//?}
 
 @Mod(Jupiter.MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -39,11 +43,17 @@ public final class JupiterForge {
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class JupiterForgeClient {
-        @SuppressWarnings("removal")
+        //? >=1.19 {
+        /^@SuppressWarnings("removal")
+        ^///?}
         @SubscribeEvent
         public static void processClient(FMLClientSetupEvent event) {
             Jupiter.processClient();
-            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, screen) -> new JupiterConfigListScreen(screen)));
+            //? >=1.19 {
+            /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, screen) -> new JupiterConfigListScreen(screen)));
+             ^///?} else {
+            ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, screen) -> new JupiterConfigListScreen(screen)));
+            //?}
         }
 
         @SubscribeEvent
@@ -60,3 +70,4 @@ public final class JupiterForge {
         }
     }
 }
+*/

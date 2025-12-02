@@ -4,19 +4,19 @@ import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
-*///?}
-//? >=1.20 {
-/*import net.minecraft.client.gui.GuiGraphics;
- *///?} else {
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.input.MouseButtonEvent;
 //?}
+//? >=1.20 {
+import net.minecraft.client.gui.GuiGraphics;
+ //?} else {
+/*import com.mojang.blaze3d.vertex.PoseStack;
+*///?}
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,23 +37,35 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     protected void init() {
         super.init();
         //? >=1.19.3 {
-        /*this.addRenderableWidget(Button.builder(Component.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
-        this.addRenderableWidget(Button.builder(Component.literal("+"), button -> {
+        this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+        this.addRenderableWidget(Button.builder(TextUtil.literal("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
             this.rebuildWidgets();
         }).bounds(this.width - 60, 5, 20, 20).build());
-         *///?} else {
-        this.addRenderableWidget(new Button(10, 5, 20, 15, Component.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(new Button(this.width - 60, 5, 20, 20, Component.literal("+"), button -> {
+         //?} else {
+        /*this.addRenderableWidget(new Button(10, 5, 20, 15, TextUtil.literal("<"), button -> this.onClose()));
+        this.addRenderableWidget(new Button(this.width - 60, 5, 20, 20, TextUtil.literal("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
+            //? >=1.19 {
             this.rebuildWidgets();
+             //?} else {
+            /^this.clearWidgets();
+            this.init();
+            ^///?}
         }));
-        //?}
+        *///?}
         this.calculateMaxItems();
         this.widgets.clear();
         Map<String, T> values = this.entry.getValue();
         for (Map.Entry<String, T> entry : values.entrySet()) {
-            WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(entry.getValue(), entry.getKey(), this::rebuildWidgets));
+            WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(entry.getValue(), entry.getKey(), () -> {
+                //? >=1.19 {
+                this.rebuildWidgets();
+                 //?} else {
+                /*this.clearWidgets();
+                this.init();
+                *///?}
+            }));
             this.widgets.add(widget);
             widget.addDialogElements(this::addRenderableWidget, "", 10, 0, Math.max(10, this.width - 40), ITEM_HEIGHT);
         }
@@ -84,47 +96,47 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY,/*? >=1.20.2 {*//*double scrollX,*//*?}*/ double scrollY) {
-        if (super.mouseScrolled(mouseX, mouseY,/*? >=1.20.2 {*//*scrollX,*//*?}*/ scrollY)) return true;
+    public boolean mouseScrolled(double mouseX, double mouseY,/*? >=1.20.2 {*/double scrollX,/*?}*/ double scrollY) {
+        if (super.mouseScrolled(mouseX, mouseY,/*? >=1.20.2 {*/scrollX,/*?}*/ scrollY)) return true;
         this.itemScrollBar.setValue(this.itemScrollBar.getValue() + (scrollY > 0 ? -1 : 1) * ITEM_PER_SCROLL);
         this.updateItemPos();
         return true;
     }
 
     @Override
-    public void render(@NotNull /*? >=1.20 {*//*GuiGraphics*//*?} else {*/PoseStack/*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 25, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 
     //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-    *///?} else {
-    @Override
+    //?} else {
+    /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        //?}
+        *///?}
         if (button == 0 && this.itemScrollBar.wasMouseOver()) {
             this.itemScrollBar.setIsDragging(true);
             this.updateItemPos();
             return true;
         }
-        boolean b = super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        boolean b = super.mouseClicked(/*? >=1.21.9 {*/event, isDoubleClick/*?} else {*//*mouseX, mouseY, button*//*?}*/);
         if (!b) this.setFocused(null);
         return b;
     }
 
     //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-    *///?} else {
-    @Override
+    //?} else {
+    /*@Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        //?}
+        *///?}
         if (button == 0) this.itemScrollBar.setIsDragging(false);
-        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        return super.mouseReleased(/*? >=1.21.9 {*/event/*?} else {*//*mouseX, mouseY, button*//*?}*/);
     }
 }
