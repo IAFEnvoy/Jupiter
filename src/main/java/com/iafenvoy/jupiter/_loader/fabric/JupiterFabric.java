@@ -12,7 +12,7 @@ public final class JupiterFabric implements ModInitializer {
     public void onInitialize() {
         Jupiter.init();
         Jupiter.process();
-        //? if >=1.21.10{
+        //? if >=1.21.9{
         ResourceLoader.get(PackType.SERVER_DATA).registerReloader(Jupiter.id("server_config_reload"), new ServerConfigManager());
         //?} else {
         /*ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ServerConfigReloader());

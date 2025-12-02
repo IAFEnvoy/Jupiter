@@ -11,7 +11,7 @@ public final class JupiterFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         Jupiter.processClient();
-        //? if >=1.21.10{
+        //? if >=1.21.9{
         ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(Jupiter.id("client_config_reload"), new ConfigManager());
         //?} else {
         /*ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ClientConfigReloader());

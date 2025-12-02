@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter._loader.fabric.reloader;
 
-//? if <=1.21.9 && fabric{
+//? if <=1.21.8 && fabric{
 /*import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;

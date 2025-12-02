@@ -45,7 +45,7 @@ dependencies {
     var fabricApiVersion = property("deps.fabric-api") as String
     include(fabricApi.module("fabric-api-base", fabricApiVersion))
     include(fabricApi.module("fabric-networking-api-v1", fabricApiVersion))
-    if (stonecutter.eval(stonecutter.current.version, "<=1.21.9"))
+    if (stonecutter.eval(stonecutter.current.version, "<=1.21.8"))
         include(fabricApi.module("fabric-resource-loader-v0", fabricApiVersion))
     else
         include(fabricApi.module("fabric-resource-loader-v1", fabricApiVersion))
