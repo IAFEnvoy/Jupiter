@@ -1,10 +1,15 @@
 package com.iafenvoy.jupiter._loader.neoforge.network;
 
 //? neoforge {
+
 /*import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+//? >=1.21.7 {
+/^import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+ ^///?} else {
+import net.neoforged.neoforge.network.PacketDistributor;
+//?}
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashMap;
@@ -26,7 +31,11 @@ public class ClientNetworkHelperImpl implements ClientNetworkHelper {
 
     @Override
     public void sendToServer(CustomPacketPayload payload) {
-        ClientPacketDistributor.sendToServer(payload);
+        //? >=1.21.7 {
+        /^ClientPacketDistributor.sendToServer(payload);
+         ^///?} else {
+        PacketDistributor.sendToServer(payload);
+        //?}
     }
 }
 */

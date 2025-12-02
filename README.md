@@ -38,6 +38,8 @@ iii.`ServerConfigScreen`: Create a server config edit screen. **Not include perm
 We will only update to newer versions when our other mods are needed. Request if you want other versions. (Except 1.16
 and below.)
 
+Extra Notice: I can only promise latest version marked in files can run. If crash occurred report on GitHub.
+
 ## Discord
 
 https://discord.gg/NDzz2upqAk

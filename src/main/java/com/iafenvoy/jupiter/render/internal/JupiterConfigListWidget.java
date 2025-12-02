@@ -3,13 +3,12 @@ package com.iafenvoy.jupiter.render.internal;
 import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.interfaces.IConfigHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-*///?} else {
-import net.minecraft.client.gui.GuiGraphics;
-//?}
+*///?}
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -33,10 +32,17 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         this.updateEntries();
     }
 
-    @Override
+    //? >=1.21.4 {
+    /*@Override
     protected int scrollBarX() {
         return super.scrollBarX() + 30;
     }
+    *///?} else {
+    @Override
+    protected int getScrollbarPosition() {
+        return super.getScrollbarPosition() + 30;
+    }
+    //?}
 
     private void updateEntries() {
         this.clearEntries();

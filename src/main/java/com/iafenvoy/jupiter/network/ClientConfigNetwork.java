@@ -37,6 +37,6 @@ public class ClientConfigNetwork {
             } else
                 return () -> callback.accept(null);
         });
-        ClientNetworkHelper.INSTANCE.registerReceiver(ConfigErrorPayload.TYPE, (client, buf) -> () -> client.getToastManager().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title"), Component.translatable("jupiter.toast.upload_config_error_content"))));
+        ClientNetworkHelper.INSTANCE.registerReceiver(ConfigErrorPayload.TYPE, (client, buf) -> () -> client./*? >=1.21.2 {*//*getToastManager*//*?} else {*/getToasts/*?}*/().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title"), Component.translatable("jupiter.toast.upload_config_error_content"))));
     }
 }

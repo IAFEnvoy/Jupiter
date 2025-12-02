@@ -46,9 +46,9 @@ public class JupiterConfigListScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        super.render(graphics, mouseX, mouseY, delta);
         this.widget.render(graphics, mouseX, mouseY, delta);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
-        super.render(graphics, mouseX, mouseY, delta);
     }
 
     public void select(JupiterConfigListWidget.ConfigEntry entry) {

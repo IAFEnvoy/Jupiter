@@ -1,6 +1,6 @@
 plugins {
     id("net.neoforged.moddev")
-    id ("dev.kikugie.postprocess.jsonlang")
+    id("dev.kikugie.postprocess.jsonlang")
     id("me.modmuss50.mod-publish-plugin")
 }
 
@@ -61,6 +61,7 @@ neoForge {
 tasks {
     processResources {
         exclude("**/fabric.mod.json", "**/*.accesswidener", "**/mods.toml")
+        dependsOn("stonecutterGenerate")
     }
 
     named("createMinecraftArtifacts") {

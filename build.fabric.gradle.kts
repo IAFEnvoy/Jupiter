@@ -62,6 +62,7 @@ fabricApi {
 tasks {
     processResources {
         exclude("**/neoforge.mods.toml", "**/mods.toml")
+        dependsOn("stonecutterGenerate")
     }
 
     register<Copy>("buildAndCollect") {
