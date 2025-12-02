@@ -5,12 +5,16 @@ import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.MouseButtonEvent;
 *///?}
+//? >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?} else {
+import com.mojang.blaze3d.vertex.PoseStack;
+//?}
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,11 +36,19 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(Button.builder(Component.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+        //? >=1.19.3 {
+        /*this.addRenderableWidget(Button.builder(Component.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
         this.addRenderableWidget(Button.builder(Component.literal("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
             this.rebuildWidgets();
         }).bounds(this.width - 60, 5, 20, 20).build());
+         *///?} else {
+        this.addRenderableWidget(new Button(10, 5, 20, 15, Component.literal("<"), button -> this.onClose()));
+        this.addRenderableWidget(new Button(this.width - 60, 5, 20, 20, Component.literal("+"), button -> {
+            this.entry.getValue().put("", this.entry.newValue());
+            this.rebuildWidgets();
+        }));
+        //?}
         this.calculateMaxItems();
         this.widgets.clear();
         Map<String, T> values = this.entry.getValue();
@@ -80,7 +92,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull /*? >=1.20 {*//*GuiGraphics*//*?} else {*/PoseStack/*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 25, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();

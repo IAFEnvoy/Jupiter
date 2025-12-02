@@ -38,7 +38,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
     public void updateCustom(boolean visible, int y) {
         if (this.keyWidget != null) {
             this.keyWidget.visible = visible;
-            this.keyWidget.setY(y);
+            this.keyWidget./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
         }
         if (this.valueBuilder != null) this.valueBuilder.update(visible, y);
     }

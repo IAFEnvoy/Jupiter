@@ -3,12 +3,17 @@ package com.iafenvoy.jupiter.render.internal;
 import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.interfaces.IConfigHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 *///?}
+//? >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?} else {
+import com.iafenvoy.jupiter.util.JupiterRenderContext;
+import com.mojang.blaze3d.vertex.PoseStack;
+//?}
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -81,12 +86,16 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         /*@Override
         public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean isHovering, float partialTick) {
             int x = this.getX(), y = this.getY();
+        *///?} else >=1.20 {
+        /*@Override
+        public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
         *///?} else {
         @Override
-        public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+        public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
             //?}
-            graphics.drawString(this.client.font, Component.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 1, -1, true);
-            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 1 + 9, -1, true);
+            graphics.drawString(this.client.font, Component.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 1, -1);
+            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 1 + 9, -1);
         }
 
         //? >=1.21.9 {

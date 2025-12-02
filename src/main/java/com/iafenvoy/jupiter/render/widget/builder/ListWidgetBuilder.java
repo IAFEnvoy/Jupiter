@@ -25,7 +25,11 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     @Override
     public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         Minecraft client = CLIENT.get();
-        this.button = Button.builder(Component.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.config))).bounds(x, y, width, height).build();
+        //? >=1.19.3 {
+        /*this.button = Button.builder(Component.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.config))).bounds(x, y, width, height).build();
+         *///?} else {
+        this.button = new Button(x, y, width, height, Component.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.config)));
+        //?}
         appender.accept(this.button);
     }
 
@@ -33,7 +37,7 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     public void updateCustom(boolean visible, int y) {
         if (this.button == null) return;
         this.button.visible = visible;
-        this.button.setY(y);
+        this.button./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
     }
 
     @Override

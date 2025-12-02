@@ -3,11 +3,16 @@ package com.iafenvoy.jupiter.render.internal;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
 import com.iafenvoy.jupiter.render.screen.ServerConfigScreen;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 //? >=1.20.5 {
 /*import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
  *///?}
+//? >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?} else {
+import com.iafenvoy.jupiter.util.JupiterRenderContext;
+import com.mojang.blaze3d.vertex.PoseStack;
+//?}
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
@@ -45,22 +50,36 @@ public class JupiterConfigListScreen extends Screen {
         //?}
         this.widget.update();
         this.addRenderableWidget(this.widget);
-        this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.back"), button -> this.onClose()).bounds(40, 40, 100, 20).build());
+        //? >=1.19.3 {
+        /*this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.back"), button -> this.onClose()).bounds(40, 40, 100, 20).build());
         this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.open"), button -> {
             JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
             if (this.minecraft != null && handler != null && handler.getConfigContainer() instanceof AbstractConfigContainer container)
                 this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(container)));
         }).bounds(150, 40, 100, 20).build());
+        *///?} else {
+        this.addRenderableWidget(new Button(40, 40, 100, 20, Component.translatable("jupiter.screen.back"), button -> this.onClose()));
+        this.addRenderableWidget(new Button(150, 40, 100, 20, Component.translatable("jupiter.screen.open"), button -> {
+            JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
+            if (this.minecraft != null && handler != null && handler.getConfigContainer() instanceof AbstractConfigContainer container)
+                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(container)));
+        }));
+        //?}
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+    public void render(@NotNull /*? >=1.20 {*//*GuiGraphics*//*?} else {*/PoseStack/*?}*/ graphics, int mouseX, int mouseY, float delta) {
         //? <=1.20.1 {
         this.renderBackground(graphics);
         //?}
         super.render(graphics, mouseX, mouseY, delta);
         this.widget.render(graphics, mouseX, mouseY, delta);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
+        //? >=1.20 {
+        /*graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
+         *///?} else {
+        JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
+        //?}
     }
 
     public void select(JupiterConfigListWidget.ConfigEntry entry) {

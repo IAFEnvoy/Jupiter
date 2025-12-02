@@ -1,6 +1,12 @@
 package com.iafenvoy.jupiter.render.screen.scrollbar;
 
-import net.minecraft.client.gui.GuiGraphics;
+//? >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?} else {
+
+import com.iafenvoy.jupiter.util.JupiterRenderContext;
+import com.mojang.blaze3d.vertex.PoseStack;
+//?}
 import net.minecraft.util.Mth;
 
 public class HorizontalScrollBar {
@@ -48,7 +54,10 @@ public class HorizontalScrollBar {
         this.dragging = isDragging;
     }
 
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int x, int y, int width, int height, int totalWidth) {
+    public void render(/*? >=1.20 {*//*GuiGraphics graphics*//*?} else {*/PoseStack poseStack/*?}*/, int mouseX, int mouseY, float partialTicks, int x, int y, int width, int height, int totalWidth) {
+        //? <=1.19.4 {
+        JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
+        //?}
         if (this.renderScrollbarBackground)
             graphics.fill(x, y, x + width, y + height, this.backgroundColor);
         if (totalWidth > 0) {

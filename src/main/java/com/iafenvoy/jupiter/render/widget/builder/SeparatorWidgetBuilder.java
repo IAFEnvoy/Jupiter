@@ -5,7 +5,11 @@ import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.StringWidget;
+//? >=1.19.3 {
+/*import net.minecraft.client.gui.components.StringWidget;
+ *///?} else {
+import com.iafenvoy.jupiter.render.widget.StringWidget;
+//?}
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;

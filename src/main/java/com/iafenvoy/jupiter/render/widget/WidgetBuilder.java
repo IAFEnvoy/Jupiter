@@ -5,7 +5,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.StringWidget;
+//? >=1.19.3 {
+/*import net.minecraft.client.gui.components.StringWidget;
+ *///?}
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;
@@ -26,10 +28,17 @@ public abstract class WidgetBuilder<T> {
         Font font = CLIENT.get().font;
         this.textWidget = new StringWidget(20, y, font.width(text), height, Component.literal(text), font);
         appender.accept(this.textWidget);
-        this.resetButton = Button.builder(Component.translatable("jupiter.screen.button.remove"), button -> {
+        //? >=1.19.3 {
+        /*this.resetButton = Button.builder(Component.translatable("jupiter.screen.button.remove"), button -> {
             this.config.reset();
             this.refresh();
         }).bounds(x + width - 50, y, 50, height).build();
+        *///?} else {
+        this.resetButton = new Button(x + width - 50, y, 50, height, Component.translatable("jupiter.screen.button.remove"), button -> {
+            this.config.reset();
+            this.refresh();
+        });
+        //?}
         this.refreshResetButton(true);
         appender.accept(this.resetButton);
         this.addCustomElements(appender, x, y, width - 55, height);
@@ -40,10 +49,17 @@ public abstract class WidgetBuilder<T> {
         Font font = CLIENT.get().font;
         this.textWidget = new StringWidget(20, y, font.width(name), height, Component.literal(name), font);
         appender.accept(this.textWidget);
-        this.resetButton = Button.builder(Component.translatable("jupiter.screen.button.reset"), button -> {
+        //? >=1.19.3 {
+        /*this.resetButton = Button.builder(Component.translatable("jupiter.screen.button.reset"), button -> {
             this.config.reset();
             this.refresh();
         }).bounds(x + width - 50, y, 50, height).build();
+        *///?} else {
+        this.resetButton = new Button(x + width - 50, y, 50, height, Component.translatable("jupiter.screen.button.reset"), button -> {
+            this.config.reset();
+            this.refresh();
+        });
+        //?}
         this.refreshResetButton(false);
         this.config.registerCallback(v -> this.refreshResetButton(false));
         appender.accept(this.resetButton);
@@ -63,11 +79,11 @@ public abstract class WidgetBuilder<T> {
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {
             this.textWidget.visible = visible;
-            this.textWidget.setY(y);
+            this.textWidget./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
         }
         if (this.resetButton != null) {
             this.resetButton.visible = visible;
-            this.resetButton.setY(y);
+            this.resetButton./*? >=1.19.3 {*//*setY*//*?} else {*/y =/*?}*/(y);
         }
         this.updateCustom(visible, y);
     }

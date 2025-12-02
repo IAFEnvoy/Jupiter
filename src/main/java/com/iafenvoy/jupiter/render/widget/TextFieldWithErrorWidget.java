@@ -1,10 +1,13 @@
 package com.iafenvoy.jupiter.render.widget;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+//? >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?} else {
+import com.mojang.blaze3d.vertex.PoseStack;
+//?}
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 public class TextFieldWithErrorWidget extends EditBox {
     private boolean hasError = false;
@@ -13,13 +16,22 @@ public class TextFieldWithErrorWidget extends EditBox {
         super(font, x, y, width, height, Component.empty());
     }
 
+    //? >=1.19.3 {
+    /*@Override
+    public void renderWidget(/^? >=1.20 {^//^GuiGraphics^//^?} else {^/PoseStack/^?}^/ graphics, int mouseX, int mouseY, float partialTick) {
+    *///?} else {
     @Override
-    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        //?}
         if (this.hasError) {
             this.setTextColorUneditable(0xFFFF0000);
             this.setEditable(false);
         }
-        super.renderWidget(graphics, mouseX, mouseY, partialTick);
+        //? >=1.19.3 {
+        /*super.renderWidget(graphics, mouseX, mouseY, partialTick);
+         *///?} else {
+        super.renderButton(poseStack, mouseX, mouseY, partialTick);
+        //?}
         this.setEditable(true);
     }
 

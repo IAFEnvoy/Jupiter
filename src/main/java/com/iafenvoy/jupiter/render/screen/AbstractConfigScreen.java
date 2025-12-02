@@ -7,14 +7,18 @@ import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.TabButton;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 *///?}
+//? >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?} else {
+import com.iafenvoy.jupiter.util.JupiterRenderContext;
+import com.mojang.blaze3d.vertex.PoseStack;
+//?}
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +51,11 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(Button.builder(Component.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+        //? >=1.19.3 {
+        /*this.addRenderableWidget(Button.builder(Component.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+         *///?} else {
+        this.addRenderableWidget(new Button(10, 5, 20, 15, Component.literal("<"), button -> this.onClose()));
+        //?}
         int x = 10, y = 22;
         this.groupButtons.clear();
         List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
@@ -138,15 +146,21 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull /*? >=1.20 {*//*GuiGraphics*//*?} else {*/PoseStack/*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         this.renderBackground(graphics);
         //?}
         super.render(graphics, mouseX, mouseY, partialTicks);
-        graphics.drawString(this.font, this.title, 35, 10, -1, true);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
+        //? >=1.20 {
+        /*graphics.drawString(this.font, this.title, 35, 10, -1, true);
         graphics.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
+         *///?} else {
+        JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
+        context.drawString(this.font, this.title, 35, 10, -1);
+        context.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
+        //?}
         this.groupScrollBar.render(graphics, mouseX, mouseY, partialTicks, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
         if (this.groupScrollBar.isDragging()) this.updateTabPos();
         this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
@@ -198,13 +212,13 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         private final int baseX;
 
         public TabButton(ConfigGroup group, int baseX, int y, int width, int height, Consumer<TabButton> listener) {
-            super(baseX, y, width, height, Component.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button), DEFAULT_NARRATION);
+            super(baseX, y, width, height, Component.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button)/*? >=1.19.3 {*//*, DEFAULT_NARRATION*//*?}*/);
             this.group = group;
             this.baseX = baseX;
         }
 
         public void updatePos(int offsetX) {
-            this.setX(this.baseX - offsetX);
+            this./*? >= 1.19.3 {*//*setX*//*?} else {*/x =/*?}*/(this.baseX - offsetX);
         }
     }
 }
