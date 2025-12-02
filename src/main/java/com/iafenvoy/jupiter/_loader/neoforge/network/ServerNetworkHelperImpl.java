@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter._loader.neoforge.network;
 
 //? neoforge{
-import com.iafenvoy.jupiter.network.ServerNetworkHelper;
+/*import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -39,4 +39,4 @@ public class ServerNetworkHelperImpl implements ServerNetworkHelper {
         RECEIVERS.entrySet().stream().filter(x -> x.getKey().id().equals(payload.type().id())).map(e -> e.getValue().handle(((ServerLevel) ctx.player().level()).getServer(), (ServerPlayer) ctx.player(), payload)).filter(Objects::nonNull).forEach(Runnable::run);
     }
 }
-//?}
+*/

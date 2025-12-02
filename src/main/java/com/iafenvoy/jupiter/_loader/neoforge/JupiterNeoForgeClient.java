@@ -1,8 +1,7 @@
 package com.iafenvoy.jupiter._loader.neoforge;
 
-//? neoforge {
-
-import com.iafenvoy.jupiter.ConfigManager;
+//? neoforge{
+/*import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
@@ -40,4 +39,4 @@ public class JupiterNeoForgeClient {
             event.register(entry.getKey(), ClientNetworkHelperImpl::handleData);
     }
 }
-//?}
+*/

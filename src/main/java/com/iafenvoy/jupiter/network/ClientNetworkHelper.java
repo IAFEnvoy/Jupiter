@@ -1,15 +1,18 @@
 package com.iafenvoy.jupiter.network;
 
-//?neoforge{
+// @formatter:off
+//? neoforge {
+/*import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
+ *///?}
+//? fabric {
+import com.iafenvoy.jupiter._loader.fabric.network.ClientNetworkHelperImpl;
+//?}
 
-import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public interface ClientNetworkHelper {
-    //?neoforge{
     ClientNetworkHelper INSTANCE = new ClientNetworkHelperImpl();
-    //?}
 
     void sendToServer(CustomPacketPayload payload);
 

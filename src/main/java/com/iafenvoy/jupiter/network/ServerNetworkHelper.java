@@ -1,8 +1,13 @@
 package com.iafenvoy.jupiter.network;
 
-//?neoforge{
+// @formatter:off
+//? neoforge {
+/*import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
+ *///?}
+//? fabric {
+import com.iafenvoy.jupiter._loader.fabric.network.ServerNetworkHelperImpl;
+//?}
 
-import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -10,9 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public interface ServerNetworkHelper {
-    //?neoforge{
     ServerNetworkHelper INSTANCE = new ServerNetworkHelperImpl();
-    //?}
 
     void sendToPlayer(ServerPlayer player, CustomPacketPayload payload);
 

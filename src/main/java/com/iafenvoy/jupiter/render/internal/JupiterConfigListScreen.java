@@ -28,13 +28,13 @@ public class JupiterConfigListScreen extends Screen {
     protected void init() {
         super.init();
         if (this.initialized)
-            this.widget.updateSize(100, new HeaderAndFooterLayout(this, 64, 32));
+            this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 64, 32));
         else {
             this.initialized = true;
             this.widget = new JupiterConfigListWidget(this, this.minecraft, this.width - 80, this.height - 70, 64, 24);
-            this.widget.setX(40);
-            this.widget.update();
         }
+        this.widget.setX(40);
+        this.widget.update();
         this.addRenderableWidget(this.widget);
         this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.back"), button -> this.onClose()).bounds(40, 40, 100, 20).build());
         this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.open"), button -> {

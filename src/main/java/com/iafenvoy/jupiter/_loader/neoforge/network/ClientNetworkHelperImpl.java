@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter._loader.neoforge.network;
-//? neoforge{
 
-import com.iafenvoy.jupiter.network.ClientNetworkHelper;
+//? neoforge{
+/*import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -29,4 +29,4 @@ public class ClientNetworkHelperImpl implements ClientNetworkHelper {
         ClientPacketDistributor.sendToServer(payload);
     }
 }
-//?}
+*/

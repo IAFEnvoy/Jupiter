@@ -1,8 +1,7 @@
 package com.iafenvoy.jupiter._loader.neoforge;
 
-//? neoforge {
-
-import com.iafenvoy.jupiter.Jupiter;
+//? neoforge{
+/*import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,4 +41,4 @@ public class JupiterNeoForge {
         event.addListener(Jupiter.id("server_config_reload"), new ServerConfigManager());
     }
 }
-/// ?}
+*/

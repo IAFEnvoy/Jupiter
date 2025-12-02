@@ -7,11 +7,9 @@ plugins {
 }
 
 tasks.named<ProcessResources>("processResources") {
-    fun prop(name: String) = project.property(name) as String
-
     val props = HashMap<String, String>().apply {
-        this["version"] = prop("mod.version")
-        this["minecraft"] = prop("deps.minecraft")
+        this["version"] = project.property("mod.version") as String
+        this["minecraft"] = project.property("deps.minecraft") as String
     }
 
     filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
@@ -30,6 +28,7 @@ jsonlang {
 repositories {
     mavenLocal()
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+    maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
 }
 
 dependencies {
@@ -41,9 +40,16 @@ dependencies {
     })
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
-
-    val modules = listOf("transitive-access-wideners-v1", "registry-sync-v0", "resource-loader-v0")
-    for (it in modules) modImplementation(fabricApi.module("fabric-$it", property("deps.fabric-api") as String))
+    modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
+    // @formatter:off
+    var fabricApiVersion = property("deps.fabric-api") as String
+    include(fabricApi.module("fabric-api-base", fabricApiVersion))
+    include(fabricApi.module("fabric-networking-api-v1", fabricApiVersion))
+    if (stonecutter.eval(stonecutter.current.version, "<=1.21.9"))
+        include(fabricApi.module("fabric-resource-loader-v0", fabricApiVersion))
+    else
+        include(fabricApi.module("fabric-resource-loader-v1", fabricApiVersion))
+    // @formatter:on
 }
 
 fabricApi {

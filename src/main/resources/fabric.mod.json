@@ -16,10 +16,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.iafenvoy.jupiter.jupiter.fabric.FabricEntrypoint"
+      "com.iafenvoy.jupiter._loader.fabric.JupiterFabric"
     ],
     "client": [
-      "com.iafenvoy.jupiter.jupiter.fabric.FabricClientEntrypoint"
+      "com.iafenvoy.jupiter._loader.fabric.JupiterFabricClient"
+    ],
+    "modmenu": [
+      "com.iafenvoy.jupiter._loader.fabric.compat.ModMenu"
     ]
   },
   "depends": {
