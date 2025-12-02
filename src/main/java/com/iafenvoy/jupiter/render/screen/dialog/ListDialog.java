@@ -8,7 +8,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.MouseButtonEvent;
+//? >=1.21.9 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -83,21 +85,33 @@ public class ListDialog<T> extends Dialog<List<T>> {
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 
-    @Override
+    //? >=1.21.9 {
+    /*@Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
-        if (event.button() == 0 && this.itemScrollBar.wasMouseOver()) {
+        int button = event.button();
+    *///?} else {
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        //?}
+        if (button == 0 && this.itemScrollBar.wasMouseOver()) {
             this.itemScrollBar.setIsDragging(true);
             this.updateItemPos();
             return true;
         }
-        boolean b = super.mouseClicked(event, isDoubleClick);
+        boolean b = super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
         if (!b) this.setFocused(null);
         return b;
     }
 
-    @Override
+    //? >=1.21.9 {
+    /*@Override
     public boolean mouseReleased(MouseButtonEvent event) {
-        if (event.button() == 0) this.itemScrollBar.setIsDragging(false);
-        return super.mouseReleased(event);
+        int button = event.button();
+    *///?} else {
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        //?}
+        if (button == 0) this.itemScrollBar.setIsDragging(false);
+        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
     }
 }

@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter._loader.neoforge.network;
 
-//? neoforge{
+//? neoforge {
 /*import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

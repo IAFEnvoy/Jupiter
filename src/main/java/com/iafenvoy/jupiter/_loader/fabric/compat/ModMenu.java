@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter._loader.fabric.compat;
 
-//? fabric{
+//? fabric {
 import com.iafenvoy.jupiter.render.internal.JupiterConfigListScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

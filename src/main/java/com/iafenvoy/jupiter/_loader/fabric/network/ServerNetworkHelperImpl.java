@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter._loader.fabric.network;
 
-//? fabric{
+//? fabric {
 import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

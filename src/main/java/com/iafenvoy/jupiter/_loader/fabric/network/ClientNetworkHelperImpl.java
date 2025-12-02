@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter._loader.fabric.network;
 
-//? fabric{
+//? fabric {
 import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

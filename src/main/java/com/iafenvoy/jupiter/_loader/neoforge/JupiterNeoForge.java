@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter._loader.neoforge;
 
-//? neoforge{
+//? neoforge {
 /*import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;

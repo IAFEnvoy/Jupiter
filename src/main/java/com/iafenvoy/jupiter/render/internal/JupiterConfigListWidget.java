@@ -3,10 +3,13 @@ package com.iafenvoy.jupiter.render.internal;
 import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.interfaces.IConfigHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.input.KeyEvent;
+//? >=1.21.9 {
+/*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+*///?} else {
+import net.minecraft.client.gui.GuiGraphics;
+//?}
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -40,10 +43,19 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         this.entries.forEach(this::addEntry);
     }
 
-    @Override
+    //? >=1.21.9 {
+    /*@Override
     public boolean keyPressed(@NotNull KeyEvent event) {
+    *///?} else {
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        //?}
         ConfigEntry entry = this.getSelected();
-        return entry != null && entry.keyPressed(event) || super.keyPressed(event);
+        //? >=1.21.9 {
+        /*return entry != null && entry.keyPressed(event) || super.keyPressed(event);
+         *///?} else {
+        return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
+        //?}
     }
 
     public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
@@ -56,15 +68,25 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
             this.handler = handler;
         }
 
-        @Override
+        //? >=1.21.9 {
+        /*@Override
         public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean isHovering, float partialTick) {
             int x = this.getX(), y = this.getY();
+        *///?} else {
+        @Override
+        public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            //?}
             graphics.drawString(this.client.font, Component.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 1, -1, true);
             graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 1 + 9, -1, true);
         }
 
+        //? >=1.21.9 {
+        /*@Override
+        public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
+        *///?} else {
         @Override
-        public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean p_432750_) {
+        public boolean mouseClicked(double x, double y, int button) {
+            //?}
             this.screen.select(this);
             return false;
         }

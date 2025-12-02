@@ -10,8 +10,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
+//? >=1.21.9 {
+/*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -97,13 +99,19 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
             this.configWidgets.get(i).update(false, 0);
     }
 
-    @Override
+    //? >=1.21.9 {
+    /*@Override
     public boolean keyPressed(KeyEvent event) {
-        if (event.key() == GLFW.GLFW_KEY_ESCAPE) {
+        int keyCode = event.key();
+    *///?} else {
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        //?}
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
             this.onClose();
             return true;
         }
-        return super.keyPressed(event);
+        return super.keyPressed(/*? >=1.21.9 {*//*event*//*?} else {*/keyCode, scanCode, modifiers/*?}*/);
     }
 
     @Override
@@ -141,30 +149,42 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 
-    @Override
+    //? >=1.21.9 {
+    /*@Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
-        if (event.button() == 0 && this.groupScrollBar.wasMouseOver()) {
+        int button = event.button();
+    *///?} else {
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        //?}
+        if (button == 0 && this.groupScrollBar.wasMouseOver()) {
             this.groupScrollBar.setIsDragging(true);
             this.updateTabPos();
             return true;
         }
-        if (event.button() == 0 && this.itemScrollBar.wasMouseOver()) {
+        if (button == 0 && this.itemScrollBar.wasMouseOver()) {
             this.itemScrollBar.setIsDragging(true);
             this.updateItemPos();
             return true;
         }
-        boolean b = super.mouseClicked(event, isDoubleClick);
+        boolean b = super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
         if (!b) this.setFocused(null);
         return b;
     }
 
-    @Override
+    //? >=1.21.9 {
+    /*@Override
     public boolean mouseReleased(MouseButtonEvent event) {
-        if (event.button() == 0) {
+        int button = event.button();
+    *///?} else {
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        //?}
+        if (button == 0) {
             this.groupScrollBar.setIsDragging(false);
             this.itemScrollBar.setIsDragging(false);
         }
-        return super.mouseReleased(event);
+        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
     }
 
     protected abstract String getCurrentEditText();
