@@ -116,8 +116,8 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)) return true;
+    public boolean mouseScrolled(double mouseX, double mouseY,/*? >=1.20.2 {*//*double scrollX,*//*?}*/ double scrollY) {
+        if (super.mouseScrolled(mouseX, mouseY,/*? >=1.20.2 {*//*scrollX,*//*?}*/ scrollY)) return true;
         if (mouseX >= 10 && mouseX <= this.width - 20 && mouseY >= 22 && mouseY <= 42) {
             this.groupScrollBar.setValue(this.groupScrollBar.getValue() + (scrollY > 0 ? -20 : 20));
             this.updateTabPos();
@@ -139,6 +139,9 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        //? <=1.20.1 {
+        this.renderBackground(graphics);
+        //?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         graphics.drawString(this.font, this.title, 35, 10, -1, true);
         String currentText = this.getCurrentEditText();

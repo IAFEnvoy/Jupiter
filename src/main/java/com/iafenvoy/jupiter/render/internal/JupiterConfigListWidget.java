@@ -21,9 +21,12 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     private final JupiterConfigListScreen screen;
     private final List<ConfigEntry> entries = new ArrayList<>();
 
-    public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y, int entryHeight) {
-        super(client, width, height, y, entryHeight);
+    public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y,/*? <=1.20.1 {*/int bottom,/*?}*/ int entryHeight) {
+        super(client, width, height, y,/*? <=1.20.1 {*/bottom,/*?}*/ entryHeight);
         this.screen = screen;
+        //? <=1.20.1 {
+        this.setRenderTopAndBottom(false);
+        //?}
     }
 
     public void update() {

@@ -60,7 +60,7 @@ neoForge {
 
 tasks {
     processResources {
-        exclude("**/fabric.mod.json", "**/*.accesswidener")
+        exclude("**/fabric.mod.json", "**/*.accesswidener", "**/pack.mcmeta")
         if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) exclude("**/mods.toml")
         else exclude("**/neoforge.mods.toml")
         dependsOn("stonecutterGenerate")

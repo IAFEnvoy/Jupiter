@@ -21,3 +21,4 @@ side = "BOTH"
 [[dependencies.jupiter]]
 modId = "minecraft"
 mandatory = true
+versionRange = "[0,)"

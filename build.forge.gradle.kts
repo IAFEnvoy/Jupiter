@@ -60,7 +60,7 @@ legacyForge {
 
 tasks {
     processResources {
-        exclude("**/fabric.mod.json", "**/*.accesswidener", "**/neoforge.mods.toml")
+        exclude("**/fabric.mod.json", "**/neoforge.mods.toml", "**/*.accesswidener")
     }
 
     named("createMinecraftArtifacts") {
@@ -77,11 +77,10 @@ tasks {
 
 java {
     withSourcesJar()
-    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) {
-        JavaVersion.VERSION_21
-    } else {
-        JavaVersion.VERSION_17
-    }
+    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) JavaVersion.VERSION_21
+    else if (stonecutter.eval(stonecutter.current.version, ">=1.18")) JavaVersion.VERSION_17
+    else if (stonecutter.eval(stonecutter.current.version, ">=1.17")) JavaVersion.VERSION_16
+    else JavaVersion.VERSION_1_8
     sourceCompatibility = javaCompat
     targetCompatibility = javaCompat
 }

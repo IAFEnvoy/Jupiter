@@ -5,11 +5,13 @@ package com.iafenvoy.jupiter.network;
 /*import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
  *///?}
 //? fabric {
-import com.iafenvoy.jupiter._loader.fabric.network.ClientNetworkHelperImpl;
+/*import com.iafenvoy.jupiter._loader.fabric.network.ClientNetworkHelperImpl;
+*///?}
+//? forge {
+import com.iafenvoy.jupiter._loader.forge.network.ClientNetworkHelperImpl;
 //?}
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
+ import net.minecraft.network.FriendlyByteBuf;
 //? >=1.20.5 {
 /*import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 *///?} else {

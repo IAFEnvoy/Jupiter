@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 //? >=1.20.5 {
 /*import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
-*///?}
+ *///?}
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
@@ -29,17 +29,20 @@ public class JupiterConfigListScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        if (this.initialized)
-            //? >=1.20.5 {
-            /*this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 64, 32));
-             *///?} else {
-            this.widget.setSize(this.width - 80, this.height - 70);
-            //?}
-        else {
+        if (!this.initialized) {
             this.initialized = true;
-            this.widget = new JupiterConfigListWidget(this, this.minecraft, this.width - 80, this.height - 70, 64, 24);
+            this.widget = new JupiterConfigListWidget(this, this.minecraft, this.width - 80, this.height - 256, 64,/*? <=1.20.1 {*/this.width - 32,/*?}*/ 24);
         }
+        //? >=1.20.5 {
+        /*this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 64, 32));
         this.widget.setX(40);
+         *///?} else >=1.20.2 {
+        /*this.widget.setSize(this.width - 80, this.height - 70);
+        this.widget.setX(40);
+         *///?} else {
+        this.widget.updateSize(this.width - 80, this.height - 96, 64, this.height - 32);
+        this.widget.setLeftPos(40);
+        //?}
         this.widget.update();
         this.addRenderableWidget(this.widget);
         this.addRenderableWidget(Button.builder(Component.translatable("jupiter.screen.back"), button -> this.onClose()).bounds(40, 40, 100, 20).build());
@@ -52,6 +55,9 @@ public class JupiterConfigListScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        //? <=1.20.1 {
+        this.renderBackground(graphics);
+        //?}
         super.render(graphics, mouseX, mouseY, delta);
         this.widget.render(graphics, mouseX, mouseY, delta);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);

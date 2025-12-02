@@ -19,6 +19,9 @@ public class Dialog<T> extends Screen implements JupiterScreen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        //? <=1.20.1 {
+        this.renderBackground(graphics);
+        //?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         graphics.drawString(this.font, this.title, 35, 10, -1, true);
     }

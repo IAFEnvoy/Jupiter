@@ -71,8 +71,8 @@ public class ListDialog<T> extends Dialog<List<T>> {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)) return true;
+    public boolean mouseScrolled(double mouseX, double mouseY,/*? >=1.20.2 {*//*double scrollX,*//*?}*/ double scrollY) {
+        if (super.mouseScrolled(mouseX, mouseY,/*? >=1.20.2 {*//*scrollX,*//*?}*/ scrollY)) return true;
         this.itemScrollBar.setValue(this.itemScrollBar.getValue() + (scrollY > 0 ? -1 : 1) * ITEM_PER_SCROLL);
         this.updateItemPos();
         return true;

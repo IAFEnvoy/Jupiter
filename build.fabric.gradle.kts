@@ -62,7 +62,7 @@ fabricApi {
 
 tasks {
     processResources {
-        exclude("**/neoforge.mods.toml", "**/mods.toml")
+        exclude("**/neoforge.mods.toml", "**/mods.toml", "**/pack.mcmeta")
         dependsOn("stonecutterGenerate")
     }
 
@@ -76,14 +76,10 @@ tasks {
 
 java {
     withSourcesJar()
-    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.21")) {
-        JavaVersion.VERSION_21
-    } else if (stonecutter.eval(stonecutter.current.version, ">=1.18")) {
-        JavaVersion.VERSION_17
-    } else if (stonecutter.eval(stonecutter.current.version, ">=1.17")) {
-        JavaVersion.VERSION_16
-    } else
-        JavaVersion.VERSION_1_8
+    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) JavaVersion.VERSION_21
+    else if (stonecutter.eval(stonecutter.current.version, ">=1.18")) JavaVersion.VERSION_17
+    else if (stonecutter.eval(stonecutter.current.version, ">=1.17")) JavaVersion.VERSION_16
+    else JavaVersion.VERSION_1_8
     sourceCompatibility = javaCompat
     targetCompatibility = javaCompat
 }

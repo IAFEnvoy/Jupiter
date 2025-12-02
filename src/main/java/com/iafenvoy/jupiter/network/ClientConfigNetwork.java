@@ -56,6 +56,6 @@ public class ClientConfigNetwork {
     }
 
     private static Runnable onConfigError(Minecraft minecraft) {
-        return () -> minecraft./*? >=1.21.2 {*//*getToastManager*//*?} else {*/getToasts/*?}*/().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title"), Component.translatable("jupiter.toast.upload_config_error_content")));
+        return () -> minecraft./*? >=1.21.2 {*//*getToastManager*//*?} else {*/getToasts/*?}*/().addToast(new SystemToast(SystemToast./*? >=1.20.2 {*//*SystemToastId*//*?} else {*/SystemToastIds/*?}*/.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title"), Component.translatable("jupiter.toast.upload_config_error_content")));
     }
 }

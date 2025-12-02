@@ -17,14 +17,14 @@ public final class Jupiter {
     public static final String MOD_ID = "jupiter";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static void init() {
+    public static void init(boolean development) {
         //? >=1.20.5 {
         /*ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
         ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigRequestPayload.TYPE, ConfigRequestPayload.CODEC);
         ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigErrorPayload.TYPE, ConfigErrorPayload.CODEC);
         *///?}
 
-        ConfigManager.getInstance().registerConfigHandler(new TestConfig());
+        if (development) ConfigManager.getInstance().registerConfigHandler(new TestConfig());
     }
 
     public static void process() {
@@ -35,6 +35,9 @@ public final class Jupiter {
         ClientConfigNetwork.init();
     }
 
+    //? forge {
+    @SuppressWarnings("removal")
+     //?}
     public static ResourceLocation id(String id) {
         //? >=1.21 {
         /*return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);

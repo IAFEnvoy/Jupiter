@@ -7,22 +7,24 @@ import com.iafenvoy.jupiter.ServerConfigManager;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+//? <=1.20.6 {
 import net.neoforged.neoforge.common.NeoForge;
-
-//? <=1.21.6 && >=1.20.5 {
-/^import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
-import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
+//?}
+//? >=1.20.5 {
+/^import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import java.util.Map;
+^///?}
+//? <=1.21.6 && >=1.20.5 {
+/^import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
+import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
  ^///?}
 //? >=1.21.4 {
 /^import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
  ^///?} else {
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 //?}
 //? >=1.20.5 {
 /^import net.minecraft.network.codec.StreamCodec;
@@ -32,6 +34,8 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 ^///?} else {
 import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufC2S;
 import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufS2C;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 //?}
 
 @Mod(Jupiter.MOD_ID)
@@ -44,7 +48,7 @@ import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufS2C;
 //?}
 public class JupiterNeoForge {
     public JupiterNeoForge() {
-        Jupiter.init();
+        Jupiter.init(!FMLEnvironment.production);
         //? <=1.20.6 {
         NeoForge.EVENT_BUS.addListener(JupiterNeoForge::registerServerListener);
         //?}

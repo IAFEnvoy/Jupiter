@@ -5,9 +5,11 @@ package com.iafenvoy.jupiter.network;
 /*import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
  *///?}
 //? fabric {
-import com.iafenvoy.jupiter._loader.fabric.network.ServerNetworkHelperImpl;
+/*import com.iafenvoy.jupiter._loader.fabric.network.ServerNetworkHelperImpl;
+*///?}
+//? forge {
+import com.iafenvoy.jupiter._loader.forge.network.ServerNetworkHelperImpl;
 //?}
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

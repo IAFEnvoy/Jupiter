@@ -81,6 +81,9 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        //? <=1.20.1 {
+        this.renderBackground(graphics);
+        //?}
         assert this.minecraft != null;
         graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
         super.render(graphics, mouseX, mouseY, delta);

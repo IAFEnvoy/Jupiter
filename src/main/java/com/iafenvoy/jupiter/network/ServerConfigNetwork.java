@@ -9,6 +9,7 @@ import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
 *///?}
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +34,15 @@ public class ServerConfigNetwork {
             assert data != null;
             compound = data.serializeNbt();
         } else compound = new CompoundTag();
-        return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, /*? >=1.20.5 {*//*new ConfigSyncPayload(id, b, compound)*//*?} else {*/NetworkConstants.CONFIG_SYNC_S2C, ByteBufHelper.create().writeResourceLocation(id).writeBoolean(b).writeNbt(compound)/*?}*/);
+        //? >=1.20.5 {
+        /*return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, new ConfigSyncPayload(id, b, compound));
+         *///?} else {
+        FriendlyByteBuf buf = ByteBufHelper.create();
+        buf.writeResourceLocation(id);
+        buf.writeBoolean(b);
+        buf.writeNbt(compound);
+        return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, NetworkConstants.CONFIG_SYNC_S2C, buf);
+        //?}
     }
 
     private static Runnable onConfigSync(MinecraftServer server, ServerPlayer player, ResourceLocation id, CompoundTag data) {
