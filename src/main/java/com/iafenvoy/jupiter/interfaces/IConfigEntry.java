@@ -1,4 +1,4 @@
-package com.iafenvoy.jupiter.config;
+package com.iafenvoy.jupiter.interfaces;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.type.ConfigType;
@@ -9,7 +9,7 @@ import net.minecraft.client.resources.language.I18n;
 
 import java.util.function.Consumer;
 
-public interface ConfigEntry<T> {
+public interface IConfigEntry<T> {
     ConfigType<T> getType();
 
     default String getJsonKey() {
@@ -18,7 +18,7 @@ public interface ConfigEntry<T> {
 
     String getNameKey();
 
-    ConfigEntry<T> newInstance();
+    IConfigEntry<T> newInstance();
 
     default String getPrettyName() {
         return I18n.get(this.getNameKey());

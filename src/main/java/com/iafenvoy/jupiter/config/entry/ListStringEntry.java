@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.Codec;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class ListStringEntry extends ListBaseEntry<String> {
     }
 
     @Override
-    public ConfigEntry<String> newSingleInstance(String value, int index, Runnable reload) {
+    public IConfigEntry<String> newSingleInstance(String value, int index, Runnable reload) {
         return new StringEntry(this.nameKey, value) {
             @Override
             public void reset() {
@@ -45,7 +45,7 @@ public class ListStringEntry extends ListBaseEntry<String> {
     }
 
     @Override
-    public ConfigEntry<List<String>> newInstance() {
+    public IConfigEntry<List<String>> newInstance() {
         return new ListStringEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
     }
 }

@@ -6,7 +6,7 @@ import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.render.widget.builder.*;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -40,15 +40,15 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class WidgetBuilderManager {
-    private static final Map<ConfigType<?>, BiFunction<AbstractConfigContainer, ConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
+    private static final Map<ConfigType<?>, BiFunction<AbstractConfigContainer, IConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> void register(ConfigType<T> type, BiFunction<AbstractConfigContainer, ConfigEntry<T>, WidgetBuilder<T>> builder) {
-        BUILDERS.put(type, (BiFunction<AbstractConfigContainer, ConfigEntry<?>, WidgetBuilder<?>>) (Object) builder);
+    public static <T> void register(ConfigType<T> type, BiFunction<AbstractConfigContainer, IConfigEntry<T>, WidgetBuilder<T>> builder) {
+        BUILDERS.put(type, (BiFunction<AbstractConfigContainer, IConfigEntry<?>, WidgetBuilder<?>>) (Object) builder);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> WidgetBuilder<T> get(AbstractConfigContainer container, ConfigEntry<T> entry) {
+    public static <T> WidgetBuilder<T> get(AbstractConfigContainer container, IConfigEntry<T> entry) {
         return (WidgetBuilder<T>) BUILDERS.getOrDefault(entry.getType(), Fallback::new).apply(container, entry);
     }
 
@@ -73,7 +73,7 @@ public class WidgetBuilderManager {
 
     //When a widget not found, it should navigate to this one
     private static class Fallback<T> extends WidgetBuilder<T> {
-        public Fallback(AbstractConfigContainer container, ConfigEntry<T> config) {
+        public Fallback(AbstractConfigContainer container, IConfigEntry<T> config) {
             super(container, config);
         }
 

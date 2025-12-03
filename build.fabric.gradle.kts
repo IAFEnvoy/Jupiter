@@ -17,7 +17,7 @@ tasks.named<ProcessResources>("processResources") {
     }
 }
 
-version = "${property("mod.version")}+${property("deps.minecraft")}-fabric"
+version = "${property("mod.version")}-${property("deps.minecraft")}-fabric"
 base.archivesName = property("mod.id") as String
 
 jsonlang {
@@ -97,7 +97,7 @@ publishMods {
 
     type = BETA
     displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} Fabric"
-    version = "${property("mod.version")}+${property("deps.minecraft")}-fabric"
+    version = "${property("mod.version")}-${property("deps.minecraft")}-fabric"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
     modLoaders.add("fabric")
 

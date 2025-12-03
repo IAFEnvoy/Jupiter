@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
-import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -17,7 +17,7 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     @Nullable
     private Button button;
 
-    public ButtonWidgetBuilder(AbstractConfigContainer container, ConfigEntry<T> config, Button.OnPress action, Supplier<Component> nameSupplier) {
+    public ButtonWidgetBuilder(AbstractConfigContainer container, IConfigEntry<T> config, Button.OnPress action, Supplier<Component> nameSupplier) {
         super(container, config);
         this.action = button -> {
             action.onPress(button);

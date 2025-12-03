@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.Codec;
 
 import java.util.AbstractMap;
@@ -20,7 +20,7 @@ public class MapStringEntry extends MapBaseEntry<String> {
     }
 
     @Override
-    public ConfigEntry<Map.Entry<String, String>> newSingleInstance(String value, String key, Runnable reload) {
+    public IConfigEntry<Map.Entry<String, String>> newSingleInstance(String value, String key, Runnable reload) {
         return new EntryStringEntry(this.nameKey, new AbstractMap.SimpleEntry<>(key, value)) {
             @Override
             public void reset() {
@@ -51,7 +51,7 @@ public class MapStringEntry extends MapBaseEntry<String> {
     }
 
     @Override
-    public ConfigEntry<Map<String, String>> newInstance() {
+    public IConfigEntry<Map<String, String>> newInstance() {
         return new MapStringEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
     }
 }

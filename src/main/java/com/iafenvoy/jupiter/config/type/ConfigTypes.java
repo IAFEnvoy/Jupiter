@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.config.type;
 
-import com.iafenvoy.jupiter.config.ConfigEnumEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,7 +20,7 @@ public interface ConfigTypes {
     ConfigType<Map.Entry<String, Integer>> ENTRY_INTEGER = new SingleConfigType<>();
     @ApiStatus.Internal
     ConfigType<Map.Entry<String, Double>> ENTRY_DOUBLE = new SingleConfigType<>();
-    ConfigType<ConfigEnumEntry> ENUM = new SingleConfigType<>();
+    ConfigType<IConfigEnumEntry> ENUM = new SingleConfigType<>();
     ConfigType<List<String>> LIST_STRING = new ListConfigType<>(STRING);
     ConfigType<List<Integer>> LIST_INTEGER = new ListConfigType<>(INTEGER);
     ConfigType<List<Double>> LIST_DOUBLE = new ListConfigType<>(DOUBLE);

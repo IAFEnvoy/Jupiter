@@ -17,7 +17,7 @@ tasks.named<ProcessResources>("processResources") {
     }
 }
 
-version = "${property("mod.version")}+${property("deps.minecraft")}-neoforge"
+version = "${property("mod.version")}-${property("deps.minecraft")}-neoforge"
 base.archivesName = property("mod.id") as String
 
 jsonlang {
@@ -101,7 +101,7 @@ publishMods {
 
     type = BETA
     displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} Neoforge"
-    version = "${property("mod.version")}+${property("deps.minecraft")}-neoforge"
+    version = "${property("mod.version")}-${property("deps.minecraft")}-neoforge"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
     modLoaders.add("neoforge")
 

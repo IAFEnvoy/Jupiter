@@ -16,7 +16,7 @@
   "jupiter.screen.open_server": "Open server config",
   "jupiter.screen.restart_required": "(Require Restart)",
   "jupiter.screen.server_config": "Server Config",
-  "jupiter.screen.unregistered_widget": "No widget registered for %s, please contact developers of %s",
+  "jupiter.screen.unregistered_widget": "Widget for %s not found, please contact developers of %s",
   "jupiter.toast.upload_config_error_content": "Permission denied",
   "jupiter.toast.upload_config_error_title": "Failed to modify server config"
 }

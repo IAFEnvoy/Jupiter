@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
@@ -45,7 +45,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         super(TextUtil.translatable(container.getTitleNameKey()));
         this.parent = parent;
         this.container = container;
-        this.currentGroup = container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
+        this.currentGroup = container.getConfigTabs().isEmpty() ? new ConfigGroup("error", "%ERROR%") : container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
     }
 
     @Override
@@ -79,7 +79,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         this.groupScrollBar.setMaxValue(Math.max(0, x - this.width));
         this.updateTabPos();
         this.calculateMaxItems();
-        this.textMaxLength = this.currentGroup.getConfigs().stream().map(ConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.textMaxLength = this.currentGroup.getConfigs().stream().map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
         this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(c -> WidgetBuilderManager.get(this.container, c)).toList());
         this.configWidgets.forEach(b -> b.addElements(this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
@@ -105,7 +105,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
 
     public void updateItemPos() {
         int top = this.itemScrollBar.getValue();
-        List<ConfigEntry<?>> entries = this.currentGroup.getConfigs();
+        List<IConfigEntry<?>> entries = this.currentGroup.getConfigs();
         for (int i = 0; i < top && i < entries.size(); i++)
             this.configWidgets.get(i).update(false, 0);
         for (int i = top; i < top + this.configPerPage && i < entries.size(); i++)

@@ -2,11 +2,11 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.config.ConfigEntry;
-import com.iafenvoy.jupiter.config.RangeConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IRangeConfigEntry;
 import com.mojang.serialization.Codec;
 
-public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry<Integer> {
+public class IntegerEntry extends BaseEntry<Integer> implements IRangeConfigEntry<Integer> {
     private final int minValue, maxValue;
     private boolean useSlider = false;
 
@@ -32,7 +32,7 @@ public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry
     }
 
     @Override
-    public ConfigEntry<Integer> newInstance() {
+    public IConfigEntry<Integer> newInstance() {
         return new IntegerEntry(this.nameKey, this.defaultValue, this.minValue, this.maxValue).visible(this.visible).json(this.jsonKey);
     }
 

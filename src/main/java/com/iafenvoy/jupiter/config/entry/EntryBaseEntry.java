@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
@@ -11,5 +11,5 @@ public abstract class EntryBaseEntry<T> extends BaseEntry<Map.Entry<String, T>> 
         super(nameKey, defaultValue);
     }
 
-    public abstract ConfigEntry<T> newValueInstance();
+    public abstract IConfigEntry<T> newValueInstance();
 }

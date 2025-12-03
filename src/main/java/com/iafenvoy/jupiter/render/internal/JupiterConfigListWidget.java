@@ -37,7 +37,6 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
 
     public void update() {
         this.entries.clear();
-        for(AbstractConfigContainer container:ConfigManager.getInstance().getConfigs())
         ConfigManager.getInstance().getConfigs().forEach(x -> this.entries.add(new ConfigEntry(this.screen, x)));
         this.updateEntries();
     }
