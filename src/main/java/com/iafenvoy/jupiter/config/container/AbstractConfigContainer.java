@@ -3,6 +3,7 @@ package com.iafenvoy.jupiter.config.container;
 import com.google.gson.*;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
+import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.*;
@@ -140,28 +141,7 @@ public abstract class AbstractConfigContainer {
     protected void writeCustomData(JsonObject obj) {
     }
 
-    @Deprecated
-    protected boolean shouldCompressKey() {
-        return true;
-    }
-
-    @Deprecated
-    protected SaveFullOption saveFullOption() {
-        return SaveFullOption.LOCAL;
-    }
-
-    protected enum SaveFullOption {
-        NONE(false, false), LOCAL(true, false), ALL(true, true);
-
-        private final boolean local, network;
-
-        SaveFullOption(boolean local, boolean network) {
-            this.local = local;
-            this.network = network;
-        }
-
-        public boolean shouldSaveFully(boolean isLocal) {
-            return isLocal ? this.local : this.network;
-        }
+    public ConfigSource getSource() {
+        return ConfigSource.NONE;
     }
 }

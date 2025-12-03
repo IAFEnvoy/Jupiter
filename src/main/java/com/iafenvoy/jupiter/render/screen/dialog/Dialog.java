@@ -26,16 +26,21 @@ public class Dialog<T> extends Screen implements JupiterScreen {
     }
 
     @Override
+    protected void init() {
+        super.init();
+    }
+
+    @Override
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
          *///?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         //? >=1.20 {
-        graphics.drawString(this.font, this.title, 35, 10, -1, true);
+        graphics.drawString(this.font, this.title, 40, 10, 0xFFFFFFFF, true);
         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawString(this.font, this.title, 35, 10, -1);
+        context.drawString(this.font, this.title, 40, 10, 0xFFFFFFFF);
         *///?}
     }
 

@@ -6,6 +6,7 @@ import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class SeparatorEntry implements IConfigEntry<Unit> {
@@ -17,6 +18,11 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     @Override
     public String getNameKey() {
         return "";
+    }
+
+    @Override
+    public Optional<String> getTooltipKey() {
+        return Optional.empty();
     }
 
     @Override

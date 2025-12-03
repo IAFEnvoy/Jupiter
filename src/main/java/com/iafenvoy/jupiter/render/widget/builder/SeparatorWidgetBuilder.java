@@ -22,12 +22,12 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
 
     @Override
     public void addElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        Font font = CLIENT.get().font;
         width = width + x - 20;
-        Font textRenderer = CLIENT.get().font;
-        int w = textRenderer.width("-"), k = 0;
+        int w = font.width("-"), k = 0;
         while ((k + 1) * w <= width) k++;
         String name = "-".repeat(k);
-        this.textWidget = new StringWidget(20, y, textRenderer.width(name), height, TextUtil.literal(name), textRenderer);
+        this.textWidget = new StringWidget(20, y, font.width(name), height, TextUtil.literal(name), font);
         appender.accept(this.textWidget);
     }
 

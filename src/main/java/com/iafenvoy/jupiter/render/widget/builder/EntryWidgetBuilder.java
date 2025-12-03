@@ -27,7 +27,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
 
     @Override
     public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        this.keyWidget = new EditBox(CLIENT.get().font, x, y, width / 2 - 5, height, TextUtil.literal(""));
+        this.keyWidget = new EditBox(CLIENT.get().font, x, y, width / 2 - 5, height, TextUtil.empty());
         this.keyWidget.setValue(this.config.getValue().getKey());
         this.keyWidget.setResponder(s -> this.config.setValue(new AbstractMap.SimpleEntry<>(s, this.config.getValue().getValue())));
         appender.accept(this.keyWidget);

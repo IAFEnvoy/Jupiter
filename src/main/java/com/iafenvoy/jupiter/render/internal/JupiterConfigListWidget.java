@@ -11,7 +11,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 //?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+        //?} else {
 /*import com.iafenvoy.jupiter.util.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -32,7 +32,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         this.screen = screen;
         //? <=1.20.1 {
         /*this.setRenderTopAndBottom(false);
-        *///?}
+         *///?}
     }
 
     public void update() {
@@ -61,16 +61,16 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     //? >=1.21.9 {
     @Override
     public boolean keyPressed(@NotNull KeyEvent event) {
-    //?} else {
+        //?} else {
     /*@Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         *///?}
         ConfigEntry entry = this.getSelected();
         //? >=1.21.9 {
         return entry != null && entry.keyPressed(event) || super.keyPressed(event);
-         //?} else {
+        //?} else {
         /*return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
-        *///?}
+         *///?}
     }
 
     public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
@@ -87,7 +87,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         @Override
         public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean isHovering, float partialTick) {
             int x = this.getX(), y = this.getY();
-        //?} else >=1.20 {
+            //?} else >=1.20 {
         /*@Override
         public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
         *///?} else {
@@ -95,14 +95,14 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
             *///?}
-            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 1, -1);
-            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 1 + 9, -1);
+            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 2, 0xFFFFFFFF);
+            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 2 + 9, 0xFF7F7F7F);
         }
 
         //? >=1.21.9 {
         @Override
         public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
-        //?} else {
+            //?} else {
         /*@Override
         public boolean mouseClicked(double x, double y, int button) {
             *///?}
@@ -116,7 +116,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
 
         @Override
         public @NotNull Component getNarration() {
-            return TextUtil.literal("");
+            return TextUtil.empty();
         }
     }
 }

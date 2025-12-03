@@ -7,6 +7,10 @@ import net.minecraft.network.chat.TranslatableComponent;
 *///?}
 
 public interface TextUtil {
+    static Component empty() {
+        return /*? >=1.19 {*/Component.empty();/*?} else {*//*new TextComponent("");*//*?}*/
+    }
+
     static Component literal(String text) {
         return /*? >=1.19 {*/Component.literal/*?} else {*//*new TextComponent*//*?}*/(text);
     }

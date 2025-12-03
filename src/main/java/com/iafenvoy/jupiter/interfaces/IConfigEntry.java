@@ -7,6 +7,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.client.resources.language.I18n;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public interface IConfigEntry<T> {
@@ -17,6 +18,8 @@ public interface IConfigEntry<T> {
     }
 
     String getNameKey();
+
+    Optional<String> getTooltipKey();
 
     IConfigEntry<T> newInstance();
 

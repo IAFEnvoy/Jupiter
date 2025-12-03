@@ -5,11 +5,12 @@ import net.minecraft.client.resources.language.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public abstract class BaseEntry<T> implements IConfigEntry<T> {
     protected final String nameKey;
-    protected String jsonKey;
+    protected String jsonKey, tooltipKey = null;
     protected boolean visible;
     protected final T defaultValue;
     protected T value;
@@ -29,6 +30,11 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
 
     public BaseEntry<T> json(String jsonKey) {
         this.jsonKey = jsonKey;
+        return this;
+    }
+
+    public BaseEntry<T> tooltip(String tooltipKey) {
+        this.tooltipKey = tooltipKey;
         return this;
     }
 
@@ -54,13 +60,18 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     }
 
     @Override
+    public String getJsonKey() {
+        return this.jsonKey;
+    }
+
+    @Override
     public String getNameKey() {
         return this.nameKey;
     }
 
     @Override
-    public String getJsonKey() {
-        return this.jsonKey;
+    public Optional<String> getTooltipKey() {
+        return Optional.ofNullable(this.tooltipKey);
     }
 
     @Override
@@ -86,8 +97,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     public String getPrettyName() {
         StringBuilder sb = new StringBuilder(IConfigEntry.super.getPrettyName());
         sb.append(" ");
-        if (this.restartRequired)
-            sb.append(I18n.get("jupiter.screen.restart_required"));
+        if (this.restartRequired) sb.append(I18n.get("jupiter.screen.restart_required")).append(" ");
         return sb.toString();
     }
 }

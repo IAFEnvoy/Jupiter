@@ -8,19 +8,19 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.gui.GuiGraphics;
         //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
+ *///?}
 
 public class TextFieldWithErrorWidget extends EditBox {
     private boolean hasError = false;
 
     public TextFieldWithErrorWidget(Font font, int x, int y, int width, int height) {
-        super(font, x, y, width, height, TextUtil.literal(""));
+        super(font, x, y, width, height, TextUtil.empty());
     }
 
     //? >=1.19.3 {
     @Override
     public void renderWidget(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTick) {
-    //?} else {
+        //?} else {
     /*@Override
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         *///?}
@@ -30,9 +30,9 @@ public class TextFieldWithErrorWidget extends EditBox {
         }
         //? >=1.19.3 {
         super.renderWidget(graphics, mouseX, mouseY, partialTick);
-         //?} else {
+        //?} else {
         /*super.renderButton(poseStack, mouseX, mouseY, partialTick);
-        *///?}
+         *///?}
         this.setEditable(true);
     }
 

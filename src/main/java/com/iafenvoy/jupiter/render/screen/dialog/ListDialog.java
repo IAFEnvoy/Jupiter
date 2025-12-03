@@ -36,15 +36,16 @@ public class ListDialog<T> extends Dialog<List<T>> {
     @Override
     protected void init() {
         super.init();
+        int width = Math.max(10, this.width - 70);
         //? >=1.19.3 {
-        this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+        this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, ITEM_HEIGHT).build());
         this.addRenderableWidget(Button.builder(TextUtil.literal("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
             this.rebuildWidgets();
-        }).bounds(this.width - 60, 5, 20, 20).build());
+        }).bounds(width - 10, 5, 20, ITEM_HEIGHT).build());
         //?} else {
-        /*this.addRenderableWidget(new Button(10, 5, 20, 15, TextUtil.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(new Button(this.width - 60, 5, 20, 20, TextUtil.literal("+"), button -> {
+        /*this.addRenderableWidget(new Button(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
+        this.addRenderableWidget(new Button(this.width - 60, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
             //? >=1.19 {
             this.rebuildWidgets();
@@ -67,13 +68,13 @@ public class ListDialog<T> extends Dialog<List<T>> {
                 *///?}
             }));
             this.widgets.add(widget);
-            widget.addDialogElements(this::addRenderableWidget, i + ":", 40, 0, Math.max(10, this.width - 70), ITEM_HEIGHT);
+            widget.addDialogElements(this::addRenderableWidget, i + ":", 40, 0, width, ITEM_HEIGHT);
         }
         this.updateItemPos();
     }
 
     public void calculateMaxItems() {
-        this.configPerPage = Math.max(0, (this.height - 25) / (ITEM_HEIGHT + ITEM_SEP));
+        this.configPerPage = Math.max(0, (this.height - 30) / (ITEM_HEIGHT + ITEM_SEP));
         this.itemScrollBar.setMaxValue(Math.max(0, this.entry.getValue().size() - this.configPerPage));
     }
 
@@ -106,7 +107,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
     @Override
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         super.render(graphics, mouseX, mouseY, partialTicks);
-        this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 25, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
+        this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 30, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 

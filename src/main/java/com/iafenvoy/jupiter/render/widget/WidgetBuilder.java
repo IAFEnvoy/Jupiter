@@ -7,9 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
-        //?}
+//?}
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -48,9 +49,9 @@ public abstract class WidgetBuilder<T> {
     }
 
     public void addElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        String name = this.config.getPrettyName();
         Font font = CLIENT.get().font;
-        this.textWidget = new StringWidget(20, y, font.width(name), height, TextUtil.literal(name), font);
+        Component component = TextUtil.literal(this.config.getPrettyName());
+        this.textWidget = new StringWidget(20, y, font.width(component), height, component, font);
         appender.accept(this.textWidget);
         //? >=1.19.3 {
         this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.reset"), button -> {

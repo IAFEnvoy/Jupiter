@@ -52,16 +52,16 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     protected void init() {
         super.init();
         //? >=1.19.3 {
-        this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
+        this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, ITEM_HEIGHT).build());
         //?} else {
-        /*this.addRenderableWidget(new Button(10, 5, 20, 15, TextUtil.literal("<"), button -> this.onClose()));
+        /*this.addRenderableWidget(new Button(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
          *///?}
-        int x = 10, y = 22;
+        int x = 10, y = 27;
         this.groupButtons.clear();
         List<ConfigGroup> configTabs = this.container.getConfigTabs();
         for (int i = 0; i < configTabs.size(); i++) {
             ConfigGroup category = configTabs.get(i);
-            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, 20, button -> {
+            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, ITEM_HEIGHT, button -> {
                 this.currentTab = this.container.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
                 //? >=1.19 {
@@ -99,7 +99,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     }
 
     public void calculateMaxItems() {
-        this.configPerPage = Math.max(0, (this.height - 55) / (ITEM_HEIGHT + ITEM_SEP));
+        this.configPerPage = Math.max(0, (this.height - 65) / (ITEM_HEIGHT + ITEM_SEP));
         this.itemScrollBar.setMaxValue(Math.max(0, this.currentGroup.getConfigs().size() - this.configPerPage));
     }
 
@@ -109,7 +109,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         for (int i = 0; i < top && i < entries.size(); i++)
             this.configWidgets.get(i).update(false, 0);
         for (int i = top; i < top + this.configPerPage && i < entries.size(); i++)
-            this.configWidgets.get(i).update(true, 55 + ITEM_SEP + (i - top) * (ITEM_HEIGHT + ITEM_SEP));
+            this.configWidgets.get(i).update(true, 60 + ITEM_SEP + (i - top) * (ITEM_HEIGHT + ITEM_SEP));
         for (int i = top + this.configPerPage; i < entries.size(); i++)
             this.configWidgets.get(i).update(false, 0);
     }
@@ -160,16 +160,16 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
         //? >=1.20 {
-        graphics.drawString(this.font, this.title, 35, 10, -1, true);
+        graphics.drawString(this.font, this.title, 40, 10, -1, true);
         graphics.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawString(this.font, this.title, 35, 10, -1);
+        context.drawString(this.font, this.title, 40, 10, -1);
         context.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
         *///?}
-        this.groupScrollBar.render(graphics, mouseX, mouseY, partialTicks, 10, 43, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
+        this.groupScrollBar.render(graphics, mouseX, mouseY, partialTicks, 10, 50, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
         if (this.groupScrollBar.isDragging()) this.updateTabPos();
-        this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 55, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
+        this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 60, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 

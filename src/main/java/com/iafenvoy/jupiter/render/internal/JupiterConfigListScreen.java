@@ -74,10 +74,10 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         super.render(graphics, mouseX, mouseY, delta);
         this.widget.render(graphics, mouseX, mouseY, delta);
         //? >=1.20 {
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
         *///?}
     }
 
