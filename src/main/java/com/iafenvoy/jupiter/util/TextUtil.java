@@ -11,7 +11,7 @@ public interface TextUtil {
         return /*? >=1.19 {*/Component.literal/*?} else {*//*new TextComponent*//*?}*/(text);
     }
 
-    static Component translatable(String text) {
-        return /*? >=1.19 {*/Component.translatable/*?} else {*//*new TranslatableComponent*//*?}*/(text);
+    static Component translatable(String text, Object... args) {
+        return /*? >=1.19 {*/Component.translatable/*?} else {*//*new TranslatableComponent*//*?}*/(text, args);
     }
 }

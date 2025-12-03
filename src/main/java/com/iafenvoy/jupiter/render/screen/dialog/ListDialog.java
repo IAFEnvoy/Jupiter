@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
@@ -27,8 +28,8 @@ public class ListDialog<T> extends Dialog<List<T>> {
     protected final List<WidgetBuilder<T>> widgets = new ArrayList<>();
     private int configPerPage;
 
-    public ListDialog(Screen parent, ListBaseEntry<T> entry) {
-        super(parent, entry);
+    public ListDialog(Screen parent, AbstractConfigContainer container, ListBaseEntry<T> entry) {
+        super(parent, container, entry);
         this.entry = entry;
     }
 
@@ -57,7 +58,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
         this.widgets.clear();
         List<T> values = this.entry.getValue();
         for (int i = 0; i < values.size(); i++) {
-            WidgetBuilder<T> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(values.get(i), i, () -> {
+            WidgetBuilder<T> widget = WidgetBuilderManager.get(this.container, this.entry.newSingleInstance(values.get(i), i, () -> {
                 //? >=1.19 {
                 this.rebuildWidgets();
                 //?} else {

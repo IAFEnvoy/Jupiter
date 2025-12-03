@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -16,8 +17,8 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     @Nullable
     private Button button;
 
-    public ButtonWidgetBuilder(ConfigEntry<T> config, Button.OnPress action, Supplier<Component> nameSupplier) {
-        super(config);
+    public ButtonWidgetBuilder(AbstractConfigContainer container, ConfigEntry<T> config, Button.OnPress action, Supplier<Component> nameSupplier) {
+        super(container, config);
         this.action = button -> {
             action.onPress(button);
             this.refresh();
@@ -29,9 +30,9 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         //? >=1.19.3 {
         this.button = Button.builder(this.nameSupplier.get(), this.action).bounds(x, y, width, height).build();
-         //?} else {
+        //?} else {
         /*this.button = new Button(x, y, width, height, this.nameSupplier.get(), this.action);
-        *///?}
+         *///?}
         appender.accept(this.button);
     }
 

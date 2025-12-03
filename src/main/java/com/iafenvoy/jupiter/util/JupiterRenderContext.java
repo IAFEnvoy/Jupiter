@@ -10,7 +10,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
+import org.jetbrains.annotations.NotNull;
 //? >=1.19.3 {
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 //?} else {
 /^import com.mojang.math.Matrix4f;

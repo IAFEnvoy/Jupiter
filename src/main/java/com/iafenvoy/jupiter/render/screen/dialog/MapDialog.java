@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
@@ -14,9 +15,9 @@ import net.minecraft.client.input.MouseButtonEvent;
 //?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+        //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
+ *///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,8 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     protected final List<WidgetBuilder<Map.Entry<String, T>>> widgets = new ArrayList<>();
     private int configPerPage;
 
-    public MapDialog(Screen parent, MapBaseEntry<T> entry) {
-        super(parent, entry);
+    public MapDialog(Screen parent, AbstractConfigContainer container, MapBaseEntry<T> entry) {
+        super(parent, container, entry);
         this.entry = entry;
     }
 
@@ -42,7 +43,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
             this.entry.getValue().put("", this.entry.newValue());
             this.rebuildWidgets();
         }).bounds(this.width - 60, 5, 20, 20).build());
-         //?} else {
+        //?} else {
         /*this.addRenderableWidget(new Button(10, 5, 20, 15, TextUtil.literal("<"), button -> this.onClose()));
         this.addRenderableWidget(new Button(this.width - 60, 5, 20, 20, TextUtil.literal("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
@@ -58,10 +59,10 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
         this.widgets.clear();
         Map<String, T> values = this.entry.getValue();
         for (Map.Entry<String, T> entry : values.entrySet()) {
-            WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(entry.getValue(), entry.getKey(), () -> {
+            WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.container, this.entry.newSingleInstance(entry.getValue(), entry.getKey(), () -> {
                 //? >=1.19 {
                 this.rebuildWidgets();
-                 //?} else {
+                //?} else {
                 /*this.clearWidgets();
                 this.init();
                 *///?}
@@ -114,7 +115,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         *///?}
@@ -132,7 +133,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         *///?}

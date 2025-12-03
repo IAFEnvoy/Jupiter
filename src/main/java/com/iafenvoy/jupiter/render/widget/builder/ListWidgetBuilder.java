@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
@@ -17,8 +18,8 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     @Nullable
     private Button button;
 
-    public ListWidgetBuilder(ListBaseEntry<T> config) {
-        super(config);
+    public ListWidgetBuilder(AbstractConfigContainer container, ListBaseEntry<T> config) {
+        super(container, config);
         this.config = config;
     }
 
@@ -26,10 +27,10 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         Minecraft client = CLIENT.get();
         //? >=1.19.3 {
-        this.button = Button.builder(TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.config))).bounds(x, y, width, height).build();
-         //?} else {
-        /*this.button = new Button(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.config)));
-        *///?}
+        this.button = Button.builder(TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.container, this.config))).bounds(x, y, width, height).build();
+        //?} else {
+        /*this.button = new Button(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new ListDialog<>(client.screen, this.container, this.config)));
+         *///?}
         appender.accept(this.button);
     }
 

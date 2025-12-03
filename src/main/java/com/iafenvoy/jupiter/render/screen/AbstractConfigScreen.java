@@ -16,7 +16,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 //?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+        //?} else {
 /*import com.iafenvoy.jupiter.util.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 
 public abstract class AbstractConfigScreen extends Screen implements JupiterScreen {
     private final Screen parent;
-    protected final AbstractConfigContainer configContainer;
+    protected final AbstractConfigContainer container;
     protected final List<TabButton> groupButtons = new ArrayList<>();
     protected final List<WidgetBuilder<?>> configWidgets = new ArrayList<>();
     protected final HorizontalScrollBar groupScrollBar = new HorizontalScrollBar();
@@ -41,11 +41,11 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     private int configPerPage;
     private int textMaxLength;
 
-    public AbstractConfigScreen(Screen parent, AbstractConfigContainer configContainer) {
-        super(TextUtil.translatable(configContainer.getTitleNameKey()));
+    public AbstractConfigScreen(Screen parent, AbstractConfigContainer container) {
+        super(TextUtil.translatable(container.getTitleNameKey()));
         this.parent = parent;
-        this.configContainer = configContainer;
-        this.currentGroup = configContainer.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
+        this.container = container;
+        this.currentGroup = container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
     }
 
     @Override
@@ -53,16 +53,16 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         super.init();
         //? >=1.19.3 {
         this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, 15).build());
-         //?} else {
+        //?} else {
         /*this.addRenderableWidget(new Button(10, 5, 20, 15, TextUtil.literal("<"), button -> this.onClose()));
-        *///?}
+         *///?}
         int x = 10, y = 22;
         this.groupButtons.clear();
-        List<ConfigGroup> configTabs = this.configContainer.getConfigTabs();
+        List<ConfigGroup> configTabs = this.container.getConfigTabs();
         for (int i = 0; i < configTabs.size(); i++) {
             ConfigGroup category = configTabs.get(i);
             TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, 20, button -> {
-                this.currentTab = this.configContainer.getConfigTabs().indexOf(button.group);
+                this.currentTab = this.container.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
                 //? >=1.19 {
                 this.rebuildWidgets();
@@ -77,10 +77,11 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         }
         x += 10;
         this.groupScrollBar.setMaxValue(Math.max(0, x - this.width));
+        this.updateTabPos();
         this.calculateMaxItems();
         this.textMaxLength = this.currentGroup.getConfigs().stream().map(ConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
-        this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(WidgetBuilderManager::get).toList());
+        this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(c -> WidgetBuilderManager.get(this.container, c)).toList());
         this.configWidgets.forEach(b -> b.addElements(this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
         this.updateItemPos();
     }
@@ -117,7 +118,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     @Override
     public boolean keyPressed(KeyEvent event) {
         int keyCode = event.key();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         *///?}
@@ -145,7 +146,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
 
     @Override
     public void onClose() {
-        this.configContainer.onConfigsChanged();
+        this.container.onConfigsChanged();
         assert this.minecraft != null;
         this.minecraft.setScreen(this.parent);
     }
@@ -154,14 +155,14 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-        *///?}
+         *///?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
         //? >=1.20 {
         graphics.drawString(this.font, this.title, 35, 10, -1, true);
         graphics.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
-         //?} else {
+        //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
         context.drawString(this.font, this.title, 35, 10, -1);
         context.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
@@ -176,7 +177,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         *///?}
@@ -199,7 +200,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
     @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         *///?}

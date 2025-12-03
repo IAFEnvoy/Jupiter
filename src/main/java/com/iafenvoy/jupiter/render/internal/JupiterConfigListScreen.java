@@ -8,13 +8,13 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 //? >=1.20.5 {
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
-        //?}
+//?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
-import org.jetbrains.annotations.NotNull;
-        //?} else {
+//?} else {
 /*import com.iafenvoy.jupiter.util.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -53,15 +53,15 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.back"), button -> this.onClose()).bounds(40, 40, 100, 20).build());
         this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.open"), button -> {
             JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
-            if (this.minecraft != null && handler != null && handler.getConfigContainer() instanceof AbstractConfigContainer container)
-                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(container)));
+            if (this.minecraft != null && handler != null)
+                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(handler.getConfigContainer())));
         }).bounds(150, 40, 100, 20).build());
         //?} else {
         /*this.addRenderableWidget(new Button(40, 40, 100, 20, TextUtil.translatable("jupiter.screen.back"), button -> this.onClose()));
         this.addRenderableWidget(new Button(150, 40, 100, 20, TextUtil.translatable("jupiter.screen.open"), button -> {
             JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
-            if (this.minecraft != null && handler != null && handler.getConfigContainer() instanceof AbstractConfigContainer container)
-                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(container)));
+            if (this.minecraft != null && handler != null)
+                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(handler.getConfigContainer())));
         }));
         *///?}
     }

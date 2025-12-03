@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
@@ -8,15 +9,15 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
- //?} else {
+        //?} else {
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
-*///?}
+ *///?}
 
 import java.util.function.Consumer;
 
 public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
-    public SeparatorWidgetBuilder(ConfigEntry<Unit> config) {
-        super(config);
+    public SeparatorWidgetBuilder(AbstractConfigContainer container, ConfigEntry<Unit> config) {
+        super(container, config);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
 import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.screens.Screen;
@@ -13,12 +14,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
 public class Dialog<T> extends Screen implements JupiterScreen {
+    protected final AbstractConfigContainer container;
     protected final ConfigEntry<T> entry;
     private final Screen parent;
 
-    protected Dialog(Screen parent, ConfigEntry<T> entry) {
+    protected Dialog(Screen parent, AbstractConfigContainer container, ConfigEntry<T> entry) {
         super(TextUtil.translatable(entry.getNameKey()));
         this.parent = parent;
+        this.container = container;
         this.entry = entry;
     }
 

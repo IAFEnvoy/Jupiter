@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.iafenvoy.jupiter.config.TextFieldConfigEntry;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.widget.TextFieldWithErrorWidget;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -14,8 +15,8 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
     @Nullable
     private TextFieldWithErrorWidget widget;
 
-    public TextFieldWidgetBuilder(ConfigEntry<T> config) {
-        super(config);
+    public TextFieldWidgetBuilder(AbstractConfigContainer container, ConfigEntry<T> config) {
+        super(container, config);
         if (config instanceof TextFieldConfigEntry t) this.textFieldConfig = t;
         else throw new IllegalArgumentException("TextFieldWidgetBuilder only accept TextFieldConfigEntry");
     }

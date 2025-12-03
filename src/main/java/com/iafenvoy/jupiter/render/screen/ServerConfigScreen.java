@@ -12,7 +12,7 @@ public class ServerConfigScreen extends AbstractConfigScreen {
 
     @Override
     protected String getCurrentEditText() {
-        if (this.configContainer instanceof FakeConfigContainer)
+        if (this.container instanceof FakeConfigContainer)
             return I18n.get("jupiter.screen.current_modifying_dedicate_server");
         else
             return I18n.get("jupiter.screen.current_modifying_local_server");
