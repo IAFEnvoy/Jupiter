@@ -1,18 +1,18 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
-import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
+import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
 //? >=1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
+/*import net.minecraft.client.input.MouseButtonEvent;
+ *///?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
@@ -28,8 +28,8 @@ public class ListDialog<T> extends Dialog<List<T>> {
     protected final List<WidgetBuilder<T>> widgets = new ArrayList<>();
     private int configPerPage;
 
-    public ListDialog(Screen parent, AbstractConfigContainer container, ListBaseEntry<T> entry) {
-        super(parent, container, entry);
+    public ListDialog(Screen parent, ConfigMetaProvider provider, ListBaseEntry<T> entry) {
+        super(parent, provider, entry);
         this.entry = entry;
     }
 
@@ -37,36 +37,16 @@ public class ListDialog<T> extends Dialog<List<T>> {
     protected void init() {
         super.init();
         int width = Math.max(10, this.width - 70);
-        //? >=1.19.3 {
-        this.addRenderableWidget(Button.builder(TextUtil.literal("<"), button -> this.onClose()).bounds(10, 5, 20, ITEM_HEIGHT).build());
-        this.addRenderableWidget(Button.builder(TextUtil.literal("+"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
+        this.addRenderableWidget(JupiterScreen.createButton(this.width - 60, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
             this.rebuildWidgets();
-        }).bounds(width - 10, 5, 20, ITEM_HEIGHT).build());
-        //?} else {
-        /*this.addRenderableWidget(new Button(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(new Button(this.width - 60, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
-            this.entry.getValue().add(this.entry.newValue());
-            //? >=1.19 {
-            this.rebuildWidgets();
-             //?} else {
-            /^this.clearWidgets();
-            this.init();
-            ^///?}
         }));
-        *///?}
         this.calculateMaxItems();
         this.widgets.clear();
         List<T> values = this.entry.getValue();
         for (int i = 0; i < values.size(); i++) {
-            WidgetBuilder<T> widget = WidgetBuilderManager.get(this.container, this.entry.newSingleInstance(values.get(i), i, () -> {
-                //? >=1.19 {
-                this.rebuildWidgets();
-                //?} else {
-                /*this.clearWidgets();
-                this.init();
-                *///?}
-            }));
+            WidgetBuilder<T> widget = WidgetBuilderManager.get(this.provider, this.entry.newSingleInstance(values.get(i), i, this::rebuildWidgets));
             this.widgets.add(widget);
             widget.addDialogElements(this::addRenderableWidget, i + ":", 40, 0, width, ITEM_HEIGHT);
         }
@@ -112,32 +92,32 @@ public class ListDialog<T> extends Dialog<List<T>> {
     }
 
     //? >=1.21.9 {
-    @Override
+    /*@Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-        //?} else {
-    /*@Override
+        *///?} else {
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        *///?}
+        //?}
         if (button == 0 && this.itemScrollBar.wasMouseOver()) {
             this.itemScrollBar.setIsDragging(true);
             this.updateItemPos();
             return true;
         }
-        boolean b = super.mouseClicked(/*? >=1.21.9 {*/event, isDoubleClick/*?} else {*//*mouseX, mouseY, button*//*?}*/);
+        boolean b = super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
         if (!b) this.setFocused(null);
         return b;
     }
 
     //? >=1.21.9 {
-    @Override
+    /*@Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-        //?} else {
-    /*@Override
+        *///?} else {
+    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        *///?}
+        //?}
         if (button == 0) this.itemScrollBar.setIsDragging(false);
-        return super.mouseReleased(/*? >=1.21.9 {*/event/*?} else {*//*mouseX, mouseY, button*//*?}*/);
+        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
     }
 }

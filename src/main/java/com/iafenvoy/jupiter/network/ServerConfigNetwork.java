@@ -26,6 +26,7 @@ public class ServerConfigNetwork {
         *///?}
     }
 
+    //Will only return config data if player has permission || allow manually sync to client.
     private static Runnable onConfigRequest(MinecraftServer server, ServerPlayer player, ResourceLocation id) {
         Jupiter.LOGGER.info("Player {} request to get config {}", player.getName().getString(), id);
         boolean b = ServerConfigManager.checkPermission(id, server, player, false);

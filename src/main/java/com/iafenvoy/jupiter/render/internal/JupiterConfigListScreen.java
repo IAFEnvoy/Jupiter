@@ -2,8 +2,8 @@ package com.iafenvoy.jupiter.render.internal;
 
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.render.screen.ConfigContainerScreen;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
-import com.iafenvoy.jupiter.render.screen.ServerConfigScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -54,14 +54,14 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.open"), button -> {
             JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
             if (this.minecraft != null && handler != null)
-                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(handler.getConfigContainer())));
+                this.minecraft.setScreen(new ConfigContainerScreen(this, this.getServerConfig(handler.getConfigContainer()), false));
         }).bounds(150, 40, 100, 20).build());
         //?} else {
         /*this.addRenderableWidget(new Button(40, 40, 100, 20, TextUtil.translatable("jupiter.screen.back"), button -> this.onClose()));
         this.addRenderableWidget(new Button(150, 40, 100, 20, TextUtil.translatable("jupiter.screen.open"), button -> {
             JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
             if (this.minecraft != null && handler != null)
-                this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig(handler.getConfigContainer())));
+                this.minecraft.setScreen(new ConfigContainerScreen(this, this.getServerConfig(handler.getConfigContainer()), false));
         }));
         *///?}
     }

@@ -18,7 +18,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.Tooltip;
-        //?} else {
+//?} else {
 /*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
  *///?}
 
@@ -43,42 +43,29 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         int x = this.width / 2;
         int y = this.height / 2;
         //Back
-        //? >=1.19.3 {
-        this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.back"), button -> {
-            assert this.minecraft != null;
-            this.minecraft.setScreen(this.parent);
-        }).bounds(x - 100, y - 25 - 10, 200, 20).build());
-        final Button serverButton = this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.server_config"), button -> {
-                    assert this.minecraft != null;
-                    assert this.serverConfig != null;
-                    this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig()));
-                }).tooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.check_server")))
-                .bounds(x - 100, y - 10, 200, 20)
-                .build());
-        final Button clientButton = this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.client_config"), button -> {
-                    assert this.minecraft != null;
-                    assert this.clientConfig != null;
-                    this.minecraft.setScreen(new ClientConfigScreen(this, this.clientConfig));
-                }).tooltip(Tooltip.create(TextUtil.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")))
-                .bounds(x - 100, y + 25 - 10, 200, 20)
-                .build());
-        //?} else {
-        /*this.addRenderableWidget(new Button(x - 100, y - 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.back"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.back"), button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(this.parent);
         }));
-        SimpleButtonTooltip serverButtonTooltip = new SimpleButtonTooltip(this, TextUtil.translatable("jupiter.screen.check_server"));
+        //? >=1.19.3 {
+        final Button serverButton = this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.server_config"), button -> {
+            assert this.minecraft != null;
+            assert this.serverConfig != null;
+            this.minecraft.setScreen(new ConfigContainerScreen(this, this.getServerConfig(), false));
+        }).bounds(x - 100, y - 10, 200, 20).tooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.check_server"))).build());
+        //?} else {
+        /*SimpleButtonTooltip serverButtonTooltip = new SimpleButtonTooltip(this, TextUtil.translatable("jupiter.screen.check_server"));
         final Button serverButton = this.addRenderableWidget(new Button(x - 100, y - 10, 200, 20, TextUtil.translatable("jupiter.screen.server_config"), button -> {
             assert this.minecraft != null;
             assert this.serverConfig != null;
-            this.minecraft.setScreen(new ServerConfigScreen(this, this.getServerConfig()));
+            this.minecraft.setScreen(new ConfigContainerScreen(this, this.getServerConfig(), false));
         }, serverButtonTooltip));
-        final Button clientButton = this.addRenderableWidget(new Button(x - 100, y + 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
+        *///?}
+        final Button clientButton = this.addRenderableWidget(JupiterScreen.createButton(this, x - 100, y + 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
             assert this.minecraft != null;
             assert this.clientConfig != null;
-            this.minecraft.setScreen(new ClientConfigScreen(this, this.clientConfig));
-        }, new SimpleButtonTooltip(this, TextUtil.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client"))));
-        *///?}
+            this.minecraft.setScreen(new ConfigContainerScreen(this, this.clientConfig, true));
+        }, TextUtil.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")));
         serverButton.active = true;
         clientButton.active = this.clientConfig != null;
 

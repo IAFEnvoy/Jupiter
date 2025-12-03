@@ -30,6 +30,8 @@ repositories {
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
     maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
     maven("https://maven.nucleoid.xyz/") { name = "Placeholder API" }
+    maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
+
 }
 
 dependencies {
@@ -40,9 +42,8 @@ dependencies {
             parchment("org.parchmentmc.data:parchment-${property("deps.parchment")}@zip")
     })
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
+
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
-    modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
-    // @formatter:off
     var fabricApiVersion = property("deps.fabric-api") as String
     include(fabricApi.module("fabric-api-base", fabricApiVersion))
     include(fabricApi.module("fabric-networking-api-v1", fabricApiVersion))
@@ -50,6 +51,11 @@ dependencies {
         include(fabricApi.module("fabric-resource-loader-v0", fabricApiVersion))
     else
         include(fabricApi.module("fabric-resource-loader-v1", fabricApiVersion))
+
+    modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
+
+    // @formatter:off
+    modImplementation("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")?.let { include(it) }
     // @formatter:on
 }
 
@@ -95,9 +101,13 @@ publishMods {
     file = tasks.remapJar.map { it.archiveFile.get() }
     additionalFiles.from(tasks.remapSourcesJar.map { it.archiveFile.get() })
 
-    type = BETA
-    displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} Fabric"
-    version = "${property("mod.version")}-${property("deps.minecraft")}-fabric"
+    val modVersion = property("mod.version") as String
+    type = if (modVersion.contains("alpha")) ALPHA
+    else if (modVersion.contains("beta")) BETA
+    else STABLE
+
+    displayName = "${property("mod.name")} $modVersion for ${stonecutter.current.version} Fabric"
+    version = "${modVersion}-${property("deps.minecraft")}-fabric"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
     modLoaders.add("fabric")
 
@@ -106,7 +116,6 @@ publishMods {
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
-        requires("fabric-api")
     }
 
     curseforge {
@@ -114,6 +123,5 @@ publishMods {
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
-        requires("fabric-api")
     }
 }

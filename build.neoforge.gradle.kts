@@ -27,6 +27,13 @@ jsonlang {
 
 repositories {
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+    maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
+}
+
+dependencies {
+    // @formatter:off
+//    implementation("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")?.let { jarJar(it) }
+    // @formatter:on
 }
 
 neoForge {
@@ -99,9 +106,13 @@ publishMods {
     file = tasks.jar.map { it.archiveFile.get() }
     additionalFiles.from(tasks.named<org.gradle.jvm.tasks.Jar>("sourcesJar").map { it.archiveFile.get() })
 
-    type = BETA
-    displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} Neoforge"
-    version = "${property("mod.version")}-${property("deps.minecraft")}-neoforge"
+    val modVersion = property("mod.version") as String
+    type = if (modVersion.contains("alpha")) ALPHA
+    else if (modVersion.contains("beta")) BETA
+    else STABLE
+
+    displayName = "${property("mod.name")} $modVersion for ${stonecutter.current.version} Neoforge"
+    version = "${modVersion}-${property("deps.minecraft")}-neoforge"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
     modLoaders.add("neoforge")
 

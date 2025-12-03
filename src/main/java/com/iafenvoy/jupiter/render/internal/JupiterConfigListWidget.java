@@ -6,9 +6,9 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 //? >=1.21.9 {
-import net.minecraft.client.input.KeyEvent;
+/*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-//?}
+*///?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
         //?} else {
@@ -42,16 +42,16 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     }
 
     //? >=1.21.4 {
-    @Override
+    /*@Override
     protected int scrollBarX() {
         return super.scrollBarX() + 30;
     }
-    //?} else {
-    /*@Override
+    *///?} else {
+    @Override
     protected int getScrollbarPosition() {
         return super.getScrollbarPosition() + 30;
     }
-    *///?}
+    //?}
 
     private void updateEntries() {
         this.clearEntries();
@@ -59,18 +59,18 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     }
 
     //? >=1.21.9 {
-    @Override
-    public boolean keyPressed(@NotNull KeyEvent event) {
-        //?} else {
     /*@Override
+    public boolean keyPressed(@NotNull KeyEvent event) {
+        *///?} else {
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        *///?}
+        //?}
         ConfigEntry entry = this.getSelected();
         //? >=1.21.9 {
-        return entry != null && entry.keyPressed(event) || super.keyPressed(event);
-        //?} else {
-        /*return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
-         *///?}
+        /*return entry != null && entry.keyPressed(event) || super.keyPressed(event);
+        *///?} else {
+        return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
+         //?}
     }
 
     public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
@@ -84,13 +84,13 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         }
 
         //? >=1.21.9 {
-        @Override
+        /*@Override
         public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean isHovering, float partialTick) {
             int x = this.getX(), y = this.getY();
-            //?} else >=1.20 {
-        /*@Override
+            *///?} else >=1.20 {
+        @Override
         public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-        *///?} else {
+        //?} else {
         /*@Override
         public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
@@ -100,12 +100,12 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         }
 
         //? >=1.21.9 {
-        @Override
-        public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
-            //?} else {
         /*@Override
+        public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
+            *///?} else {
+        @Override
         public boolean mouseClicked(double x, double y, int button) {
-            *///?}
+            //?}
             this.screen.select(this);
             return false;
         }

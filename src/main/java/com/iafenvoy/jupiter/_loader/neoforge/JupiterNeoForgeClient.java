@@ -10,19 +10,19 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 //? >=1.21.4 {
-import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
- //?} else {
-/*import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
-*///?}
+/*import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+ *///?} else {
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+//?}
 //? >=1.21.7 {
-import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
+/*import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import java.util.Map;
-//?}
+*///?}
 //? >=1.20.5 {
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -50,22 +50,22 @@ public class JupiterNeoForgeClient {
     }
 
     //? >=1.21.4 {
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void registerClientListener(AddClientReloadListenersEvent event) {
         event.addListener(Jupiter.id("client_config_reload"), ConfigManager.getInstance());
     }
-    //?} else {
-    /*@SubscribeEvent
+    *///?} else {
+    @SubscribeEvent
     public static void registerClientListener(RegisterClientReloadListenersEvent event) {
         event.registerReloadListener(ConfigManager.getInstance());
     }
-    *///?}
+    //?}
 
     //? >=1.21.7 {
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void register(RegisterClientPayloadHandlersEvent event) {
         for (Map.Entry<CustomPacketPayload.Type<CustomPacketPayload>, StreamCodec<FriendlyByteBuf, CustomPacketPayload>> entry : ServerNetworkHelperImpl.TYPES.entrySet())
             event.register(entry.getKey(), ClientNetworkHelperImpl::handleData);
     }
-    //?}
+    *///?}
 }

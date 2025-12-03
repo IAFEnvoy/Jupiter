@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
+import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
@@ -16,8 +16,8 @@ import net.minecraft.client.gui.components.StringWidget;
 import java.util.function.Consumer;
 
 public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
-    public SeparatorWidgetBuilder(AbstractConfigContainer container, IConfigEntry<Unit> config) {
-        super(container, config);
+    public SeparatorWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<Unit> config) {
+        super(provider, config);
     }
 
     @Override

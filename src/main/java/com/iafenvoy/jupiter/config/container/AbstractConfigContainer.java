@@ -5,6 +5,7 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
+import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class AbstractConfigContainer {
+public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     protected final List<ConfigGroup> configTabs = new ArrayList<>();
     protected final ResourceLocation id;
@@ -33,6 +34,7 @@ public abstract class AbstractConfigContainer {
         this.version = new IntegerEntry("version", version);
     }
 
+    @Override
     public ResourceLocation getConfigId() {
         return this.id;
     }

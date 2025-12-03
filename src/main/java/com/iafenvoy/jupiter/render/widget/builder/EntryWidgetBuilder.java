@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
-import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.entry.EntryBaseEntry;
+import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -20,8 +20,8 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
     @Nullable
     private WidgetBuilder<T> valueBuilder;
 
-    public EntryWidgetBuilder(AbstractConfigContainer container, EntryBaseEntry<T> config) {
-        super(container, config);
+    public EntryWidgetBuilder(ConfigMetaProvider provider, EntryBaseEntry<T> config) {
+        super(provider, config);
         this.config = config;
     }
 
@@ -31,7 +31,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
         this.keyWidget.setValue(this.config.getValue().getKey());
         this.keyWidget.setResponder(s -> this.config.setValue(new AbstractMap.SimpleEntry<>(s, this.config.getValue().getValue())));
         appender.accept(this.keyWidget);
-        this.valueBuilder = WidgetBuilderManager.get(this.container, this.config.newValueInstance());
+        this.valueBuilder = WidgetBuilderManager.get(this.provider, this.config.newValueInstance());
         this.valueBuilder.addCustomElements(appender, x + width / 2, y, width / 2, height);
     }
 

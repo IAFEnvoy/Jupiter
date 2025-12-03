@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
+import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.screens.Screen;
@@ -14,21 +14,23 @@ import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
 public class Dialog<T> extends Screen implements JupiterScreen {
-    protected final AbstractConfigContainer container;
+    protected final ConfigMetaProvider provider;
     protected final IConfigEntry<T> entry;
     private final Screen parent;
 
-    protected Dialog(Screen parent, AbstractConfigContainer container, IConfigEntry<T> entry) {
+    protected Dialog(Screen parent, ConfigMetaProvider provider, IConfigEntry<T> entry) {
         super(TextUtil.translatable(entry.getNameKey()));
         this.parent = parent;
-        this.container = container;
+        this.provider = provider;
         this.entry = entry;
     }
 
-    @Override
-    protected void init() {
-        super.init();
+    //? <=1.18.2 {
+    /*protected void rebuildWidgets() {
+        this.clearWidgets();
+        this.init();
     }
+    *///?}
 
     @Override
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
