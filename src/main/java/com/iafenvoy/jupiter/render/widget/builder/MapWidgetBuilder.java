@@ -1,14 +1,12 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
-import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
 import com.iafenvoy.jupiter.render.screen.dialog.MapDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;

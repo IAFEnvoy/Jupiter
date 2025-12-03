@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.render.widget;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,12 +15,12 @@ import java.util.function.Supplier;
 
 public abstract class WidgetBuilder<T> {
     protected static final Supplier<Minecraft> CLIENT = Minecraft::getInstance;
-    protected final IConfigEntry<T> config;
+    protected final ConfigEntry<T> config;
     protected StringWidget textWidget;
     protected Button resetButton;
     protected boolean canSave = true;
 
-    protected WidgetBuilder(IConfigEntry<T> config) {
+    protected WidgetBuilder(ConfigEntry<T> config) {
         this.config = config;
     }
 

@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.internal;
 
 import com.iafenvoy.jupiter.ConfigManager;
-import com.iafenvoy.jupiter.interfaces.IConfigHandler;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -37,7 +37,8 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
 
     public void update() {
         this.entries.clear();
-        ConfigManager.getInstance().getAllHandlers().forEach(x -> this.entries.add(new ConfigEntry(this.screen, x)));
+        for(AbstractConfigContainer container:ConfigManager.getInstance().getConfigs())
+        ConfigManager.getInstance().getConfigs().forEach(x -> this.entries.add(new ConfigEntry(this.screen, x)));
         this.updateEntries();
     }
 
@@ -76,9 +77,9 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
         private final Minecraft client = Minecraft.getInstance();
         private final JupiterConfigListScreen screen;
-        private final IConfigHandler handler;
+        private final AbstractConfigContainer handler;
 
-        public ConfigEntry(JupiterConfigListScreen screen, IConfigHandler handler) {
+        public ConfigEntry(JupiterConfigListScreen screen, AbstractConfigContainer handler) {
             this.screen = screen;
             this.handler = handler;
         }
@@ -110,7 +111,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
             return false;
         }
 
-        public IConfigHandler getConfigContainer() {
+        public AbstractConfigContainer getConfigContainer() {
             return this.handler;
         }
 

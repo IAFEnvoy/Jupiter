@@ -2,11 +2,11 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.interfaces.ITextFieldConfig;
+import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.config.TextFieldConfigEntry;
 import com.mojang.serialization.Codec;
 
-public class StringEntry extends BaseEntry<String> implements ITextFieldConfig {
+public class StringEntry extends BaseEntry<String> implements TextFieldConfigEntry {
     public StringEntry(String nameKey, String defaultValue) {
         super(nameKey, defaultValue);
     }
@@ -17,7 +17,7 @@ public class StringEntry extends BaseEntry<String> implements ITextFieldConfig {
     }
 
     @Override
-    public IConfigEntry<String> newInstance() {
+    public ConfigEntry<String> newInstance() {
         return new StringEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
     }
 

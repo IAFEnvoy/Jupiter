@@ -1,13 +1,13 @@
 package com.iafenvoy.jupiter.network.payload;
 
 //? >=1.20.5 {
-
 import com.iafenvoy.jupiter.Jupiter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public record ConfigSyncPayload(ResourceLocation id, boolean allow,
                                 CompoundTag compound) implements CustomPacketPayload {

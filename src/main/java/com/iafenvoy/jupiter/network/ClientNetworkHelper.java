@@ -11,11 +11,11 @@ import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 /*import com.iafenvoy.jupiter._loader.forge.network.ClientNetworkHelperImpl;
 *///?}
 import net.minecraft.client.Minecraft;
- import net.minecraft.network.FriendlyByteBuf;
 //? >=1.20.5 {
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 //?} else {
 /*import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
 *///?}
 
 public interface ClientNetworkHelper {

@@ -18,7 +18,6 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

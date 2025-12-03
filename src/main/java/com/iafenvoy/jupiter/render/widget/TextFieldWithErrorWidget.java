@@ -3,9 +3,10 @@ package com.iafenvoy.jupiter.render.widget;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
+import org.jetbrains.annotations.NotNull;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+        //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
@@ -18,7 +19,7 @@ public class TextFieldWithErrorWidget extends EditBox {
 
     //? >=1.19.3 {
     @Override
-    public void renderWidget(/*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTick) {
     //?} else {
     /*@Override
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {

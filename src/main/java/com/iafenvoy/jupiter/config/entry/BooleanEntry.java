@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.mojang.serialization.Codec;
 
 public class BooleanEntry extends BaseEntry<Boolean> {
@@ -16,7 +16,7 @@ public class BooleanEntry extends BaseEntry<Boolean> {
     }
 
     @Override
-    public IConfigEntry<Boolean> newInstance() {
+    public ConfigEntry<Boolean> newInstance() {
         return new BooleanEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
     }
 

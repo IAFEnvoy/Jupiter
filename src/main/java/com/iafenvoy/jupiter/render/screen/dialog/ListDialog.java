@@ -8,15 +8,15 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import org.jetbrains.annotations.NotNull;
 //? >=1.21.9 {
 import net.minecraft.client.input.MouseButtonEvent;
- //?}
+//?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+//?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
-import net.minecraft.network.chat.Component;
+ *///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
             this.entry.getValue().add(this.entry.newValue());
             this.rebuildWidgets();
         }).bounds(this.width - 60, 5, 20, 20).build());
-         //?} else {
+        //?} else {
         /*this.addRenderableWidget(new Button(10, 5, 20, 15, TextUtil.literal("<"), button -> this.onClose()));
         this.addRenderableWidget(new Button(this.width - 60, 5, 20, 20, TextUtil.literal("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
@@ -60,7 +60,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
             WidgetBuilder<T> widget = WidgetBuilderManager.get(this.entry.newSingleInstance(values.get(i), i, () -> {
                 //? >=1.19 {
                 this.rebuildWidgets();
-                 //?} else {
+                //?} else {
                 /*this.clearWidgets();
                 this.init();
                 *///?}
@@ -113,7 +113,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         *///?}
@@ -131,7 +131,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
     @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-    //?} else {
+        //?} else {
     /*@Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         *///?}

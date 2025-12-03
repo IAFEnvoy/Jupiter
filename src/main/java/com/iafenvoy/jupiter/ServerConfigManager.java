@@ -6,9 +6,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ServerConfigManager implements ResourceManagerReloadListener {
@@ -33,6 +35,10 @@ public class ServerConfigManager implements ResourceManagerReloadListener {
         ServerConfigHolder holder = CONFIGS.get(id);
         if (holder == null) return false;
         return !modify && holder.allowManualSync || holder.checker.check(server, player);
+    }
+
+    public static List<AbstractConfigContainer> getServerConfigs() {
+        return CONFIGS.values().stream().map(ServerConfigHolder::data).toList();
     }
 
     @Override

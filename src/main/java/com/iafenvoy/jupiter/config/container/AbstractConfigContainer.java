@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
-import com.iafenvoy.jupiter.interfaces.IConfigHandler;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class AbstractConfigContainer implements IConfigHandler {
+public abstract class AbstractConfigContainer {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     protected final List<ConfigGroup> configTabs = new ArrayList<>();
     protected final ResourceLocation id;
@@ -33,12 +32,10 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
         this.version = new IntegerEntry("version", version);
     }
 
-    @Override
     public ResourceLocation getConfigId() {
         return this.id;
     }
 
-    @Override
     public String getTitleNameKey() {
         return this.titleNameKey;
     }
@@ -53,6 +50,18 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
     public List<ConfigGroup> getConfigTabs() {
         return this.configTabs;
     }
+
+
+    public final void onConfigsChanged() {
+        this.save();
+        this.load();
+    }
+
+    public abstract void load();
+
+    public abstract void save();
+
+    public abstract void init();
 
     public String serialize() {
         if (this.cache == null) this.cache = this.buildCodec();
@@ -69,7 +78,7 @@ public abstract class AbstractConfigContainer implements IConfigHandler {
     }
 
     public void deserialize(String data) {
-        JsonElement element = /*? >=1.18 {*/JsonParser.parseString/*?} else {*/ /*new JsonParser().parse*//*?}*/(data);
+        JsonElement element = JsonParser.parseString(data);
         if (element instanceof JsonObject obj) {
             if (!this.shouldLoad(obj)) return;
             this.deserializeJson(obj);

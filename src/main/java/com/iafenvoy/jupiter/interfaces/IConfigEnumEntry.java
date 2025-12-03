@@ -1,17 +1,9 @@
 package com.iafenvoy.jupiter.interfaces;
 
-import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.network.chat.Component;
+import com.iafenvoy.jupiter.config.ConfigEnumEntry;
+import com.iafenvoy.jupiter.util.Comment;
 
-public interface IConfigEnumEntry {
-    default Component getDisplayText() {
-        return TextUtil.translatable(this.getName());
-    }
-
-    String getName();
-
-    @NotNull
-    IConfigEnumEntry getByName(String name);
-
-    IConfigEnumEntry cycle(boolean clockWise);
+@Comment("Use ConfigEnumEntry instead.")
+@Deprecated(forRemoval = true)
+public interface IConfigEnumEntry extends ConfigEnumEntry {
 }

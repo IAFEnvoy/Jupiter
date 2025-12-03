@@ -1,9 +1,10 @@
 package com.iafenvoy.jupiter.test;
 
 import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.config.ConfigEnumEntry;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.config.entry.*;
-import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class TestConfig extends FileConfigContainer {
         this.createTab("tab9", "jupiter.tab9");
     }
 
-    private enum OptionsExample implements IConfigEnumEntry {
+    private enum OptionsExample implements ConfigEnumEntry {
         FIRST, SECOND, THIRD;
 
         @Override
@@ -50,12 +51,12 @@ public class TestConfig extends FileConfigContainer {
         }
 
         @Override
-        public @NotNull IConfigEnumEntry getByName(String name) {
+        public @NotNull ConfigEnumEntry getByName(String name) {
             return valueOf(name);
         }
 
         @Override
-        public IConfigEnumEntry cycle(boolean clockWise) {
+        public ConfigEnumEntry cycle(boolean clockWise) {
             return values()[(this.ordinal() + (clockWise ? 1 : -1)) % values().length];
         }
     }

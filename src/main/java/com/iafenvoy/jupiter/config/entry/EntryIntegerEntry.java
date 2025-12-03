@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,7 +17,7 @@ public class EntryIntegerEntry extends EntryBaseEntry<Integer> {
     }
 
     @Override
-    public IConfigEntry<Integer> newValueInstance() {
+    public ConfigEntry<Integer> newValueInstance() {
         return new IntegerEntry(this.nameKey, this.value.getValue());
     }
 
@@ -27,7 +27,7 @@ public class EntryIntegerEntry extends EntryBaseEntry<Integer> {
     }
 
     @Override
-    public IConfigEntry<Map.Entry<String, Integer>> newInstance() {
+    public ConfigEntry<Map.Entry<String, Integer>> newInstance() {
         return new EntryIntegerEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
     }
 

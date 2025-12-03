@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.mojang.serialization.Codec;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public abstract class ListBaseEntry<T> extends BaseEntry<List<T>> {
 
     public abstract Codec<T> getValueCodec();
 
-    public abstract IConfigEntry<T> newSingleInstance(T value, int index, Runnable reload);
+    public abstract ConfigEntry<T> newSingleInstance(T value, int index, Runnable reload);
 
     public abstract T newValue();
 

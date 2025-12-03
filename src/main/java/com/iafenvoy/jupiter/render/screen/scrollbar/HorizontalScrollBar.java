@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.render.screen.scrollbar;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
  //?} else {
-
 /*import com.iafenvoy.jupiter.util.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}

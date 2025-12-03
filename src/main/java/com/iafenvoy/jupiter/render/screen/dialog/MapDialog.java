@@ -8,6 +8,7 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import org.jetbrains.annotations.NotNull;
 //? >=1.21.9 {
 import net.minecraft.client.input.MouseButtonEvent;
 //?}
@@ -16,7 +17,6 @@ import net.minecraft.client.gui.GuiGraphics;
  //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
-import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;

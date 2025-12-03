@@ -2,25 +2,25 @@ package com.iafenvoy.jupiter.render.internal;
 
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.ServerConfigScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.server.IntegratedServer;
 import org.jetbrains.annotations.ApiStatus;
 //? >=1.20.5 {
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
- //?}
+        //?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+import org.jetbrains.annotations.NotNull;
+        //?} else {
 /*import com.iafenvoy.jupiter.util.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
 @ApiStatus.Internal
-public class JupiterConfigListScreen extends Screen {
+public class JupiterConfigListScreen extends Screen implements JupiterScreen {
     private final Screen parent;
     private JupiterConfigListWidget widget;
     private boolean initialized = false;
@@ -40,7 +40,7 @@ public class JupiterConfigListScreen extends Screen {
         //? >=1.20.5 {
         this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 64, 32));
         this.widget.setX(40);
-         //?} else >=1.20.2 {
+        //?} else >=1.20.2 {
         /*this.widget.setSize(this.width - 80, this.height - 70);
         this.widget.setX(40);
          *///?} else {
@@ -70,12 +70,12 @@ public class JupiterConfigListScreen extends Screen {
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float delta) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-        *///?}
+         *///?}
         super.render(graphics, mouseX, mouseY, delta);
         this.widget.render(graphics, mouseX, mouseY, delta);
         //? >=1.20 {
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
-         //?} else {
+        //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
         context.drawCenteredString(this.font, this.title, this.width / 2, 20, -1);
         *///?}
@@ -93,14 +93,7 @@ public class JupiterConfigListScreen extends Screen {
     }
 
     private AbstractConfigContainer getServerConfig(AbstractConfigContainer container) {
-        if (!this.connectedToDedicatedServer()) return container;
+        if (!JupiterScreen.connectedToDedicatedServer()) return container;
         return new FakeConfigContainer(container);
-    }
-
-    public boolean connectedToDedicatedServer() {
-        assert this.minecraft != null;
-        ClientPacketListener handler = this.minecraft.getConnection();
-        IntegratedServer server = this.minecraft.getSingleplayerServer();
-        return handler != null && handler.getConnection().isConnected() && (server == null || server.isDedicatedServer());
     }
 }

@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
@@ -21,6 +21,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 import net.minecraft.client.resources.language.I18n;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
         x += 10;
         this.groupScrollBar.setMaxValue(Math.max(0, x - this.width));
         this.calculateMaxItems();
-        this.textMaxLength = this.currentGroup.getConfigs().stream().map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.textMaxLength = this.currentGroup.getConfigs().stream().map(ConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
         this.configWidgets.addAll(this.currentGroup.getConfigs().stream().map(WidgetBuilderManager::get).toList());
         this.configWidgets.forEach(b -> b.addElements(this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
@@ -103,7 +104,7 @@ public abstract class AbstractConfigScreen extends Screen implements JupiterScre
 
     public void updateItemPos() {
         int top = this.itemScrollBar.getValue();
-        List<IConfigEntry<?>> entries = this.currentGroup.getConfigs();
+        List<ConfigEntry<?>> entries = this.currentGroup.getConfigs();
         for (int i = 0; i < top && i < entries.size(); i++)
             this.configWidgets.get(i).update(false, 0);
         for (int i = top; i < top + this.configPerPage && i < entries.size(); i++)

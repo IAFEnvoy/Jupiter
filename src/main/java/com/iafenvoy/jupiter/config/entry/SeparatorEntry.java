@@ -2,13 +2,13 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 
 import java.util.function.Consumer;
 
-public class SeparatorEntry implements IConfigEntry<Unit> {
+public class SeparatorEntry implements ConfigEntry<Unit> {
     @Override
     public ConfigType<Unit> getType() {
         return ConfigTypes.SEPARATOR;
@@ -20,7 +20,7 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     }
 
     @Override
-    public IConfigEntry<Unit> newInstance() {
+    public ConfigEntry<Unit> newInstance() {
         return new SeparatorEntry();
     }
 

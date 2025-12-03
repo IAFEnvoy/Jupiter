@@ -1,13 +1,13 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import net.minecraft.client.resources.language.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class BaseEntry<T> implements IConfigEntry<T> {
+public abstract class BaseEntry<T> implements ConfigEntry<T> {
     protected final String nameKey;
     protected String jsonKey;
     protected boolean visible;
@@ -84,7 +84,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
 
     @Override
     public String getPrettyName() {
-        StringBuilder sb = new StringBuilder(IConfigEntry.super.getPrettyName());
+        StringBuilder sb = new StringBuilder(ConfigEntry.super.getPrettyName());
         sb.append(" ");
         if (this.restartRequired)
             sb.append(I18n.get("jupiter.screen.restart_required"));

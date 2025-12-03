@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
@@ -11,12 +11,11 @@ import net.minecraft.client.gui.components.StringWidget;
  //?} else {
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
 *///?}
-import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;
 
 public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
-    public SeparatorWidgetBuilder(IConfigEntry<Unit> config) {
+    public SeparatorWidgetBuilder(ConfigEntry<Unit> config) {
         super(config);
     }
 

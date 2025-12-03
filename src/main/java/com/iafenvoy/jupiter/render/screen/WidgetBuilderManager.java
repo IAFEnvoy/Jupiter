@@ -5,26 +5,25 @@ import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.ConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.render.widget.builder.*;
 import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.network.chat.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 public class WidgetBuilderManager {
-    private static final Map<ConfigType<?>, Function<IConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
+    private static final Map<ConfigType<?>, Function<ConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> void register(ConfigType<T> type, Function<IConfigEntry<T>, WidgetBuilder<T>> builder) {
-        BUILDERS.put(type, (Function<IConfigEntry<?>, WidgetBuilder<?>>) (Object) builder);
+    public static <T> void register(ConfigType<T> type, Function<ConfigEntry<T>, WidgetBuilder<T>> builder) {
+        BUILDERS.put(type, (Function<ConfigEntry<?>, WidgetBuilder<?>>) (Object) builder);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> WidgetBuilder<T> get(IConfigEntry<T> entry) {
+    public static <T> WidgetBuilder<T> get(ConfigEntry<T> entry) {
         return (WidgetBuilder<T>) BUILDERS.get(entry.getType()).apply(entry);
     }
 

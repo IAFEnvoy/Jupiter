@@ -2,14 +2,14 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.interfaces.ITextFieldConfig;
+import com.iafenvoy.jupiter.config.ConfigEntry;
+import com.iafenvoy.jupiter.config.TextFieldConfigEntry;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
-public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implements ITextFieldConfig {
+public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implements TextFieldConfigEntry {
     public ResourceLocationEntry(String nameKey, ResourceLocation defaultValue) {
         super(nameKey, defaultValue);
     }
@@ -20,7 +20,7 @@ public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implement
     }
 
     @Override
-    public IConfigEntry<ResourceLocation> newInstance() {
+    public ConfigEntry<ResourceLocation> newInstance() {
         return new ResourceLocationEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
     }
 

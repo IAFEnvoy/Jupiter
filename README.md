@@ -21,7 +21,7 @@ Jupiter is a powerful, auto sync config library.
 1.Create config class and extend `FileConfigContainer`.
 
 2.Add config in `init`
-method. ([Example](https://github.com/ArkTechMC/Jupiter/blob/master/common/src/main/java/com/iafenvoy/jupiter/test/TestConfig.java))
+method. ([Example](https://github.com/IAFEnvoy/Jupiter/blob/main/src/main/java/com/iafenvoy/jupiter/test/TestConfig.java))
 
 3.If your config is for server/common, register it with `ServerConfigManager.registerServerConfig`.
 
