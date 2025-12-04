@@ -1,9 +1,10 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
-import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
+import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.screen.ConfigListScreen;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
-import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -11,22 +12,20 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
-    protected final ListBaseEntry<T> config;
+public class ConfigGroupWidgetBuilder extends WidgetBuilder<ConfigGroup> {
     @Nullable
     private Button button;
 
-    public ListWidgetBuilder(ConfigMetaProvider provider, ListBaseEntry<T> config) {
+    public ConfigGroupWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<ConfigGroup> config) {
         super(provider, config);
-        this.config = config;
     }
 
     @Override
     public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> this.minecraft.setScreen(new ListDialog<>(screen, this.provider, this.config)));
+        ConfigGroup group = this.config.getValue();
+        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.translatable("jupiter.screen.edit"), button -> this.minecraft.setScreen(new ConfigListScreen(screen, screen.getTitle().copy().append(TITLE_SEPARATOR).append(TextUtil.translatable(group.getTranslateKey())), this.provider.getConfigId(), group.getConfigs(), this.provider.isClientSide().orElse(false))));
         appender.accept(this.button);
     }
 
@@ -39,7 +38,6 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
 
     @Override
     public void refresh() {
-        if (this.button == null) return;
-        this.button.setMessage(TextUtil.literal(String.valueOf(this.config.getValue())));
+        //Fixed button text
     }
 }

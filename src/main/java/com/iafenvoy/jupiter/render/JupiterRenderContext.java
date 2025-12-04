@@ -1,4 +1,4 @@
-package com.iafenvoy.jupiter.util;
+package com.iafenvoy.jupiter.render;
 
 //? <=1.19.4 {
 
@@ -68,11 +68,11 @@ public class JupiterRenderContext {
         float f = (float) FastColor.ARGB32.red(color) / 255.0F;
         float f1 = (float) FastColor.ARGB32.green(color) / 255.0F;
         float f2 = (float) FastColor.ARGB32.blue(color) / 255.0F;
-        VertexConsumer vertexconsumer = this.bufferSource.getBuffer(renderType);
-        vertexconsumer.vertex(matrix4f, (float) minX, (float) minY, (float) z).color(f, f1, f2, f3).endVertex();
-        vertexconsumer.vertex(matrix4f, (float) minX, (float) maxY, (float) z).color(f, f1, f2, f3).endVertex();
-        vertexconsumer.vertex(matrix4f, (float) maxX, (float) maxY, (float) z).color(f, f1, f2, f3).endVertex();
-        vertexconsumer.vertex(matrix4f, (float) maxX, (float) minY, (float) z).color(f, f1, f2, f3).endVertex();
+        VertexConsumer consumer = this.bufferSource.getBuffer(renderType);
+        consumer.vertex(matrix4f, (float) minX, (float) minY, (float) z).color(f, f1, f2, f3).endVertex();
+        consumer.vertex(matrix4f, (float) minX, (float) maxY, (float) z).color(f, f1, f2, f3).endVertex();
+        consumer.vertex(matrix4f, (float) maxX, (float) maxY, (float) z).color(f, f1, f2, f3).endVertex();
+        consumer.vertex(matrix4f, (float) maxX, (float) minY, (float) z).color(f, f1, f2, f3).endVertex();
         this.flush();
     }
 

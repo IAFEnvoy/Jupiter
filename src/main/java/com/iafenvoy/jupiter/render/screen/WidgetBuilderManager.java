@@ -14,12 +14,13 @@ import com.iafenvoy.jupiter.util.EnumHelper;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
 //?} else {
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
-*///?}
+ *///?}
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class WidgetBuilderManager {
 
     static {
         register(ConfigTypes.SEPARATOR, SeparatorWidgetBuilder::new);
+        register(ConfigTypes.CONFIG_GROUP, ConfigGroupWidgetBuilder::new);
         register(ConfigTypes.BOOLEAN, (provider, config) -> new ButtonWidgetBuilder<>(provider, config, button -> config.setValue(!config.getValue()), () -> TextUtil.literal(config.getValue() ? "§atrue" : "§cfalse")));
         register(ConfigTypes.INTEGER, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
@@ -65,15 +67,15 @@ public class WidgetBuilderManager {
         }
 
         @Override
-        public void addElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-            Font textRenderer = CLIENT.get().font;
+        public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+            Font textRenderer = this.minecraft.font;
             Component text = TextUtil.translatable("jupiter.screen.unregistered_widget", this.config.getClass().getSimpleName(), Platform.resolveModName(this.provider.getConfigId().getNamespace()));
             this.textWidget = new StringWidget(20, y, textRenderer.width(text), height, text, textRenderer);
             appender.accept(this.textWidget);
         }
 
         @Override
-        public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
             //No Need
         }
 

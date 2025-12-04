@@ -48,7 +48,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
         for (int i = 0; i < values.size(); i++) {
             WidgetBuilder<T> widget = WidgetBuilderManager.get(this.provider, this.entry.newSingleInstance(values.get(i), i, this::rebuildWidgets));
             this.widgets.add(widget);
-            widget.addDialogElements(this::addRenderableWidget, i + ":", 40, 0, width, ITEM_HEIGHT);
+            widget.addDialogElements(this, this::addRenderableWidget, i + ":", 40, 0, width, ITEM_HEIGHT);
         }
         this.updateItemPos();
     }

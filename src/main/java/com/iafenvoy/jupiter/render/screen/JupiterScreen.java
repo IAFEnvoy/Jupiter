@@ -1,5 +1,8 @@
 package com.iafenvoy.jupiter.render.screen;
 
+import com.iafenvoy.jupiter.config.ConfigGroup;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
+import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -13,11 +16,20 @@ import net.minecraft.client.gui.components.Tooltip;
 /*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
  *///?}
 
+import java.util.List;
+
 public interface JupiterScreen {
     String TITLE_SEPARATOR = " -> ";
     int ITEM_PER_SCROLL = 2;
     int ITEM_HEIGHT = 20;
     int ITEM_SEP = 5;
+
+    static Screen getConfigScreen(Screen parent, AbstractConfigContainer container, boolean client) {
+        List<ConfigGroup> groups = container.getConfigTabs();
+        if (groups.size() == 1)
+            return new ConfigListScreen(parent, TextUtil.translatable(container.getTitleNameKey()), container.getConfigId(), groups/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/.getConfigs(), client);
+        else return new ConfigContainerScreen(parent, container, client);
+    }
 
     static boolean connectedToDedicatedServer() {
         Minecraft minecraft = Minecraft.getInstance();

@@ -4,24 +4,18 @@ import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.network.ServerConfigNetwork;
 import com.iafenvoy.jupiter.test.TestConfig;
 import net.minecraft.resources.ResourceLocation;
-
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 //? >=1.20.5 {
 import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
 //?}
-//? >=1.18 {
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
-//?} else {
-/*import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-*///?}
 
 public final class Jupiter {
     public static final String MOD_ID = "jupiter";
-    public static final Logger LOGGER = /*? >=1.18 {*/LogUtils/*?} else {*//*LogManager*//*?}*/.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static void init(boolean development) {
         //? >=1.20.5 {
@@ -43,23 +37,23 @@ public final class Jupiter {
 
     //? forge {
     /*@SuppressWarnings("removal")
-     *///?}
+            *///?}
     public static ResourceLocation id(String id) {
         //? >=1.21 {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
-        //?} else {
+         //?} else {
         /*return new ResourceLocation(MOD_ID, id);
-         *///?}
+        *///?}
     }
 
     //? forge {
     /*@SuppressWarnings("removal")
-     *///?}
+            *///?}
     public static ResourceLocation id(String namespace, String id) {
         //? >=1.21 {
         return ResourceLocation.fromNamespaceAndPath(namespace, id);
-        //?} else {
+         //?} else {
         /*return new ResourceLocation(namespace, id);
-         *///?}
+        *///?}
     }
 }

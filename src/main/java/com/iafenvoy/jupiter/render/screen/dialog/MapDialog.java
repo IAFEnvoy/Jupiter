@@ -49,7 +49,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
         for (Map.Entry<String, T> entry : values.entrySet()) {
             WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.provider, this.entry.newSingleInstance(entry.getValue(), entry.getKey(), this::rebuildWidgets));
             this.widgets.add(widget);
-            widget.addDialogElements(this::addRenderableWidget, "", 10, 0, width, ITEM_HEIGHT);
+            widget.addDialogElements(this, this::addRenderableWidget, "", 10, 0, width, ITEM_HEIGHT);
         }
         this.updateItemPos();
     }

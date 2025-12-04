@@ -15,7 +15,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
-/*import com.iafenvoy.jupiter.util.JupiterRenderContext;
+/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 import net.minecraft.client.resources.language.I18n;
@@ -39,7 +39,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     private int configPerPage, textMaxLength;
 
     public ConfigListScreen(Screen parent, Component title, ResourceLocation id, List<IConfigEntry<?>> entries, boolean client) {
-        this(parent, parent.getTitle().copy().append(TITLE_SEPARATOR).append(title), id, client);
+        this(parent, title, id, client);
         this.entries = entries;
     }
 
@@ -57,8 +57,8 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.calculateMaxItems();
         this.textMaxLength = this.entries.stream().map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
-        this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%"), c)).toList());
-        this.configWidgets.forEach(b -> b.addElements(this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
+        this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
+        this.configWidgets.forEach(b -> b.addElements(this, this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
         this.updateItemPos();
     }
 

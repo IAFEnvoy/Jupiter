@@ -7,6 +7,12 @@ import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
 
 public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
+    @SuppressWarnings({"unchecked", "removal"})
+    @Deprecated(forRemoval = true)
+    public EnumEntry(String nameKey, com.iafenvoy.jupiter.interfaces.IConfigEnumEntry defaultValue) {
+        super(nameKey, (T) defaultValue);
+    }
+
     public EnumEntry(String nameKey, T defaultValue) {
         super(nameKey, defaultValue);
     }

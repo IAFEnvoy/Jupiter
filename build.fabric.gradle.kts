@@ -31,7 +31,6 @@ repositories {
     maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
     maven("https://maven.nucleoid.xyz/") { name = "Placeholder API" }
     maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
-
 }
 
 dependencies {
@@ -55,6 +54,9 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
 
     // @formatter:off
+    // Night Config
+    modImplementation("com.electronwill.night-config:core:3.8.2")
+    modImplementation("com.electronwill.night-config:toml:3.8.2")
     modImplementation("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")?.let { include(it) }
     // @formatter:on
 }

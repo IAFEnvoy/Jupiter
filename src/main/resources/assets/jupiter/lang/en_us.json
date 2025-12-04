@@ -12,6 +12,7 @@
   "jupiter.screen.current_modifying_local_server": "Current modifying local server config",
   "jupiter.screen.disable_client": "Client config is disabled or not provided",
   "jupiter.screen.disable_server": "No permission",
+  "jupiter.screen.edit": "Edit",
   "jupiter.screen.error_server": "Receive invalid server config data",
   "jupiter.screen.open": "Open config",
   "jupiter.screen.open_client": "Open client config",

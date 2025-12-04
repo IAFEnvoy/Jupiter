@@ -8,16 +8,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
 //?}
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public abstract class WidgetBuilder<T> implements JupiterScreen {
-    protected static final Supplier<Minecraft> CLIENT = Minecraft::getInstance;
+    protected final Minecraft minecraft = Minecraft.getInstance();
     protected final ConfigMetaProvider provider;
     protected final IConfigEntry<T> config;
     protected StringWidget textWidget;
@@ -29,8 +29,8 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         this.config = config;
     }
 
-    public void addDialogElements(Consumer<AbstractWidget> appender, String text, int x, int y, int width, int height) {
-        Font font = CLIENT.get().font;
+    public void addDialogElements(Screen screen, Consumer<AbstractWidget> appender, String text, int x, int y, int width, int height) {
+        Font font = this.minecraft.font;
         this.textWidget = new StringWidget(20, y, font.width(text), height, TextUtil.literal(text), font);
         appender.accept(this.textWidget);
         //? >=1.19.3 {
@@ -46,11 +46,11 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         *///?}
         this.refreshResetButton(true);
         appender.accept(this.resetButton);
-        this.addCustomElements(appender, x, y, width - 55, height);
+        this.addCustomElements(screen, appender, x, y, width - 55, height);
     }
 
-    public void addElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        Font font = CLIENT.get().font;
+    public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        Font font = this.minecraft.font;
         Component component = TextUtil.literal(this.config.getPrettyName());
         this.textWidget = new StringWidget(20, y, font.width(component), height, component, font);
         appender.accept(this.textWidget);
@@ -68,7 +68,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         this.refreshResetButton(false);
         this.config.registerCallback(v -> this.refreshResetButton(false));
         appender.accept(this.resetButton);
-        this.addCustomElements(appender, x, y, width - 55, height);
+        this.addCustomElements(screen, appender, x, y, width - 55, height);
     }
 
     private void refreshResetButton(boolean dialog) {
@@ -79,7 +79,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         this.resetButton.active = b;
     }
 
-    public abstract void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height);
+    public abstract void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height);
 
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {

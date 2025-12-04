@@ -4,7 +4,7 @@ package com.iafenvoy.jupiter.render.screen.scrollbar;
 import net.minecraft.client.gui.GuiGraphics;
  //?} else {
 
-/*import com.iafenvoy.jupiter.util.JupiterRenderContext;
+/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 import net.minecraft.util.Mth;

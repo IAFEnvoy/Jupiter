@@ -1,10 +1,17 @@
 package com.iafenvoy.jupiter.render.internal;
 
 import com.iafenvoy.jupiter.ConfigManager;
+import com.iafenvoy.jupiter.config.ConfigSide;
+import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
+import com.iafenvoy.jupiter.render.BadgeRenderer;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -12,13 +19,9 @@ import net.minecraft.client.input.MouseButtonEvent;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
-/*import com.iafenvoy.jupiter.util.JupiterRenderContext;
+/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
-import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +53,14 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     *///?} else {
     @Override
     protected int getScrollbarPosition() {
-        return super.getScrollbarPosition() + 30;
+        return super.getScrollbarPosition() - 14;
     }
     //?}
 
+    @Override
+    public int getRowWidth() {
+        return this.width - 4;
+    }
 
     @Override
     public void setSelected(@Nullable JupiterConfigListWidget.ConfigEntry selected) {
@@ -103,9 +110,14 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
             *///?}
-            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 1, 0xFFFFFFFF);
-            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 1 + 9, 0xFF7F7F7F);
-            graphics.drawString(this.client.font, this.handler.getPath(), x + 32 + 3, y + 1 + 18, 0xFF7F7F7F);
+            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 65, y + 1, 0xFFFFFFFF);
+            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 65, y + 1 + 9, 0xFF7F7F7F);
+            graphics.drawString(this.client.font, this.handler.getPath(), x + 65, y + 1 + 18, 0xFF7F7F7F);
+            //Badges
+            ConfigSource source = this.handler.getSource();
+            ConfigSide side = this.handler.getSide();
+            BadgeRenderer.draw(graphics, this.client.font, x + 1, y + 1, source.name(), source.color());
+            BadgeRenderer.draw(graphics, this.client.font, x + 1, y + 16, TextUtil.literal(side.getDisplayText()), side.getColor());
         }
 
         //? >=1.21.9 {

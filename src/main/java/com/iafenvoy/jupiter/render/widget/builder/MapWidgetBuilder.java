@@ -6,9 +6,9 @@ import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.dialog.MapDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -25,9 +25,8 @@ public class MapWidgetBuilder<T> extends WidgetBuilder<Map<String, T>> {
     }
 
     @Override
-    public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        Minecraft client = CLIENT.get();
-        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> client.setScreen(new MapDialog<>(client.screen, this.provider, this.config)));
+    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> this.minecraft.setScreen(new MapDialog<>(screen, this.provider, this.config)));
         appender.accept(this.button);
     }
 

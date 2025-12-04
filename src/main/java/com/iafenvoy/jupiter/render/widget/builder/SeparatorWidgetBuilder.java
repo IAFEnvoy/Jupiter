@@ -7,9 +7,10 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
-        //?} else {
+//?} else {
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
  *///?}
 
@@ -21,8 +22,8 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
     }
 
     @Override
-    public void addElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        Font font = CLIENT.get().font;
+    public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        Font font = this.minecraft.font;
         width = width + x - 20;
         int w = font.width("-"), k = 0;
         while ((k + 1) * w <= width) k++;
@@ -32,7 +33,7 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
     }
 
     @Override
-    public void addCustomElements(Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
         //No Need
     }
 

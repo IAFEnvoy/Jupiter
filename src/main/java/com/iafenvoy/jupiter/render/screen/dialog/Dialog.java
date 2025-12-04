@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
-/*import com.iafenvoy.jupiter.util.JupiterRenderContext;
+/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 

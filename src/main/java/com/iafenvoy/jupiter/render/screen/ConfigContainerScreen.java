@@ -12,8 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
-/*import com.iafenvoy.jupiter.util.JupiterRenderContext;
-import com.mojang.blaze3d.vertex.PoseStack;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 import net.minecraft.client.resources.language.I18n;
 import org.jetbrains.annotations.NotNull;

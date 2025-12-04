@@ -54,7 +54,6 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
         return this.configTabs;
     }
 
-
     public final void onConfigsChanged() {
         this.save();
         this.load();
