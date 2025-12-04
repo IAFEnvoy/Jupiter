@@ -8,6 +8,7 @@ import com.iafenvoy.jupiter.render.BadgeRenderer;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ import java.util.List;
 public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigListWidget.ConfigEntry> {
     private final JupiterConfigListScreen screen;
     private final List<ConfigEntry> entries = new ArrayList<>();
+    private String filter = "";
 
     public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y/*? <=1.20.1 {*//*, int bottom*//*?}*/) {
         super(client, width, height, y,/*? <=1.20.1 {*//*bottom,*//*?}*/ 32);
@@ -70,7 +72,8 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
 
     private void updateEntries() {
         this.clearEntries();
-        this.entries.forEach(this::addEntry);
+        this.entries.stream().filter(x -> x.match(this.filter)).forEach(this::addEntry);
+        this.setScrollAmount(0);
     }
 
     //? >=1.21.9 {
@@ -86,6 +89,11 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
          *///?} else {
         return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
         //?}
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+        this.updateEntries();
     }
 
     public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
@@ -138,6 +146,12 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         @Override
         public @NotNull Component getNarration() {
             return TextUtil.empty();
+        }
+
+        public boolean match(String filter) {
+            return I18n.get(this.handler.getTitleNameKey()).contains(filter) ||
+                    this.handler.getConfigId().toString().contains(filter) ||
+                    this.handler.getPath().contains(filter);
         }
     }
 }

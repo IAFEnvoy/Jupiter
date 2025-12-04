@@ -11,7 +11,7 @@ public final class EnumHelper {
     }
 
     public static <T extends Enum<T>> Codec<T> getCodec(Class<T> value) {
-        return Codec.STRING.xmap(x -> Enum.valueOf(value, x), x -> x.name().toLowerCase(Locale.ROOT));
+        return Codec.STRING.xmap(x -> Enum.valueOf(value, x), Enum::name);
     }
 
     public static <T extends Enum<?>> Enum<?> cycle(T value, boolean clockwise) {
