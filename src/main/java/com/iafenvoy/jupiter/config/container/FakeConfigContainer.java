@@ -17,6 +17,11 @@ public class FakeConfigContainer extends AbstractConfigContainer {
     }
 
     @Override
+    public String getPath() {
+        return "Virtual Config File";
+    }
+
+    @Override
     public void init() {
     }
 

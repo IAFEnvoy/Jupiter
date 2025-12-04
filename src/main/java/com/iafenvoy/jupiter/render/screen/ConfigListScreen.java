@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
@@ -56,7 +57,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.calculateMaxItems();
         this.textMaxLength = this.entries.stream().map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
-        this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(() -> this.id, c)).toList());
+        this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%"), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
         this.updateItemPos();
     }

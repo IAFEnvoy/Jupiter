@@ -142,8 +142,4 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     @Comment("Only call on saving to disk, not on network")
     protected void writeCustomData(JsonObject obj) {
     }
-
-    public ConfigSource getSource() {
-        return ConfigSource.NONE;
-    }
 }

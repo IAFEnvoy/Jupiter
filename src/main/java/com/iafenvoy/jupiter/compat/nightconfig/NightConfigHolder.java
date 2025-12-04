@@ -53,12 +53,13 @@ public record NightConfigHolder(String modId, String type, String fileName, Unmo
         for (UnmodifiableConfig.Entry entry : this.defaults.entrySet()) {
             if (!(entry.getValue() instanceof ModConfigSpec.ValueSpec spec)) continue;
             AtomicReference<BaseEntry<?>> holder = new AtomicReference<>(null);
+            String translateKey = spec.getTranslationKey();
             Object defaultValue = spec.getDefault(), value = this.values.get(entry.getKey());
-            this.processEntry(holder, spec, entry, defaultValue, value, Boolean.class, BooleanEntry::new);
-            this.processEntry(holder, spec, entry, defaultValue, value, Integer.class, IntegerEntry::new);
-            this.processEntry(holder, spec, entry, defaultValue, value, Double.class, DoubleEntry::new);
-            this.processEntry(holder, spec, entry, defaultValue, value, String.class, StringEntry::new);
-            this.processEnum(holder, spec, entry, defaultValue, value, spec.getClazz());
+            this.processEntry(holder, translateKey, entry, defaultValue, value, Boolean.class, BooleanEntry::new);
+            this.processEntry(holder, translateKey, entry, defaultValue, value, Integer.class, IntegerEntry::new);
+            this.processEntry(holder, translateKey, entry, defaultValue, value, Double.class, DoubleEntry::new);
+            this.processEntry(holder, translateKey, entry, defaultValue, value, String.class, StringEntry::new);
+            this.processEnum(holder, translateKey, entry, defaultValue, value, spec.getClazz());
             BaseEntry<?> configEntry = holder.get();
             if (configEntry == null)
                 Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.type);
@@ -71,21 +72,21 @@ public record NightConfigHolder(String modId, String type, String fileName, Unmo
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends Enum<T>> void processEnum(AtomicReference<BaseEntry<?>> reference, ModConfigSpec.ValueSpec spec, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<?> clazz) {
+    private <T extends Enum<T>> void processEnum(AtomicReference<BaseEntry<?>> reference, String translateKey, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<?> clazz) {
         if (value instanceof String string && clazz.isEnum()) {
             Class<T> testClazz = (Class<T>) clazz;
-            this.processEntry(reference, spec, entry, defaultValue, Enum.valueOf(testClazz, string), testClazz, EnumEntry::new);
+            this.processEntry(reference, translateKey, entry, defaultValue, Enum.valueOf(testClazz, string), testClazz, EnumEntry::new);
         }
     }
 
-    private <T> void processEntry(AtomicReference<BaseEntry<?>> reference, ModConfigSpec.ValueSpec spec, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> testClazz, BiFunction<String, T, BaseEntry<T>> entryProvider) {
-        this.processEntry(reference, spec, entry, defaultValue, value, testClazz, Function.identity(), Function.identity(), entryProvider);
+    private <T> void processEntry(AtomicReference<BaseEntry<?>> reference, String translateKey, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> testClazz, BiFunction<String, T, BaseEntry<T>> entryProvider) {
+        this.processEntry(reference, translateKey, entry, defaultValue, value, testClazz, Function.identity(), Function.identity(), entryProvider);
     }
 
     @SuppressWarnings("unchecked")
-    private <T, M> void processEntry(AtomicReference<BaseEntry<?>> reference, ModConfigSpec.ValueSpec spec, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> testClazz, Function<T, M> wrapper, Function<M, T> unwrapper, BiFunction<String, M, BaseEntry<M>> entryProvider) {
+    private <T, M> void processEntry(AtomicReference<BaseEntry<?>> reference, String translateKey, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> testClazz, Function<T, M> wrapper, Function<M, T> unwrapper, BiFunction<String, M, BaseEntry<M>> entryProvider) {
         if (testClazz.isAssignableFrom(defaultValue.getClass()) && testClazz.isAssignableFrom(value.getClass())) {
-            BaseEntry<M> e = entryProvider.apply(this.getTranslationKey(spec.getTranslationKey(), entry.getKey()), wrapper.apply((T) defaultValue));
+            BaseEntry<M> e = entryProvider.apply(this.getTranslationKey(translateKey, entry.getKey()), wrapper.apply((T) defaultValue));
             e.callback(val -> this.values.set(entry.getKey(), unwrapper.apply(val))).setValue(wrapper.apply((T) value));
             reference.set(e);
         }

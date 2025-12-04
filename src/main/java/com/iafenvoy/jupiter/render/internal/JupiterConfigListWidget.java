@@ -18,6 +18,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,8 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     private final JupiterConfigListScreen screen;
     private final List<ConfigEntry> entries = new ArrayList<>();
 
-    public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y,/*? <=1.20.1 {*//*int bottom,*//*?}*/ int entryHeight) {
-        super(client, width, height, y,/*? <=1.20.1 {*//*bottom,*//*?}*/ entryHeight);
+    public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y/*? <=1.20.1 {*//*, int bottom*//*?}*/) {
+        super(client, width, height, y,/*? <=1.20.1 {*//*bottom,*//*?}*/ 32);
         this.screen = screen;
         //? <=1.20.1 {
         /*this.setRenderTopAndBottom(false);
@@ -53,6 +54,13 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     }
     //?}
 
+
+    @Override
+    public void setSelected(@Nullable JupiterConfigListWidget.ConfigEntry selected) {
+        super.setSelected(selected);
+        this.screen.setOpenConfigState(this.getSelected() != null);
+    }
+
     private void updateEntries() {
         this.clearEntries();
         this.entries.forEach(this::addEntry);
@@ -68,9 +76,9 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         ConfigEntry entry = this.getSelected();
         //? >=1.21.9 {
         /*return entry != null && entry.keyPressed(event) || super.keyPressed(event);
-        *///?} else {
+         *///?} else {
         return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
-         //?}
+        //?}
     }
 
     public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
@@ -90,13 +98,14 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
             *///?} else >=1.20 {
         @Override
         public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-        //?} else {
+            //?} else {
         /*@Override
         public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
             *///?}
-            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 2, 0xFFFFFFFF);
-            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 2 + 9, 0xFF7F7F7F);
+            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 32 + 3, y + 1, 0xFFFFFFFF);
+            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 32 + 3, y + 1 + 9, 0xFF7F7F7F);
+            graphics.drawString(this.client.font, this.handler.getPath(), x + 32 + 3, y + 1 + 18, 0xFF7F7F7F);
         }
 
         //? >=1.21.9 {
