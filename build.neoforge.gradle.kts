@@ -27,13 +27,9 @@ jsonlang {
 
 repositories {
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
-    maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
 }
 
 dependencies {
-    // @formatter:off
-//    implementation("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")?.let { jarJar(it) }
-    // @formatter:on
 }
 
 neoForge {

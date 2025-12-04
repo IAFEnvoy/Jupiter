@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.EditBox;
 import org.jetbrains.annotations.NotNull;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
-        //?} else {
+//?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
  *///?}
 

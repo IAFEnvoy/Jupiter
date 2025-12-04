@@ -19,7 +19,7 @@ public class Dialog<T> extends Screen implements JupiterScreen {
     private final Screen parent;
 
     protected Dialog(Screen parent, ConfigMetaProvider provider, IConfigEntry<T> entry) {
-        super(TextUtil.translatable(entry.getNameKey()));
+        super(parent.getTitle().copy().append(TITLE_SEPARATOR).append(TextUtil.translatable(entry.getNameKey())));
         this.parent = parent;
         this.provider = provider;
         this.entry = entry;

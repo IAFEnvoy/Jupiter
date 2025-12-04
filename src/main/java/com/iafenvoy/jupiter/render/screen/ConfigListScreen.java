@@ -38,7 +38,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     private int configPerPage, textMaxLength;
 
     public ConfigListScreen(Screen parent, Component title, ResourceLocation id, List<IConfigEntry<?>> entries, boolean client) {
-        this(parent, title, id, client);
+        this(parent, parent.getTitle().copy().append(TITLE_SEPARATOR).append(title), id, client);
         this.entries = entries;
     }
 

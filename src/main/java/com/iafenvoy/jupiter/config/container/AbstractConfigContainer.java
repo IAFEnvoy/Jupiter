@@ -60,11 +60,11 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
         this.load();
     }
 
+    public abstract void init();
+
     public abstract void load();
 
     public abstract void save();
-
-    public abstract void init();
 
     public String serialize() {
         if (this.cache == null) this.cache = this.buildCodec();

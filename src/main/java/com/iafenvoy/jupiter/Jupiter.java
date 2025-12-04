@@ -47,8 +47,19 @@ public final class Jupiter {
     public static ResourceLocation id(String id) {
         //? >=1.21 {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
-         //?} else {
+        //?} else {
         /*return new ResourceLocation(MOD_ID, id);
-        *///?}
+         *///?}
+    }
+
+    //? forge {
+    /*@SuppressWarnings("removal")
+     *///?}
+    public static ResourceLocation id(String namespace, String id) {
+        //? >=1.21 {
+        return ResourceLocation.fromNamespaceAndPath(namespace, id);
+        //?} else {
+        /*return new ResourceLocation(namespace, id);
+         *///?}
     }
 }

@@ -7,8 +7,7 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
-/*import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
+/*import net.minecraft.client.input.MouseButtonEvent;
 *///?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;

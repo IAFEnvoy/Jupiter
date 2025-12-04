@@ -38,7 +38,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
         super.init();
         int width = Math.max(10, this.width - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(JupiterScreen.createButton(this.width - 60, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(width - 10, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
             this.rebuildWidgets();
         }));

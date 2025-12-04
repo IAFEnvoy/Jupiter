@@ -11,7 +11,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 *///?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
-        //?} else {
+//?} else {
 /*import com.iafenvoy.jupiter.util.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}

@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter.render.internal;
 
+import com.iafenvoy.jupiter.compat.forgeconfigspec.ForgeConfigSpecLoader;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
 import com.iafenvoy.jupiter.render.screen.ConfigContainerScreen;
@@ -28,6 +29,7 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
     public JupiterConfigListScreen(Screen parent) {
         super(TextUtil.translatable("jupiter.screen.config_list.title"));
         this.parent = parent;
+        ForgeConfigSpecLoader.scanConfig();
     }
 
     @Override

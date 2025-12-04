@@ -4,6 +4,7 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -14,7 +15,7 @@ public class ConfigGroup {
     private Codec<ConfigGroup> cache;
 
     public ConfigGroup(String id, String translateKey) {
-        this(id, translateKey, List.of());
+        this(id, translateKey, new LinkedList<>());
     }
 
     public ConfigGroup(String id, String translateKey, List<IConfigEntry<?>> configs) {

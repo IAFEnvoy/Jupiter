@@ -11,9 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.client.gui.components.Tooltip;
 //?} else {
 /*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
-*///?}
+ *///?}
 
 public interface JupiterScreen {
+    String TITLE_SEPARATOR = " -> ";
     int ITEM_PER_SCROLL = 2;
     int ITEM_HEIGHT = 20;
     int ITEM_SEP = 5;
