@@ -1,1 +1,0 @@
-Fully support (Neo)Forge config system, currently you can access from Jupiter config screen.

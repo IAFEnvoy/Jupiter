@@ -84,7 +84,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
 
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {
-            this.textWidget.visible = visible;
+            this.textWidget.visible = this.textWidget.active = visible;
             this.textWidget./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
         }
         if (this.resetButton != null) {
@@ -97,6 +97,14 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
     public abstract void updateCustom(boolean visible, int y);
 
     public abstract void refresh();
+
+    public boolean isMouseOver(int mouseX, int mouseY) {
+        return this.textWidget.visible && this.textWidget.isMouseOver(mouseX, mouseY);
+    }
+
+    public IConfigEntry<T> getConfig() {
+        return this.config;
+    }
 
     public boolean canSave() {
         return this.canSave;

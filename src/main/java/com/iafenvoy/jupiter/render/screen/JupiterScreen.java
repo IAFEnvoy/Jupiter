@@ -20,9 +20,9 @@ import net.minecraft.client.gui.components.Tooltip;
 import java.util.List;
 
 public interface JupiterScreen {
-    int ITEM_PER_SCROLL = 2;
-    int ITEM_HEIGHT = 20;
-    int ITEM_SEP = 5;
+    int ENTRIES_PER_SCROLL = 2;
+    int ENTRY_HEIGHT = 20;
+    int ENTRY_SEPARATOR = 5;
 
     static Screen getConfigScreen(Screen parent, AbstractConfigContainer container, boolean client) {
         List<ConfigGroup> groups = container.getConfigTabs();

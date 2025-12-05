@@ -47,7 +47,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
         List<ConfigGroup> configTabs = this.container.getConfigTabs();
         for (int i = 0; i < configTabs.size(); i++) {
             ConfigGroup category = configTabs.get(i);
-            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, ITEM_HEIGHT, button -> {
+            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, ENTRY_HEIGHT, button -> {
                 this.currentTab = this.container.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
                 this.rebuildWidgets();

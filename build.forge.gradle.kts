@@ -104,7 +104,7 @@ publishMods {
     displayName = "${property("mod.name")} $modVersion for ${stonecutter.current.version} Neoforge"
     version = "${modVersion}-${property("deps.minecraft")}-neoforge"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
-    modLoaders.add("neoforge")
+    modLoaders.add("forge")
 
     modrinth {
         projectId = property("publish.modrinth") as String
