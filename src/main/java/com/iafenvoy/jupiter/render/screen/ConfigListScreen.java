@@ -4,6 +4,7 @@ import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
 import com.iafenvoy.jupiter.config.entry.BaseEntry;
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -31,22 +32,24 @@ import java.util.List;
 
 public class ConfigListScreen extends Screen implements JupiterScreen {
     private final Screen parent;
+    private final TitleStack titleStack;
     private final ResourceLocation id;
+    private final boolean client;
     protected final List<WidgetBuilder<?>> configWidgets = new ArrayList<>();
     protected final VerticalScrollBar itemScrollBar = new VerticalScrollBar();
-    private final boolean client;
     protected List<IConfigEntry<?>> entries = List.of();
     protected int topBorder = 30;
     private int configPerPage, textMaxLength;
 
-    public ConfigListScreen(Screen parent, Component title, ResourceLocation id, List<IConfigEntry<?>> entries, boolean client) {
-        this(parent, title, id, client);
+    public ConfigListScreen(Screen parent, TitleStack titleStack, ResourceLocation id, List<IConfigEntry<?>> entries, boolean client) {
+        this(parent, titleStack, id, client);
         this.entries = entries;
     }
 
-    public ConfigListScreen(Screen parent, Component title, ResourceLocation id, boolean client) {
-        super(title);
+    public ConfigListScreen(Screen parent, TitleStack titleStack, ResourceLocation id, boolean client) {
+        super(TextUtil.empty());
         this.parent = parent;
+        this.titleStack = titleStack;
         this.id = id;
         this.client = client;
     }
@@ -54,12 +57,13 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     @Override
     protected void init() {
         super.init();
+        this.titleStack.cacheTitle(this.width - this.font.width(this.getCurrentEditText()) - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
         this.calculateMaxItems();
         this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
-        this.configWidgets.forEach(b -> b.addElements(this, this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
+        this.configWidgets.forEach(b -> b.addElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
         this.updateItemPos();
     }
 
@@ -75,6 +79,11 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         super.resize(minecraft, width, height);
         this.calculateMaxItems();
         this.updateItemPos();
+    }
+
+    @Override
+    public @NotNull Component getTitle() {
+        return this.titleStack.getTitle();
     }
 
     public void calculateMaxItems() {
@@ -125,11 +134,6 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     }
 
     @Override
-    public @NotNull Component getTitle() {
-        return super.getTitle();
-    }
-
-    @Override
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
@@ -138,11 +142,11 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
         //? >=1.20 {
-        graphics.drawString(this.font, this.title, 40, 10, -1, true);
+        graphics.drawString(this.font, this.getTitle(), 40, 10, -1, true);
         graphics.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawString(this.font, this.title, 40, 10, -1);
+        context.drawString(this.font, this.getTitle(), 40, 10, -1);
         context.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
         *///?}
         this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - 70, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ITEM_HEIGHT + ITEM_SEP));

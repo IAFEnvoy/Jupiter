@@ -5,14 +5,11 @@ import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
     private final EntryBaseEntry<T> config;
@@ -27,13 +24,13 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
     }
 
     @Override
-    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addCustomElements(Context context, int x, int y, int width, int height) {
         this.keyWidget = new EditBox(this.minecraft.font, x, y, width / 2 - 5, height, TextUtil.empty());
         this.keyWidget.setValue(this.config.getValue().getKey());
         this.keyWidget.setResponder(s -> this.config.setValue(new AbstractMap.SimpleEntry<>(s, this.config.getValue().getValue())));
-        appender.accept(this.keyWidget);
+        context.addWidget(this.keyWidget);
         this.valueBuilder = WidgetBuilderManager.get(this.provider, this.config.newValueInstance());
-        this.valueBuilder.addCustomElements(screen, appender, x + width / 2, y, width / 2, height);
+        this.valueBuilder.addCustomElements(context, x + width / 2, y, width / 2, height);
     }
 
     @Override

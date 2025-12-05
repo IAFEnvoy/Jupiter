@@ -6,8 +6,6 @@ import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.screens.Screen;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.network.chat.Component;
@@ -15,7 +13,6 @@ import net.minecraft.network.chat.Component;
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
  *///?}
 
-import java.util.function.Consumer;
 
 public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
     public SeparatorWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<Unit> config) {
@@ -23,7 +20,7 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
     }
 
     @Override
-    public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addElements(Context context, int x, int y, int width, int height) {
         Font font = this.minecraft.font;
         width = width + x - 20;
         Component text;
@@ -33,11 +30,11 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
             text = TextUtil.literal("-".repeat(k));
         } else text = TextUtil.translatable(this.config.getNameKey());
         this.textWidget = new StringWidget(20, y, font.width(text), height, text, font);
-        appender.accept(this.textWidget);
+        context.addWidget(this.textWidget);
     }
 
     @Override
-    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addCustomElements(Context context, int x, int y, int width, int height) {
         //No Need
     }
 

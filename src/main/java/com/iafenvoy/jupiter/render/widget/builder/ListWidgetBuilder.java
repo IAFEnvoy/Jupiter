@@ -6,13 +6,10 @@ import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     protected final ListBaseEntry<T> config;
@@ -25,9 +22,9 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
     }
 
     @Override
-    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
-        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> this.minecraft.setScreen(new ListDialog<>(screen, this.provider, this.config)));
-        appender.accept(this.button);
+    public void addCustomElements(Context context, int x, int y, int width, int height) {
+        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> this.minecraft.setScreen(new ListDialog<>(context.parent(), context.push(TextUtil.translatable(this.config.getNameKey())), this.provider, this.config)));
+        context.addWidget(this.button);
     }
 
     @Override

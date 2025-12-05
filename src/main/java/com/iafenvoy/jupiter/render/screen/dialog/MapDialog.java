@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter.render.screen.dialog;
 
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
@@ -29,17 +30,16 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
     protected final List<WidgetBuilder<Map.Entry<String, T>>> widgets = new ArrayList<>();
     private int configPerPage;
 
-    public MapDialog(Screen parent, ConfigMetaProvider provider, MapBaseEntry<T> entry) {
-        super(parent, provider, entry);
+    public MapDialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, MapBaseEntry<T> entry) {
+        super(parent, titleStack, provider, entry);
         this.entry = entry;
     }
 
     @Override
     protected void init() {
         super.init();
-        int width = Math.max(10, this.width - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(JupiterScreen.createButton(width - 40, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(this.width - 80, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
             this.entry.getValue().put("", this.entry.newValue());
             this.rebuildWidgets();
         }));
@@ -49,7 +49,7 @@ public class MapDialog<T> extends Dialog<Map<String, T>> {
         for (Map.Entry<String, T> entry : values.entrySet()) {
             WidgetBuilder<Map.Entry<String, T>> widget = WidgetBuilderManager.get(this.provider, this.entry.newSingleInstance(entry.getValue(), entry.getKey(), this::rebuildWidgets));
             this.widgets.add(widget);
-            widget.addDialogElements(this, this::addRenderableWidget, "", 10, 0, width, ITEM_HEIGHT);
+            widget.addDialogElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), "", 10, 0, Math.max(10, this.width - 70), ITEM_HEIGHT);
         }
         this.updateItemPos();
     }

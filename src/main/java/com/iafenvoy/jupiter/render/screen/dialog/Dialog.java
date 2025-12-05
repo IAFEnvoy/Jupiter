@@ -2,9 +2,11 @@ package com.iafenvoy.jupiter.render.screen.dialog;
 
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,15 +16,23 @@ import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
 public class Dialog<T> extends Screen implements JupiterScreen {
+    private final Screen parent;
+    protected final TitleStack titleStack;
     protected final ConfigMetaProvider provider;
     protected final IConfigEntry<T> entry;
-    private final Screen parent;
 
-    protected Dialog(Screen parent, ConfigMetaProvider provider, IConfigEntry<T> entry) {
-        super(parent.getTitle().copy().append(TITLE_SEPARATOR).append(TextUtil.translatable(entry.getNameKey())));
+    protected Dialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, IConfigEntry<T> entry) {
+        super(TextUtil.empty());
         this.parent = parent;
+        this.titleStack = titleStack;
         this.provider = provider;
         this.entry = entry;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.titleStack.cacheTitle(this.width - 130);
     }
 
     //? <=1.18.2 {
@@ -33,16 +43,21 @@ public class Dialog<T> extends Screen implements JupiterScreen {
     *///?}
 
     @Override
+    public @NotNull Component getTitle() {
+        return this.titleStack.getTitle();
+    }
+
+    @Override
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
          *///?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         //? >=1.20 {
-        graphics.drawString(this.font, this.title, 40, 10, 0xFFFFFFFF, true);
+        graphics.drawString(this.font, this.getTitle(), 40, 10, 0xFFFFFFFF, true);
         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawString(this.font, this.title, 40, 10, 0xFFFFFFFF);
+        context.drawString(this.font, this.getTitle(), 40, 10, 0xFFFFFFFF);
         *///?}
     }
 

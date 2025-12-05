@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter.render.widget;
 
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
@@ -29,10 +30,10 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         this.config = config;
     }
 
-    public void addDialogElements(Screen screen, Consumer<AbstractWidget> appender, String text, int x, int y, int width, int height) {
+    public void addDialogElements(Context context, String text, int x, int y, int width, int height) {
         Font font = this.minecraft.font;
         this.textWidget = new StringWidget(20, y, font.width(text), height, TextUtil.literal(text), font);
-        appender.accept(this.textWidget);
+        context.addWidget(this.textWidget);
         //? >=1.19.3 {
         this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.remove"), button -> {
             this.config.reset();
@@ -45,15 +46,15 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         });
         *///?}
         this.refreshResetButton(true);
-        appender.accept(this.resetButton);
-        this.addCustomElements(screen, appender, x, y, width - 55, height);
+        context.addWidget(this.resetButton);
+        this.addCustomElements(context, x, y, width - 55, height);
     }
 
-    public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addElements(Context context, int x, int y, int width, int height) {
         Font font = this.minecraft.font;
         Component component = TextUtil.literal(this.config.getPrettyName());
         this.textWidget = new StringWidget(20, y, font.width(component), height, component, font);
-        appender.accept(this.textWidget);
+        context.addWidget(this.textWidget);
         //? >=1.19.3 {
         this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.reset"), button -> {
             this.config.reset();
@@ -67,8 +68,8 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         *///?}
         this.refreshResetButton(false);
         this.config.registerCallback(v -> this.refreshResetButton(false));
-        appender.accept(this.resetButton);
-        this.addCustomElements(screen, appender, x, y, width - 55, height);
+        context.addWidget(this.resetButton);
+        this.addCustomElements(context, x, y, width - 55, height);
     }
 
     private void refreshResetButton(boolean dialog) {
@@ -79,7 +80,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         this.resetButton.active = b;
     }
 
-    public abstract void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height);
+    public abstract void addCustomElements(Context context, int x, int y, int width, int height);
 
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {
@@ -99,5 +100,15 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
 
     public boolean canSave() {
         return this.canSave;
+    }
+
+    public record Context(Screen parent, Consumer<AbstractWidget> appender, TitleStack titleStack) {
+        public void addWidget(AbstractWidget widget) {
+            this.appender.accept(widget);
+        }
+
+        public TitleStack push(Component title) {
+            return this.titleStack.push(title);
+        }
     }
 }

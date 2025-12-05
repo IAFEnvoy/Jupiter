@@ -4,13 +4,10 @@ import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
@@ -29,9 +26,9 @@ public class ButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     }
 
     @Override
-    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addCustomElements(Context context, int x, int y, int width, int height) {
         this.button = JupiterScreen.createButton(x, y, width, height, this.nameSupplier.get(), this.action);
-        appender.accept(this.button);
+        context.addWidget(this.button);
     }
 
     @Override

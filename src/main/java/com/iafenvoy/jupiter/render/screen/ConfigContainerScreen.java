@@ -2,18 +2,19 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
+import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
 /*import net.minecraft.client.input.MouseButtonEvent;
-*///?}
+ *///?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
+ *///?}
 import net.minecraft.client.resources.language.I18n;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +31,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
     private ConfigGroup currentGroup;
 
     public ConfigContainerScreen(Screen parent, AbstractConfigContainer container, boolean client) {
-        super(parent, TextUtil.translatable(container.getTitleNameKey()), container.getConfigId(), client);
+        super(parent, TitleStack.create(TextUtil.translatable(container.getTitleNameKey())), container.getConfigId(), client);
         this.parent = parent;
         this.container = container;
         this.currentGroup = container.getConfigTabs().isEmpty() ? ConfigGroup.EMPTY : container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;

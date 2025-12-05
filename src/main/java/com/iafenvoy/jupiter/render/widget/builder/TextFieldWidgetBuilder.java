@@ -5,11 +5,7 @@ import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.interfaces.ITextFieldConfigEntry;
 import com.iafenvoy.jupiter.render.widget.TextFieldWithErrorWidget;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
     private final ITextFieldConfigEntry textFieldConfig;
@@ -23,7 +19,7 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
     }
 
     @Override
-    public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+    public void addCustomElements(Context context, int x, int y, int width, int height) {
         this.widget = new TextFieldWithErrorWidget(this.minecraft.font, x, y, width, height);
         this.widget.setValue(this.textFieldConfig.valueAsString());
         this.widget.setResponder(s -> {
@@ -37,7 +33,7 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
                 this.setCanReset(true);
             }
         });
-        appender.accept(this.widget);
+        context.addWidget(this.widget);
     }
 
     @Override

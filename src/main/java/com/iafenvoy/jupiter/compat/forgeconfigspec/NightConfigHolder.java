@@ -77,11 +77,11 @@ public final class NightConfigHolder {
     }
 
     public List<ConfigGroup> toGroups() {
-        return List.of(this.buildGroup(this.defaults, this.values));
+        return List.of(this.buildGroup(this.id().toString(), this.title(), this.defaults, this.values));
     }
 
-    public ConfigGroup buildGroup(UnmodifiableConfig defaults, CommentedConfig values) {
-        ConfigGroup group = new ConfigGroup("Unclassified", "Unclassified");
+    public ConfigGroup buildGroup(String id, String groupTranslate, UnmodifiableConfig defaults, CommentedConfig values) {
+        ConfigGroup group = new ConfigGroup(id, groupTranslate);
         for (UnmodifiableConfig.Entry entry : defaults.entrySet()) {
             Object entryValue = entry.getValue(), value = values.get(entry.getKey());
             if (entryValue instanceof /*? >=1.20.2 {*/ ModConfigSpec/*?} else {*/ /*ForgeConfigSpec*//*?}*/.ValueSpec spec) {
@@ -95,8 +95,10 @@ public final class NightConfigHolder {
                         baseEntry.tooltip(spec.getComment()).registerCallback(val -> this.values.set(entry.getKey(), val));
                     group.add(configEntry);
                 }
-            } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config)
-                group.add(new ConfigGroupEntry(this.getTranslationKey(entry.getKey(), entry.getKey()), this.buildGroup(spec, config)));
+            } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config) {
+                String translateKey = this.getTranslationKey(entry.getKey(), entry.getKey());
+                group.add(new ConfigGroupEntry(translateKey, this.buildGroup(entry.getKey(), translateKey, spec, config)));
+            }
         }
         return group;
     }
@@ -113,7 +115,7 @@ public final class NightConfigHolder {
         //Enum
         this.processEnum(holder, values, translateKey, entry, defaultValue, value, defaultValue.getClass());
         //List
-        if (holder.get() == null)
+        if (Collection.class.isAssignableFrom(defaultValue.getClass()))
             //Some magic hack
             if (validator.test(List.of(false)))
                 this.processCollectionEntry(holder, values, translateKey, entry, defaultValue, value, ListBooleanEntry::new);

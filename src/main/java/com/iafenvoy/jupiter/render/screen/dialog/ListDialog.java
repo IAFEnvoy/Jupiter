@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter.render.screen.dialog;
 
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
@@ -28,17 +29,16 @@ public class ListDialog<T> extends Dialog<List<T>> {
     protected final List<WidgetBuilder<T>> widgets = new ArrayList<>();
     private int configPerPage;
 
-    public ListDialog(Screen parent, ConfigMetaProvider provider, ListBaseEntry<T> entry) {
-        super(parent, provider, entry);
+    public ListDialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, ListBaseEntry<T> entry) {
+        super(parent, titleStack, provider, entry);
         this.entry = entry;
     }
 
     @Override
     protected void init() {
         super.init();
-        int width = Math.max(10, this.width - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(JupiterScreen.createButton(width - 10, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(this.width - 80, 5, 20, ITEM_HEIGHT, TextUtil.literal("+"), button -> {
             this.entry.getValue().add(this.entry.newValue());
             this.rebuildWidgets();
         }));
@@ -48,7 +48,7 @@ public class ListDialog<T> extends Dialog<List<T>> {
         for (int i = 0; i < values.size(); i++) {
             WidgetBuilder<T> widget = WidgetBuilderManager.get(this.provider, this.entry.newSingleInstance(values.get(i), i, this::rebuildWidgets));
             this.widgets.add(widget);
-            widget.addDialogElements(this, this::addRenderableWidget, i + ":", 40, 0, width, ITEM_HEIGHT);
+            widget.addDialogElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), i + ":", 40, 0, Math.max(10, this.width - 70), ITEM_HEIGHT);
         }
         this.updateItemPos();
     }

@@ -13,8 +13,6 @@ import com.iafenvoy.jupiter.render.widget.builder.*;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
@@ -25,7 +23,6 @@ import net.minecraft.client.gui.components.StringWidget;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 public class WidgetBuilderManager {
     private static final Map<ConfigType<?>, BiFunction<ConfigMetaProvider, IConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
@@ -71,15 +68,15 @@ public class WidgetBuilderManager {
         }
 
         @Override
-        public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        public void addElements(Context context, int x, int y, int width, int height) {
             Font textRenderer = this.minecraft.font;
             Component text = TextUtil.translatable("jupiter.screen.unregistered_widget", this.config.getClass().getSimpleName(), this.provider.getSource().jupiterCapability() ? "Jupiter" : Platform.resolveModName(this.provider.getConfigId().getNamespace()));
             this.textWidget = new StringWidget(20, y, textRenderer.width(text), height, text, textRenderer);
-            appender.accept(this.textWidget);
+            context.addWidget(this.textWidget);
         }
 
         @Override
-        public void addCustomElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
+        public void addCustomElements(Context context, int x, int y, int width, int height) {
             //No Need
         }
 
