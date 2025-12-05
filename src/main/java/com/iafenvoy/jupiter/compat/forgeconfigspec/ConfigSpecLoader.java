@@ -53,8 +53,8 @@ public class ConfigSpecLoader {
                     case CLIENT -> ConfigSide.CLIENT;
                     case SERVER -> ConfigSide.SERVER;
                 };
-                UnmodifiableConfig defaults = spec.getSpec().get(type.name().toLowerCase(Locale.ROOT));
-                CommentedConfig values = loadedData.get(type.name().toLowerCase(Locale.ROOT));
+                UnmodifiableConfig defaults = spec.getSpec().entrySet().stream().findFirst().orElseThrow().getValue();
+                CommentedConfig values = loadedData.entrySet().stream().findFirst().orElseThrow().getValue();
                 Runnable saver = config::save;
                 *///?}
                 AbstractConfigContainer container = new NightConfigWrapper(new NightConfigHolder(config.getModId(), type, config.getFileName(), defaults, values, saver));
