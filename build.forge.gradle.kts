@@ -17,7 +17,7 @@ tasks.named<ProcessResources>("processResources") {
     }
 }
 
-version = "${property("mod.version")}-${property("deps.minecraft")}-neoforge"
+version = "${property("mod.version")}-${property("deps.minecraft")}-forge"
 base.archivesName = property("mod.id") as String
 
 jsonlang {
@@ -73,6 +73,10 @@ tasks {
         into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
         dependsOn("build")
     }
+
+    named("jar") {
+        finalizedBy("reobfJar")
+    }
 }
 
 java {
@@ -101,8 +105,8 @@ publishMods {
     else if (modVersion.contains("beta")) BETA
     else STABLE
 
-    displayName = "${property("mod.name")} $modVersion for ${stonecutter.current.version} Neoforge"
-    version = "${modVersion}-${property("deps.minecraft")}-neoforge"
+    displayName = "${property("mod.name")} $modVersion for ${stonecutter.current.version} Forge"
+    version = "${modVersion}-${property("deps.minecraft")}-forge"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
     modLoaders.add("forge")
 

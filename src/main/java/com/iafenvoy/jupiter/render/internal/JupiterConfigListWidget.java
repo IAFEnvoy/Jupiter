@@ -51,12 +51,12 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     //? >=1.21.4 {
     /*@Override
     protected int scrollBarX() {
-        return super.scrollBarX() + 30;
+        return this.getRight() - 8;
     }
     *///?} else {
     @Override
     protected int getScrollbarPosition() {
-        return super.getScrollbarPosition() - 14;
+        return this.getRight() - 8;
     }
     //?}
 

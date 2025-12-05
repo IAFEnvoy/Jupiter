@@ -46,15 +46,14 @@ public class ConfigSpecLoader {
                 CommentedConfig values = valueHolder.config();
                 Runnable saver = valueHolder::save;
                 //?} else {
-                /*CommentedConfig loadedData = config.getConfigData();
-                if (!(config.getSpec() instanceof /^? >=1.20.2 {^/ModConfigSpec/^?} else {^//^ForgeConfigSpec^//^?}^/ spec) || loadedData == null) continue;
+                /*CommentedConfig values = config.getConfigData();
+                if (!(config.getSpec() instanceof /^? >=1.20.2 {^/ModConfigSpec/^?} else {^//^ForgeConfigSpec^//^?}^/ spec) || values == null) continue;
                 ConfigSide type = switch (config.getType()) {
                     case COMMON/^? >=1.20.5 {^/, STARTUP/^?}^/ -> ConfigSide.COMMON;
                     case CLIENT -> ConfigSide.CLIENT;
                     case SERVER -> ConfigSide.SERVER;
                 };
-                UnmodifiableConfig defaults = spec.getSpec().entrySet().stream().findFirst().orElseThrow().getValue();
-                CommentedConfig values = loadedData.entrySet().stream().findFirst().orElseThrow().getValue();
+                UnmodifiableConfig defaults = spec.getSpec();
                 Runnable saver = config::save;
                 *///?}
                 AbstractConfigContainer container = new NightConfigWrapper(new NightConfigHolder(config.getModId(), type, config.getFileName(), defaults, values, saver));

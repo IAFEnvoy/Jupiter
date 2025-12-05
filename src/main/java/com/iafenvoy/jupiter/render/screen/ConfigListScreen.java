@@ -161,9 +161,9 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         if (entry != null && entry.getTooltipKey().isPresent())
             //? >=1.21.4 {
             /*graphics.setTooltipForNextFrame(TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
-        *///?} else >=1.19.3 {
-        this.setTooltipForNextRenderPass(TextUtil.translatable(entry.getTooltipKey().get()));
-         //?} else {
+             *///?} else >=1.19.3 {
+            this.setTooltipForNextRenderPass(TextUtil.translatable(entry.getTooltipKey().get()));
+        //?} else {
         /*this.renderTooltip(graphics, TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
          *///?}
     }
