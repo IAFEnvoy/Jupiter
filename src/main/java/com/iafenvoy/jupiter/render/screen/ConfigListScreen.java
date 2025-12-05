@@ -16,7 +16,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 *///?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+        //?} else {
 /*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -143,7 +143,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-        *///?}
+         *///?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
@@ -159,11 +159,13 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         if (this.entryScrollBar.isDragging()) this.updateEntryPos();
         IConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
         if (entry != null && entry.getTooltipKey().isPresent())
-            //? >=1.19.3 {
-            this.setTooltipForNextRenderPass(TextUtil.translatable(entry.getTooltipKey().get()));
-             //?} else {
-            /*this.renderTooltip(graphics, TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
-            *///?}
+            //? >=1.21.4 {
+            /*graphics.setTooltipForNextFrame(TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
+        *///?} else >=1.19.3 {
+        this.setTooltipForNextRenderPass(TextUtil.translatable(entry.getTooltipKey().get()));
+         //?} else {
+        /*this.renderTooltip(graphics, TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
+         *///?}
     }
 
     //? >=1.21.9 {

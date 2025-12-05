@@ -8,8 +8,12 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public final class BadgeRenderer {
     public static void draw(/*? >= 1.20 {*/GuiGraphics/*?} else {*//*JupiterRenderContext*//*?}*/ graphics, Font font, int x, int y, Component text, int color) {
-        graphics.drawString(font, text, x + 2, y + 2, 0xFFFFFFFF);
+        //? >=1.21.9 {
+        /*x += 2;
+        y += 2;
+        *///?}
         drawFrame(graphics, x, y, font.width(text) + 3, font.lineHeight + 2, color);
+        graphics.drawString(font, text, x + 2, y + 2, 0xFFFFFFFF);
     }
 
     public static void drawFrame(/*? >= 1.20 {*/GuiGraphics/*?} else {*//*JupiterRenderContext*//*?}*/ graphics, int x, int y, int width, int height, int color) {
