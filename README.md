@@ -6,17 +6,20 @@ Jupiter is a powerful, auto sync config library.
 
 ## Features
 
-1.Simple creation of config instance.
+### For players
 
-2.Config support `int`, `double`, `string`,`list` and so on.
+- Convenient in-game config edit screens.
+- Auto sync with server if you are connect to dedicated servers & you have proper permissions.
+- (Neo)Forge config system support, you can also edit them in `Jupiter`.
 
-3.Can set range for `int`, `double`
+### For develops
 
-4.Automatically sync config with dedicate server.
+- Simple creation of config instance.
+- Config support `int`, `double`, `string`,`list` and so on.
+- Customized codec based config entry: You can add config entry for any value type.
+- Permission control for dedicate server config.
 
-5.Permission control for dedicate server config.
-
-## How to use (For developer)
+#### How to use (For developer)
 
 1.Create config class and extend `FileConfigContainer`.
 
@@ -33,12 +36,11 @@ ii.`ClientConfigScreen`: Create a client config edit screen.
 
 iii.`ServerConfigScreen`: Create a server config edit screen. **Not include permission check.**
 
-## Other Version
+## Special thanks
 
-We will only update to newer versions when our other mods are needed. Request if you want other versions. (Except 1.16
-and below.)
-
-Extra Notice: I can only promise latest version marked in files can run. If crash occurred report on GitHub.
+- `masady`: Author of `Malilib`, config screen designs is partly based on it.
+- `Fuzs`: Author of `Forge Config API Port`: `Jupiter` can load (Neo)Forge configs more convenient with its universal
+  APIs.
 
 ## Discord
 
