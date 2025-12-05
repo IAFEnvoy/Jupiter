@@ -3,8 +3,6 @@ package com.iafenvoy.jupiter.util;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
-import java.util.Locale;
-
 public final class EnumHelper {
     public static <T extends Enum<T>> Codec<T> getCodec(T value) {
         return getCodec(value.getDeclaringClass());

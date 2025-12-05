@@ -72,7 +72,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
     }
 
     private void refreshResetButton(boolean dialog) {
-        this.setCanReset(dialog || !this.config.getValue().equals(this.config.getDefaultValue()));
+        this.setCanReset(dialog || this.config.canReset());
     }
 
     protected void setCanReset(boolean b) {

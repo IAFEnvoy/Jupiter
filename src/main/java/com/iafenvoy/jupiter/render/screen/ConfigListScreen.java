@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.config.entry.BaseEntry;
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
@@ -55,7 +56,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         super.init();
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ITEM_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
         this.calculateMaxItems();
-        this.textMaxLength = this.entries.stream().map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(this, this::addRenderableWidget, this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ITEM_HEIGHT));
@@ -121,6 +122,11 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     public void onClose() {
         assert this.minecraft != null;
         this.minecraft.setScreen(this.parent);
+    }
+
+    @Override
+    public @NotNull Component getTitle() {
+        return super.getTitle();
     }
 
     @Override

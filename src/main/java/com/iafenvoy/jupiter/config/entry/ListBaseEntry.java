@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class ListBaseEntry<T> extends BaseEntry<List<T>> {
     public ListBaseEntry(String nameKey, List<T> defaultValue) {

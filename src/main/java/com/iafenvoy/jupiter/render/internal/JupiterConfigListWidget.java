@@ -26,6 +26,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @ApiStatus.Internal
 public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigListWidget.ConfigEntry> {
@@ -92,7 +93,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     }
 
     public void setFilter(String filter) {
-        this.filter = filter;
+        this.filter = filter.toLowerCase(Locale.ROOT);
         this.updateEntries();
     }
 
@@ -149,7 +150,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         }
 
         public boolean match(String filter) {
-            return I18n.get(this.handler.getTitleNameKey()).contains(filter) ||
+            return I18n.get(this.handler.getTitleNameKey()).toLowerCase(Locale.ROOT).contains(filter) ||
                     this.handler.getConfigId().toString().contains(filter) ||
                     this.handler.getPath().contains(filter);
         }

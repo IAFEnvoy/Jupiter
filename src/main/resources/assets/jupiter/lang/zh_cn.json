@@ -21,5 +21,6 @@
   "jupiter.screen.server_config": "服务端配置",
   "jupiter.screen.unregistered_widget": "未找到注册给 %s 的渲染组件，请联系 %s 模组的开发者",
   "jupiter.toast.upload_config_error_content": "无权限修改",
-  "jupiter.toast.upload_config_error_title": "修改服务器配置失败"
+  "jupiter.toast.upload_config_error_title": "修改服务器配置失败",
+  "jupiter.screen.cannot_process_list_enum": "Jupiter无法处理默认空的 List<Enum> 配置项"
 }

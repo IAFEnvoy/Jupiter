@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config.container;
 import com.google.gson.*;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
-import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
 import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.util.Comment;

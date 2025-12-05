@@ -5,11 +5,24 @@ import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
 public class SeparatorEntry implements IConfigEntry<Unit> {
+    private String textKey = "", tooltipKey;
+
+    public SeparatorEntry text(@NotNull String textKey) {
+        this.textKey = textKey;
+        return this;
+    }
+
+    public SeparatorEntry tooltip(String tooltipKey) {
+        this.tooltipKey = tooltipKey;
+        return this;
+    }
+
     @Override
     public ConfigType<Unit> getType() {
         return ConfigTypes.SEPARATOR;
@@ -17,12 +30,12 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
 
     @Override
     public String getNameKey() {
-        return "";
+        return this.textKey;
     }
 
     @Override
     public Optional<String> getTooltipKey() {
-        return Optional.empty();
+        return Optional.ofNullable(this.tooltipKey);
     }
 
     @Override
@@ -36,12 +49,12 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
 
     @Override
     public Unit getValue() {
-        return null;
+        return Unit.INSTANCE;
     }
 
     @Override
     public Unit getDefaultValue() {
-        return null;
+        return Unit.INSTANCE;
     }
 
     @Override

@@ -45,12 +45,16 @@ public class WidgetBuilderManager {
         register(ConfigTypes.CONFIG_GROUP, ConfigGroupWidgetBuilder::new);
         register(ConfigTypes.BOOLEAN, (provider, config) -> new ButtonWidgetBuilder<>(provider, config, button -> config.setValue(!config.getValue()), () -> TextUtil.literal(config.getValue() ? "§atrue" : "§cfalse")));
         register(ConfigTypes.INTEGER, TextFieldWidgetBuilder::new);
+        register(ConfigTypes.LONG, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
         register(ConfigTypes.STRING, TextFieldWidgetBuilder::new);
         register(ConfigTypes.ENUM, (provider, config) -> new ButtonWidgetBuilder<>(provider, config, button -> config.setValue(EnumHelper.cycle(config.getValue(), true)), () -> EnumHelper.getDisplayText(config.getValue())));
-        register(ConfigTypes.LIST_STRING, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<String>) config));
+        register(ConfigTypes.LIST_BOOLEAN, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Boolean>) config));
         register(ConfigTypes.LIST_INTEGER, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Integer>) config));
+        register(ConfigTypes.LIST_LONG, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Long>) config));
         register(ConfigTypes.LIST_DOUBLE, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Double>) config));
+        register(ConfigTypes.LIST_STRING, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<String>) config));
+        register(ConfigTypes.LIST_ENUM, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Enum<?>>) config));
         register(ConfigTypes.MAP_STRING, (provider, config) -> new MapWidgetBuilder<>(provider, (MapBaseEntry<String>) config));
         register(ConfigTypes.MAP_INTEGER, (provider, config) -> new MapWidgetBuilder<>(provider, (MapBaseEntry<Integer>) config));
         register(ConfigTypes.MAP_DOUBLE, (provider, config) -> new MapWidgetBuilder<>(provider, (MapBaseEntry<Double>) config));
@@ -69,7 +73,7 @@ public class WidgetBuilderManager {
         @Override
         public void addElements(Screen screen, Consumer<AbstractWidget> appender, int x, int y, int width, int height) {
             Font textRenderer = this.minecraft.font;
-            Component text = TextUtil.translatable("jupiter.screen.unregistered_widget", this.config.getClass().getSimpleName(), Platform.resolveModName(this.provider.getConfigId().getNamespace()));
+            Component text = TextUtil.translatable("jupiter.screen.unregistered_widget", this.config.getClass().getSimpleName(), this.provider.getSource().jupiterCapability() ? "Jupiter" : Platform.resolveModName(this.provider.getConfigId().getNamespace()));
             this.textWidget = new StringWidget(20, y, textRenderer.width(text), height, text, textRenderer);
             appender.accept(this.textWidget);
         }

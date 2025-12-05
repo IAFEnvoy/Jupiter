@@ -13,6 +13,7 @@ public interface ConfigTypes {
     ConfigType<ConfigGroup> CONFIG_GROUP = new SingleConfigType<>();
     ConfigType<Boolean> BOOLEAN = new SingleConfigType<>();
     ConfigType<Integer> INTEGER = new SingleConfigType<>();
+    ConfigType<Long> LONG = new SingleConfigType<>();
     ConfigType<Double> DOUBLE = new SingleConfigType<>();
     ConfigType<String> STRING = new SingleConfigType<>();
     @ApiStatus.Internal
@@ -22,9 +23,12 @@ public interface ConfigTypes {
     @ApiStatus.Internal
     ConfigType<Map.Entry<String, Double>> ENTRY_DOUBLE = new SingleConfigType<>();
     ConfigType<Enum<?>> ENUM = new SingleConfigType<>();
-    ConfigType<List<String>> LIST_STRING = new ListConfigType<>(STRING);
+    ConfigType<List<Boolean>> LIST_BOOLEAN = new ListConfigType<>(BOOLEAN);
     ConfigType<List<Integer>> LIST_INTEGER = new ListConfigType<>(INTEGER);
+    ConfigType<List<Long>> LIST_LONG = new ListConfigType<>(LONG);
     ConfigType<List<Double>> LIST_DOUBLE = new ListConfigType<>(DOUBLE);
+    ConfigType<List<String>> LIST_STRING = new ListConfigType<>(STRING);
+    ConfigType<List<Enum<?>>> LIST_ENUM = new ListConfigType<>(ENUM);
     ConfigType<Map<String, String>> MAP_STRING = new MapConfigType<>(STRING);
     ConfigType<Map<String, Integer>> MAP_INTEGER = new MapConfigType<>(INTEGER);
     ConfigType<Map<String, Double>> MAP_DOUBLE = new MapConfigType<>(DOUBLE);
