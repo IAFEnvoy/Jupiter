@@ -6,9 +6,9 @@ import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
-import net.minecraft.network.chat.Component;
 //?} else {
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
  *///?}

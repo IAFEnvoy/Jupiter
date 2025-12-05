@@ -4,19 +4,18 @@ import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.Nullable;
+//? >=1.19.3 {
+import net.minecraft.client.gui.components.Tooltip;
+//?} else {
+/*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
+ *///?}
 
 import java.util.List;
 
