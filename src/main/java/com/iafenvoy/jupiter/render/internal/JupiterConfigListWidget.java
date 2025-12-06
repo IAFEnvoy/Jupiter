@@ -8,7 +8,6 @@ import com.iafenvoy.jupiter.render.BadgeRenderer;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +123,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
             *///?}
-            graphics.drawString(this.client.font, TextUtil.translatable(this.handler.getTitleNameKey()), x + 65, y + 1, 0xFFFFFFFF);
+            graphics.drawString(this.client.font, this.handler.getTitle(), x + 65, y + 1, 0xFFFFFFFF);
             graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 65, y + 1 + 9, 0xFF7F7F7F);
             graphics.drawString(this.client.font, this.handler.getPath(), x + 65, y + 1 + 18, 0xFF7F7F7F);
             //Badges
@@ -155,7 +154,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         }
 
         public boolean match(String filter) {
-            return I18n.get(this.handler.getTitleNameKey()).toLowerCase(Locale.ROOT).contains(filter) ||
+            return this.handler.getTitle().getString().toLowerCase(Locale.ROOT).contains(filter) ||
                     this.handler.getConfigId().toString().contains(filter) ||
                     this.handler.getPath().contains(filter);
         }

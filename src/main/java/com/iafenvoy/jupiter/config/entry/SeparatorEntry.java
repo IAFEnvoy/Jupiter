@@ -13,8 +13,6 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-
 public class SeparatorEntry implements IConfigEntry<Unit> {
     private Component text = null, tooltip;
 
@@ -76,7 +74,7 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
 
     @Override
     public IConfigEntry<Unit> newInstance() {
-        return new SeparatorEntry();
+        return new Builder().build();
     }
 
     @Override

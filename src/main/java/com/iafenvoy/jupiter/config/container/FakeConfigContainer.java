@@ -12,7 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class FakeConfigContainer extends AbstractConfigContainer {
     public FakeConfigContainer(AbstractConfigContainer parent) {
-        super(parent.getConfigId(), parent.titleNameKey);
+        super(parent.getConfigId(), parent.getTitle());
         this.configTabs.addAll(parent.getConfigTabs().stream().map(ConfigGroup::copy).toList());
     }
 

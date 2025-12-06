@@ -6,9 +6,11 @@ import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.util.Comment;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -19,17 +21,17 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     protected final List<ConfigGroup> configTabs = new ArrayList<>();
     protected final ResourceLocation id;
-    protected final String titleNameKey;
+    protected final Component title;
     protected final IntegerEntry version;
     private Codec<List<ConfigGroup>> cache;
 
-    public AbstractConfigContainer(ResourceLocation id, String titleNameKey) {
-        this(id, titleNameKey, 0);
+    public AbstractConfigContainer(ResourceLocation id, Component title) {
+        this(id, title, 0);
     }
 
-    public AbstractConfigContainer(ResourceLocation id, String titleNameKey, int version) {
+    public AbstractConfigContainer(ResourceLocation id, Component title, int version) {
         this.id = id;
-        this.titleNameKey = titleNameKey;
+        this.title = title;
         this.version = IntegerEntry.builder("version", version).build();
     }
 
@@ -38,12 +40,16 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
         return this.id;
     }
 
-    public String getTitleNameKey() {
-        return this.titleNameKey;
+    public Component getTitle() {
+        return this.title;
     }
 
     public ConfigGroup createTab(String id, String translateKey) {
-        ConfigGroup category = new ConfigGroup(id, translateKey, new ArrayList<>());
+        return this.createTab(id, TextUtil.translatable(translateKey));
+    }
+
+    public ConfigGroup createTab(String id, Component name) {
+        ConfigGroup category = new ConfigGroup(id, name, new ArrayList<>());
         this.configTabs.add(category);
         this.cache = null;
         return category;

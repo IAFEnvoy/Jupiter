@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
@@ -15,7 +14,6 @@ import net.minecraft.client.gui.GuiGraphics;
 //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
  *///?}
-import net.minecraft.client.resources.language.I18n;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
     private ConfigGroup currentGroup;
 
     public ConfigContainerScreen(Screen parent, AbstractConfigContainer container, boolean client) {
-        super(parent, TitleStack.create(TextUtil.translatable(container.getTitleNameKey())), container.getConfigId(), client);
+        super(parent, TitleStack.create(container.getTitle()), container.getConfigId(), client);
         this.parent = parent;
         this.container = container;
         this.currentGroup = container.getConfigTabs().isEmpty() ? ConfigGroup.EMPTY : container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
@@ -47,7 +45,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
         List<ConfigGroup> configTabs = this.container.getConfigTabs();
         for (int i = 0; i < configTabs.size(); i++) {
             ConfigGroup category = configTabs.get(i);
-            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(I18n.get(category.getTranslateKey())) + 10, ENTRY_HEIGHT, button -> {
+            TabButton tabButton = this.addRenderableWidget(new TabButton(category, x, y, this.font.width(category.getName()) + 10, ENTRY_HEIGHT, button -> {
                 this.currentTab = this.container.getConfigTabs().indexOf(button.group);
                 this.currentGroup = button.group;
                 this.rebuildWidgets();
@@ -124,7 +122,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
         private final int baseX;
 
         public TabButton(ConfigGroup group, int baseX, int y, int width, int height, Consumer<TabButton> listener) {
-            super(baseX, y, width, height, TextUtil.translatable(group.getTranslateKey()), button -> listener.accept((TabButton) button)/*? >=1.19.3 {*/, DEFAULT_NARRATION/*?}*/);
+            super(baseX, y, width, height, group.getName(), button -> listener.accept((TabButton) button)/*? >=1.19.3 {*/, DEFAULT_NARRATION/*?}*/);
             this.group = group;
             this.baseX = baseX;
         }

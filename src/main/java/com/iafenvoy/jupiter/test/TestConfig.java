@@ -41,6 +41,6 @@ public class TestConfig extends FileConfigContainer {
     }
 
     private enum OptionsExample {
-        FIRST, SECOND, THIRD;
+        FIRST, SECOND, THIRD
     }
 }

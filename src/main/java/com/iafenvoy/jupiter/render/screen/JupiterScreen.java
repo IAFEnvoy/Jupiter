@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.render.screen;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.TitleStack;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,7 +26,7 @@ public interface JupiterScreen {
     static Screen getConfigScreen(Screen parent, AbstractConfigContainer container, boolean client) {
         List<ConfigGroup> groups = container.getConfigTabs();
         if (groups.size() == 1)
-            return new ConfigListScreen(parent, TitleStack.create(TextUtil.translatable(container.getTitleNameKey())), container.getConfigId(), groups/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/.getConfigs(), client);
+            return new ConfigListScreen(parent, TitleStack.create(container.getTitle()), container.getConfigId(), groups/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/.getConfigs(), client);
         else return new ConfigContainerScreen(parent, container, client);
     }
 

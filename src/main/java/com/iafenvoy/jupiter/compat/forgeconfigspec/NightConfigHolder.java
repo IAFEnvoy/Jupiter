@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.compat.forgeconfigspec;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.iafenvoy.jupiter.Jupiter;
-import com.iafenvoy.jupiter.Platform;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.entry.*;
@@ -11,7 +10,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.TextFormatter;
 import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 //? >= 1.20.2 {
@@ -48,12 +46,8 @@ public final class NightConfigHolder {
         return Jupiter.id(this.modId, this.side.name().toLowerCase(Locale.ROOT));
     }
 
-    public String title() {
-        //? >=1.20.2 {
-        return this.translatableConfig(".title", "neoforge.configuration.uitext.title." + this.side.name().toLowerCase(Locale.ROOT));
-        //?} else {
-        /*return TextFormatter.formatToTitleCase(this.modId + "_" + this.side.name().toLowerCase(Locale.ROOT) + "_config");
-         *///?}
+    public Component title() {
+        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId + "_" + this.side.name().toLowerCase(Locale.ROOT) + "_config"));
     }
 
     public ConfigSide getSide() {
@@ -68,31 +62,18 @@ public final class NightConfigHolder {
         this.save.run();
     }
 
-    private String getTranslationKey(String key, String fallback) {
-        if (key != null && I18n.exists(key)) return key;
-        key = this.modId + ".configuration." + fallback;
-        if (I18n.exists(key)) return key;
-        return TextFormatter.formatToTitleCase(fallback);
-    }
-
-    public String translatableConfig(String suffix, String fallback) {
-        String key = this.modId + ".configuration.section." + this.fileName.replaceAll("[^a-zA-Z0-9]+", ".").replaceFirst("^\\.", "").replaceFirst("\\.$", "").toLowerCase(Locale.ENGLISH) + suffix;
-        return I18n.get(I18n.exists(key) ? key : fallback, Platform.resolveModName(this.modId));
-    }
-
     public List<ConfigGroup> toGroups() {
         return List.of(this.buildGroup(this.id().toString(), this.title(), this.defaults, this.values));
     }
 
-    public ConfigGroup buildGroup(String id, String groupTranslate, UnmodifiableConfig defaults, CommentedConfig values) {
-        ConfigGroup group = new ConfigGroup(id, groupTranslate);
+    public ConfigGroup buildGroup(String id, Component groupName, UnmodifiableConfig defaults, CommentedConfig values) {
+        ConfigGroup group = new ConfigGroup(id, groupName);
         for (UnmodifiableConfig.Entry entry : defaults.entrySet()) {
             Object entryValue = entry.getValue(), value = values.get(entry.getKey());
             if (entryValue instanceof /*? >=1.20.2 {*/ ModConfigSpec/*?} else {*/ /*ForgeConfigSpec*//*?}*/.ValueSpec spec) {
                 Object defaultValue = spec.getDefault();
-                Component name = TextUtil.translatable(this.getTranslationKey(spec.getTranslationKey(), entry.getKey()));
                 try {
-                    ConfigBuilder<?, ?, ?> builder = this.process(values, name, entry, defaultValue, value, spec::test);
+                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatable(spec.getTranslationKey()), entry, defaultValue, value, spec::test);
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {
@@ -104,8 +85,8 @@ public final class NightConfigHolder {
                     Jupiter.LOGGER.error("Cannot load key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side, e);
                 }
             } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config) {
-                String translateKey = this.getTranslationKey(entry.getKey(), entry.getKey());
-                group.add(ConfigGroupEntry.builder(translateKey, this.buildGroup(entry.getKey(), translateKey, spec, config)).build());
+                Component name = TextUtil.translatable(entry.getKey());
+                group.add(ConfigGroupEntry.builder(name, this.buildGroup(entry.getKey(), name, spec, config)).build());
             }
         }
         return group;

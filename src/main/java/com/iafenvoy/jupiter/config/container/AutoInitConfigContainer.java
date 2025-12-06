@@ -3,14 +3,19 @@ package com.iafenvoy.jupiter.config.container;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.TextUtil;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 public class AutoInitConfigContainer extends FileConfigContainer {
-    public AutoInitConfigContainer(ResourceLocation id, String titleNameKey, String path) {
-        super(id, titleNameKey, path);
+    public AutoInitConfigContainer(ResourceLocation id, String titleKey, String path) {
+        super(id, titleKey, path);
+    }
+
+    public AutoInitConfigContainer(ResourceLocation id, Component title, String path) {
+        super(id, title, path);
     }
 
     @Override
@@ -29,7 +34,11 @@ public class AutoInitConfigContainer extends FileConfigContainer {
         private boolean loaded = false;
 
         public AutoInitConfigCategoryBase(String id, String translateKey) {
-            this.category = new ConfigGroup(id, translateKey, new ArrayList<>());
+            this(id, TextUtil.translatable(translateKey));
+        }
+
+        public AutoInitConfigCategoryBase(String id, Component name) {
+            this.category = new ConfigGroup(id, name);
         }
 
         public ConfigGroup getCategory() {

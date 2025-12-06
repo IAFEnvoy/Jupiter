@@ -2,7 +2,9 @@ package com.iafenvoy.jupiter.config;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.*;
+import net.minecraft.network.chat.Component;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,18 +12,19 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ConfigGroup {
-    public static final ConfigGroup EMPTY = new ConfigGroup("", "");
-    private final String id, translateKey;
+    public static final ConfigGroup EMPTY = new ConfigGroup("", TextUtil.empty());
+    private final String id;
+    private final Component name;
     private final List<IConfigEntry<?>> configs;
     private Codec<ConfigGroup> cache;
 
-    public ConfigGroup(String id, String translateKey) {
-        this(id, translateKey, new LinkedList<>());
+    public ConfigGroup(String id, Component name) {
+        this(id, name, new LinkedList<>());
     }
 
-    public ConfigGroup(String id, String translateKey, List<IConfigEntry<?>> configs) {
+    public ConfigGroup(String id, Component name, List<IConfigEntry<?>> configs) {
         this.id = id;
-        this.translateKey = translateKey;
+        this.name = name;
         this.configs = configs;
     }
 
@@ -35,8 +38,8 @@ public class ConfigGroup {
         return this.id;
     }
 
-    public String getTranslateKey() {
-        return this.translateKey;
+    public Component getName() {
+        return this.name;
     }
 
     public List<IConfigEntry<?>> getConfigs() {
@@ -45,7 +48,7 @@ public class ConfigGroup {
 
     @SuppressWarnings("unchecked")
     public ConfigGroup copy() {
-        return new ConfigGroup(this.id, this.translateKey, (List<IConfigEntry<?>>) (Object) this.configs.stream().map(IConfigEntry::newInstance).toList());
+        return new ConfigGroup(this.id, this.name, (List<IConfigEntry<?>>) (Object) this.configs.stream().map(IConfigEntry::newInstance).toList());
     }
 
     public Codec<ConfigGroup> getCodec() {

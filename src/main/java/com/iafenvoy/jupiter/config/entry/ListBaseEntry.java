@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;

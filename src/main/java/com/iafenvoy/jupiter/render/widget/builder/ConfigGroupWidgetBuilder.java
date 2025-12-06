@@ -21,7 +21,7 @@ public class ConfigGroupWidgetBuilder extends WidgetBuilder<ConfigGroup> {
     @Override
     public void addCustomElements(Context context, int x, int y, int width, int height) {
         ConfigGroup group = this.config.getValue();
-        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.translatable("jupiter.screen.edit"), button -> this.minecraft.setScreen(new ConfigListScreen(context.parent(), context.push(TextUtil.translatable(group.getTranslateKey())), this.provider.getConfigId(), group.getConfigs(), this.provider.isClientSide().orElse(false))));
+        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.translatable("jupiter.screen.edit"), button -> this.minecraft.setScreen(new ConfigListScreen(context.parent(), context.push(group.getName()), this.provider.getConfigId(), group.getConfigs(), this.provider.isClientSide().orElse(false))));
         context.addWidget(this.button);
     }
 

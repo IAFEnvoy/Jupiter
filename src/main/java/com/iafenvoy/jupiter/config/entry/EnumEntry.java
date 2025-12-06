@@ -6,7 +6,6 @@ import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
