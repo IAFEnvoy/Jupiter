@@ -1,15 +1,27 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class MapIntegerEntry extends MapBaseEntry<Integer> {
+    protected MapIntegerEntry(Component name, Map<String, Integer> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Map<String, Integer>>> callbacks) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    }
+
+    @SuppressWarnings("removal")
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public MapIntegerEntry(String nameKey, Map<String, Integer> defaultValue) {
         super(nameKey, defaultValue);
     }
@@ -21,23 +33,18 @@ public class MapIntegerEntry extends MapBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<Map.Entry<String, Integer>> newSingleInstance(Integer value, String key, Runnable reload) {
-        return new EntryIntegerEntry(this.nameKey, new AbstractMap.SimpleEntry<>(key, value)) {
-            @Override
-            public void reset() {
-                MapIntegerEntry.this.getValue().remove(key);
+        return EntryIntegerEntry.builder(this.name, new AbstractMap.SimpleEntry<>(key, value)).callback((o, n, r, d) -> {
+            if (r) {
+                this.getValue().remove(key);
                 reload.run();
+            } else {
+                if (!Objects.equals(o.getKey(), n.getKey())) {
+                    this.getValue().remove(o.getKey());
+                    this.getValue().put(n.getKey(), n.getValue());
+                } else if (!Objects.equals(o.getValue(), n.getValue()))
+                    this.getValue().put(o.getKey(), n.getValue());
             }
-
-            @Override
-            public void setValue(Map.Entry<String, Integer> value) {
-                if (!Objects.equals(this.value.getKey(), value.getKey())) {
-                    MapIntegerEntry.this.getValue().remove(this.value.getKey());
-                    MapIntegerEntry.this.getValue().put(value.getKey(), value.getValue());
-                } else if (!Objects.equals(this.value.getValue(), value.getValue()))
-                    MapIntegerEntry.this.getValue().put(this.value.getKey(), value.getValue());
-                super.setValue(value);
-            }
-        };
+        }).buildInternal();
     }
 
     @Override
@@ -52,6 +59,38 @@ public class MapIntegerEntry extends MapBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<Map<String, Integer>> newInstance() {
-        return new MapIntegerEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
+        return new Builder(this).buildInternal();
+    }
+
+    public static Builder builder(Component name, Map<String, Integer> defaultValue) {
+        return new Builder(name, defaultValue);
+    }
+
+    public static Builder builder(String nameKey, Map<String, Integer> defaultValue) {
+        return new Builder(nameKey, defaultValue);
+    }
+
+    public static class Builder extends BaseEntry.Builder<Map<String, Integer>, MapIntegerEntry, Builder> {
+        public Builder(Component name, Map<String, Integer> defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, Map<String, Integer> defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(MapIntegerEntry parent) {
+            super(parent);
+        }
+
+        @Override
+        public Builder self() {
+            return this;
+        }
+
+        @Override
+        protected MapIntegerEntry buildInternal() {
+            return new MapIntegerEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+        }
     }
 }

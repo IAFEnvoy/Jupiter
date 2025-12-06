@@ -61,7 +61,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.titleStack.cacheTitle(this.width - this.font.width(this.getCurrentEditText()) - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
         this.calculateMaxEntries();
-        this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getNameKey).map(I18n::get).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getName).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ENTRY_HEIGHT));
@@ -158,13 +158,13 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.entryScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - 70, (this.configPerPage + this.entryScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
         if (this.entryScrollBar.isDragging()) this.updateEntryPos();
         IConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
-        if (entry != null && entry.getTooltipKey().isPresent())
+        if (entry != null && entry.getTooltip() != null)
             //? >=1.21.4 {
-            /*graphics.setTooltipForNextFrame(TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
+            /*graphics.setTooltipForNextFrame(entry.getTooltip(), mouseX, mouseY);
              *///?} else >=1.19.3 {
-            this.setTooltipForNextRenderPass(TextUtil.translatable(entry.getTooltipKey().get()));
+            this.setTooltipForNextRenderPass(entry.getTooltip());
         //?} else {
-        /*this.renderTooltip(graphics, TextUtil.translatable(entry.getTooltipKey().get()), mouseX, mouseY);
+        /*this.renderTooltip(graphics, entry.getTooltip(), mouseX, mouseY);
          *///?}
     }
 

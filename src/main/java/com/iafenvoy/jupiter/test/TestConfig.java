@@ -17,19 +17,19 @@ public class TestConfig extends FileConfigContainer {
     @Override
     public void init() {
         this.createTab("tab1", "jupiter.tab1")
-                .add(new BooleanEntry("this is boolean", false))
-                .add(new IntegerEntry("this is int", 0))
-                .add(new IntegerEntry("this is int with range", 0, -10, 10))
-                .add(new StringEntry("this is string", ""))
-                .add(new ListStringEntry("this is string list", List.of("1", "2", "3", "4", "5")))
-                .add(new MapStringEntry("this is string map", Map.of("1", "1", "2", "2")))
-                .add(new SeparatorEntry())
-                .add(new IntegerEntry("this is int", 0).restartRequired())
-                .add(new IntegerEntry("this is int", 0))
-                .add(new IntegerEntry("this is int", 0))
-                .add(new IntegerEntry("this is int", 0))
-                .add(new IntegerEntry("this is int", 0))
-                .add(new IntegerEntry("this is int", 0));
+                .add(BooleanEntry.builder("this is boolean", false).build())
+                .add(IntegerEntry.builder("this is int", 0).build())
+                .add(IntegerEntry.builder("this is int with range", 0).min(-10).max(10).build())
+                .add(StringEntry.builder("this is string", "").build())
+                .add(ListStringEntry.builder("this is string list", List.of("1", "2", "3", "4", "5")).build())
+                .add(MapStringEntry.builder("this is string map", Map.of("1", "1", "2", "2")).build())
+                .add(SeparatorEntry.builder().build())
+                .add(IntegerEntry.builder("this is int", 0).restartRequired().build())
+                .add(IntegerEntry.builder("this is int", 0).build())
+                .add(IntegerEntry.builder("this is int", 0).build())
+                .add(IntegerEntry.builder("this is int", 0).build())
+                .add(IntegerEntry.builder("this is int", 0).build())
+                .add(IntegerEntry.builder("this is int", 0).build());
         this.createTab("tab2", "jupiter.tab2");
         this.createTab("tab3", "jupiter.tab3");
         this.createTab("tab4", "jupiter.tab4");

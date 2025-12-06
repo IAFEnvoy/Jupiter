@@ -6,6 +6,7 @@ import com.mojang.serialization.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ConfigGroup {
@@ -51,24 +52,24 @@ public class ConfigGroup {
         return MapCodec.<ConfigGroup>of(new MapEncoder.Implementation<>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
-                return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).map(ops::createString);
+                return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).filter(Objects::nonNull).map(ops::createString);
             }
 
             @Override
             public <T> RecordBuilder<T> encode(ConfigGroup input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
-                return input.configs.stream().reduce(prefix, (p, c) -> p.add(c.getJsonKey(), c.encode(ops)), (a, b) -> null);
+                return input.configs.stream().reduce(prefix, (p, c) -> c.getJsonKey() == null ? p : p.add(c.getJsonKey(), c.encode(ops)), (a, b) -> null);
             }
         }, new MapDecoder.Implementation<>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {
-                return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).map(ops::createString);
+                return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).filter(Objects::nonNull).map(ops::createString);
             }
 
             @Override
             public <T> DataResult<ConfigGroup> decode(DynamicOps<T> ops, MapLike<T> input) {
                 input.entries().forEach(x -> {
                     String s = ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
-                    ConfigGroup.this.configs.stream().filter(y -> y.getJsonKey().equals(s)).findFirst().ifPresent(y -> y.decode(ops, x.getSecond()));
+                    ConfigGroup.this.configs.stream().filter(y -> y.getJsonKey() != null && y.getJsonKey().equals(s)).findFirst().ifPresent(y -> y.decode(ops, x.getSecond()));
                 });
                 return DataResult.success(ConfigGroup.this);
             }

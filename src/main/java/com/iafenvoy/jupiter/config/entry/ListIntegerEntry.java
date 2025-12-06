@@ -1,13 +1,23 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ListIntegerEntry extends ListBaseEntry<Integer> {
+    protected ListIntegerEntry(Component name, List<Integer> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<List<Integer>>> callbacks) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    }
+
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public ListIntegerEntry(String nameKey, List<Integer> defaultValue) {
         super(nameKey, defaultValue);
     }
@@ -19,19 +29,12 @@ public class ListIntegerEntry extends ListBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<Integer> newSingleInstance(Integer value, int index, Runnable reload) {
-        return new IntegerEntry(this.nameKey, value) {
-            @Override
-            public void reset() {
-                ListIntegerEntry.this.getValue().remove(index);
+        return IntegerEntry.builder(this.name, value).callback((o, n, r, d) -> {
+            if (r) {
+                this.getValue().remove(index);
                 reload.run();
-            }
-
-            @Override
-            public void setValue(Integer value) {
-                super.setValue(value);
-                ListIntegerEntry.this.getValue().set(index, value);
-            }
-        };
+            } else this.getValue().set(index, value);
+        }).buildInternal();
     }
 
     @Override
@@ -46,6 +49,38 @@ public class ListIntegerEntry extends ListBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<List<Integer>> newInstance() {
-        return new ListIntegerEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
+        return new Builder(this).buildInternal();
+    }
+
+    public static Builder builder(Component name, List<Integer> defaultValue) {
+        return new Builder(name, defaultValue);
+    }
+
+    public static Builder builder(String nameKey, List<Integer> defaultValue) {
+        return new Builder(nameKey, defaultValue);
+    }
+
+    public static class Builder extends BaseEntry.Builder<List<Integer>, ListIntegerEntry, Builder> {
+        public Builder(Component name, List<Integer> defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, List<Integer> defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(ListIntegerEntry parent) {
+            super(parent);
+        }
+
+        @Override
+        public Builder self() {
+            return this;
+        }
+
+        @Override
+        protected ListIntegerEntry buildInternal() {
+            return new ListIntegerEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+        }
     }
 }

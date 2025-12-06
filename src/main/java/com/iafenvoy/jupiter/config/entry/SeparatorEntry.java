@@ -1,25 +1,56 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class SeparatorEntry implements IConfigEntry<Unit> {
-    private String textKey = "", tooltipKey;
+    private Component text = null, tooltip;
 
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
+    public SeparatorEntry() {
+    }
+
+    protected SeparatorEntry(Component text, Component tooltip) {
+        this.text = text;
+        this.tooltip = tooltip;
+    }
+
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public SeparatorEntry text(@NotNull String textKey) {
-        this.textKey = textKey;
+        return this.text(TextUtil.translatable(textKey));
+    }
+
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
+    public SeparatorEntry text(@NotNull Component textKey) {
+        this.text = textKey;
         return this;
     }
 
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public SeparatorEntry tooltip(String tooltipKey) {
-        this.tooltipKey = tooltipKey;
+        return this.tooltip(TextUtil.translatable(tooltipKey));
+    }
+
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
+    public SeparatorEntry tooltip(Component tooltipKey) {
+        this.tooltip = tooltipKey;
         return this;
     }
 
@@ -29,13 +60,18 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     }
 
     @Override
-    public String getNameKey() {
-        return this.textKey;
+    public @Nullable String getJsonKey() {
+        return null;
     }
 
     @Override
-    public Optional<String> getTooltipKey() {
-        return Optional.ofNullable(this.tooltipKey);
+    public Component getName() {
+        return this.text;
+    }
+
+    @Override
+    public Component getTooltip() {
+        return this.tooltip;
     }
 
     @Override
@@ -44,7 +80,7 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     }
 
     @Override
-    public void registerCallback(Consumer<Unit> callback) {
+    public void registerCallback(ValueChangeCallback<Unit> callback) {
     }
 
     @Override
@@ -68,5 +104,54 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
 
     @Override
     public void reset() {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder implements ConfigBuilder<Unit, SeparatorEntry, Builder> {
+        protected Component text;
+        @Nullable
+        protected Component tooltip;
+        protected boolean visible = true;
+
+        public Builder() {
+        }
+
+        public Builder text(String textKey) {
+            return this.text(TextUtil.translatable(textKey));
+        }
+
+        public Builder text(Component text) {
+            this.text = text;
+            return this;
+        }
+
+        @Override
+        public Builder tooltip(String tooltipKey) {
+            return this.tooltip(TextUtil.translatable(tooltipKey));
+        }
+
+        @Override
+        public Builder tooltip(Component tooltip) {
+            this.tooltip = tooltip;
+            return this;
+        }
+
+        @Override
+        public Builder callback(ValueChangeCallback<Unit> callback) {
+            return this;
+        }
+
+        @Override
+        public Builder value(Unit value) {
+            return this;
+        }
+
+        @Override
+        public SeparatorEntry build() {
+            return new SeparatorEntry(this.text, this.tooltip);
+        }
     }
 }

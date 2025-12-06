@@ -1,35 +1,31 @@
 package com.iafenvoy.jupiter.interfaces;
 
 import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 //Only BaseEntry will calculate text width
 public interface IConfigEntry<T> {
     ConfigType<T> getType();
 
-    default String getJsonKey() {
-        return this.getNameKey();
-    }
+    @Nullable
+    String getJsonKey() ;
 
-    String getNameKey();
+    Component getName();
 
-    Optional<String> getTooltipKey();
+    @Nullable
+    Component getTooltip();
 
     IConfigEntry<T> newInstance();
 
-    default String getPrettyName() {
-        return I18n.get(this.getNameKey());
-    }
-
-    void registerCallback(Consumer<T> callback);
+    void registerCallback(ValueChangeCallback<T> callback);
 
     T getValue();
 

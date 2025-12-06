@@ -1,15 +1,25 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ListDoubleEntry extends ListBaseEntry<Double> {
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public ListDoubleEntry(String nameKey, List<Double> defaultValue) {
         super(nameKey, defaultValue);
+    }
+
+    protected ListDoubleEntry(Component name, List<Double> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<List<Double>>> callbacks) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
     }
 
     @Override
@@ -19,19 +29,12 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Double> newSingleInstance(Double value, int index, Runnable reload) {
-        return new DoubleEntry(this.nameKey, value) {
-            @Override
-            public void reset() {
-                ListDoubleEntry.this.getValue().remove(index);
+        return DoubleEntry.builder(this.name, value).callback((o, n, r, d) -> {
+            if (r) {
+                this.getValue().remove(index);
                 reload.run();
-            }
-
-            @Override
-            public void setValue(Double value) {
-                super.setValue(value);
-                ListDoubleEntry.this.getValue().set(index, value);
-            }
-        };
+            } else this.getValue().set(index, value);
+        }).buildInternal();
     }
 
     @Override
@@ -46,6 +49,38 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
 
     @Override
     public IConfigEntry<List<Double>> newInstance() {
-        return new ListDoubleEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
+        return new Builder(this).buildInternal();
+    }
+
+    public static Builder builder(Component name, List<Double> defaultValue) {
+        return new Builder(name, defaultValue);
+    }
+
+    public static Builder builder(String nameKey, List<Double> defaultValue) {
+        return new Builder(nameKey, defaultValue);
+    }
+
+    public static class Builder extends BaseEntry.Builder<List<Double>, ListDoubleEntry, Builder> {
+        public Builder(Component name, List<Double> defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, List<Double> defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(ListDoubleEntry parent) {
+            super(parent);
+        }
+
+        @Override
+        public Builder self() {
+            return this;
+        }
+
+        @Override
+        protected ListDoubleEntry buildInternal() {
+            return new ListDoubleEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+        }
     }
 }

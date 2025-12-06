@@ -23,7 +23,7 @@ public class ListWidgetBuilder<T> extends WidgetBuilder<List<T>> {
 
     @Override
     public void addCustomElements(Context context, int x, int y, int width, int height) {
-        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> this.minecraft.setScreen(new ListDialog<>(context.parent(), context.push(TextUtil.translatable(this.config.getNameKey())), this.provider, this.config)));
+        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.literal(String.valueOf(this.config.getValue())), button -> this.minecraft.setScreen(new ListDialog<>(context.parent(), context.push(this.config.getName()), this.provider, this.config)));
         context.addWidget(this.button);
     }
 

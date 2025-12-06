@@ -1,30 +1,47 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.interfaces.IRangeConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class LongEntry extends BaseEntry<Long> implements IRangeConfigEntry<Long> {
     private final long minValue, maxValue;
     private boolean useSlider = false;
 
+    protected LongEntry(Component name, long defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Long>> callbacks, long minValue, long maxValue) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public LongEntry(String nameKey, Long defaultValue) {
         this(nameKey, defaultValue, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
+    @SuppressWarnings("removal")
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public LongEntry(String nameKey, long defaultValue, long minValue, long maxValue) {
-        super(nameKey, defaultValue);
+        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
 
     public LongEntry slider() {
-        if (Integer.MIN_VALUE < this.minValue && this.maxValue < Integer.MAX_VALUE)
+        if (Long.MIN_VALUE < this.minValue && this.maxValue < Long.MAX_VALUE)
             this.useSlider = true;
         return this;
     }
@@ -36,7 +53,7 @@ public class LongEntry extends BaseEntry<Long> implements IRangeConfigEntry<Long
 
     @Override
     public IConfigEntry<Long> newInstance() {
-        return new LongEntry(this.nameKey, this.defaultValue, this.minValue, this.maxValue).visible(this.visible).json(this.jsonKey);
+        return new Builder(this).buildInternal();
     }
 
     @Override
@@ -70,5 +87,51 @@ public class LongEntry extends BaseEntry<Long> implements IRangeConfigEntry<Long
         long d = Long.parseLong(s);
         if (d < this.minValue || d > this.maxValue) throw new IllegalArgumentException();
         this.setValue(d);
+    }
+
+    public static Builder builder(Component name, long defaultValue) {
+        return new Builder(name, defaultValue);
+    }
+
+    public static Builder builder(String nameKey, long defaultValue) {
+        return new Builder(nameKey, defaultValue);
+    }
+
+    public static class Builder extends BaseEntry.Builder<Long, LongEntry, Builder> {
+        protected long minValue = Long.MIN_VALUE, maxValue = Long.MAX_VALUE;
+
+        public Builder(Component name, long defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, long defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(LongEntry parent) {
+            super(parent);
+            this.minValue = parent.minValue;
+            this.maxValue = parent.maxValue;
+        }
+
+        public Builder min(long minValue) {
+            this.minValue = minValue;
+            return this;
+        }
+
+        public Builder max(long maxValue) {
+            this.maxValue = maxValue;
+            return this;
+        }
+
+        @Override
+        public Builder self() {
+            return this;
+        }
+
+        @Override
+        protected LongEntry buildInternal() {
+            return new LongEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks, this.minValue, this.maxValue);
+        }
     }
 }

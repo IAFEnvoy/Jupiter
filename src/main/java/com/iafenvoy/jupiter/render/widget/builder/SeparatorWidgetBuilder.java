@@ -13,7 +13,6 @@ import net.minecraft.client.gui.components.StringWidget;
 /*import com.iafenvoy.jupiter.render.widget.StringWidget;
  *///?}
 
-
 public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
     public SeparatorWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<Unit> config) {
         super(provider, config);
@@ -24,11 +23,11 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
         Font font = this.minecraft.font;
         width = width + x - 20;
         Component text;
-        if (this.config.getNameKey().isBlank()) {
+        if (this.config.getName() == null) {
             int w = font.width("-"), k = 0;
             while ((k + 1) * w <= width) k++;
             text = TextUtil.literal("-".repeat(k));
-        } else text = TextUtil.translatable(this.config.getNameKey());
+        } else text = this.config.getName();
         this.textWidget = new StringWidget(20, y, font.width(text), height, text, font);
         context.addWidget(this.textWidget);
     }

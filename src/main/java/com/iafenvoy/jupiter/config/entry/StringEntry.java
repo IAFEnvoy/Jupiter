@@ -1,14 +1,28 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.interfaces.ITextFieldConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class StringEntry extends BaseEntry<String> implements ITextFieldConfigEntry {
+    protected StringEntry(Component name, String defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<String>> callbacks) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    }
+
+    @SuppressWarnings("removal")
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public StringEntry(String nameKey, String defaultValue) {
-        super(nameKey, defaultValue);
+        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
     }
 
     @Override
@@ -18,7 +32,7 @@ public class StringEntry extends BaseEntry<String> implements ITextFieldConfigEn
 
     @Override
     public IConfigEntry<String> newInstance() {
-        return new StringEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
+        return new Builder(this).buildInternal();
     }
 
     @Override
@@ -34,5 +48,37 @@ public class StringEntry extends BaseEntry<String> implements ITextFieldConfigEn
     @Override
     public void setValueFromString(String s) {
         this.setValue(s);
+    }
+
+    public static Builder builder(Component name, String defaultValue) {
+        return new Builder(name, defaultValue);
+    }
+
+    public static Builder builder(String nameKey, String defaultValue) {
+        return new Builder(nameKey, defaultValue);
+    }
+
+    public static class Builder extends BaseEntry.Builder<String, StringEntry, Builder> {
+        public Builder(Component name, String defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, String defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(StringEntry parent) {
+            super(parent);
+        }
+
+        @Override
+        public Builder self() {
+            return this;
+        }
+
+        @Override
+        protected StringEntry buildInternal() {
+            return new StringEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+        }
     }
 }

@@ -33,27 +33,28 @@ public final class Jupiter {
 
     public static void processClient() {
         ClientConfigNetwork.init();
+        Platform.setClientSide(true);
     }
 
     //? forge {
     /*@SuppressWarnings("removal")
-            *///?}
+     *///?}
     public static ResourceLocation id(String id) {
         //? >=1.21 {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
-         //?} else {
+        //?} else {
         /*return new ResourceLocation(MOD_ID, id);
-        *///?}
+         *///?}
     }
 
     //? forge {
     /*@SuppressWarnings("removal")
-            *///?}
+     *///?}
     public static ResourceLocation id(String namespace, String id) {
         //? >=1.21 {
         return ResourceLocation.fromNamespaceAndPath(namespace, id);
-         //?} else {
+        //?} else {
         /*return new ResourceLocation(namespace, id);
-        *///?}
+         *///?}
     }
 }

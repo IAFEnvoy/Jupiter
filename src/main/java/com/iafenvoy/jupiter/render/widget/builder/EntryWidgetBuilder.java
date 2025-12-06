@@ -29,6 +29,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
         this.keyWidget.setValue(this.config.getValue().getKey());
         this.keyWidget.setResponder(s -> this.config.setValue(new AbstractMap.SimpleEntry<>(s, this.config.getValue().getValue())));
         context.addWidget(this.keyWidget);
+        //TODO::Move newValueInstance to get config type
         this.valueBuilder = WidgetBuilderManager.get(this.provider, this.config.newValueInstance());
         this.valueBuilder.addCustomElements(context, x + width / 2, y, width / 2, height);
     }

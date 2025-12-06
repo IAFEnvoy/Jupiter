@@ -30,7 +30,7 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     public AbstractConfigContainer(ResourceLocation id, String titleNameKey, int version) {
         this.id = id;
         this.titleNameKey = titleNameKey;
-        this.version = new IntegerEntry("version", version);
+        this.version = IntegerEntry.builder("version", version).build();
     }
 
     @Override

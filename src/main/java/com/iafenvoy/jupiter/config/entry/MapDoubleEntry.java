@@ -1,15 +1,27 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class MapDoubleEntry extends MapBaseEntry<Double> {
+    protected MapDoubleEntry(Component name, Map<String, Double> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Map<String, Double>>> callbacks) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    }
+
+    @SuppressWarnings("removal")
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public MapDoubleEntry(String nameKey, Map<String, Double> defaultValue) {
         super(nameKey, defaultValue);
     }
@@ -21,23 +33,18 @@ public class MapDoubleEntry extends MapBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Map.Entry<String, Double>> newSingleInstance(Double value, String key, Runnable reload) {
-        return new EntryDoubleEntry(this.nameKey, new AbstractMap.SimpleEntry<>(key, value)) {
-            @Override
-            public void reset() {
-                MapDoubleEntry.this.getValue().remove(key);
+        return EntryDoubleEntry.builder(this.name, new AbstractMap.SimpleEntry<>(key, value)).callback((o, n, r, d) -> {
+            if (r) {
+                this.getValue().remove(key);
                 reload.run();
+            } else {
+                if (!Objects.equals(o.getKey(), n.getKey())) {
+                    this.getValue().remove(o.getKey());
+                    this.getValue().put(n.getKey(), n.getValue());
+                } else if (!Objects.equals(o.getValue(), n.getValue()))
+                    this.getValue().put(o.getKey(), n.getValue());
             }
-
-            @Override
-            public void setValue(Map.Entry<String, Double> value) {
-                if (!Objects.equals(this.value.getKey(), value.getKey())) {
-                    MapDoubleEntry.this.getValue().remove(this.value.getKey());
-                    MapDoubleEntry.this.getValue().put(value.getKey(), value.getValue());
-                } else if (!Objects.equals(this.value.getValue(), value.getValue()))
-                    MapDoubleEntry.this.getValue().put(this.value.getKey(), value.getValue());
-                super.setValue(value);
-            }
-        };
+        }).buildInternal();
     }
 
     @Override
@@ -52,6 +59,38 @@ public class MapDoubleEntry extends MapBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Map<String, Double>> newInstance() {
-        return new MapDoubleEntry(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
+        return new Builder(this).buildInternal();
+    }
+
+    public static Builder builder(Component name, Map<String, Double> defaultValue) {
+        return new Builder(name, defaultValue);
+    }
+
+    public static Builder builder(String nameKey, Map<String, Double> defaultValue) {
+        return new Builder(nameKey, defaultValue);
+    }
+
+    public static class Builder extends BaseEntry.Builder<Map<String, Double>, MapDoubleEntry, Builder> {
+        public Builder(Component name, Map<String, Double> defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, Map<String, Double> defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(MapDoubleEntry parent) {
+            super(parent);
+        }
+
+        @Override
+        public Builder self() {
+            return this;
+        }
+
+        @Override
+        protected MapDoubleEntry buildInternal() {
+            return new MapDoubleEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter;
 
 //? neoforge {
+
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforgespi.language.IModInfo;
@@ -17,6 +18,8 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 *///?}
 
 public final class Platform {
+    private static boolean CLIENT_SIDE = false;
+
     public static String resolveModName(String id) {
         //? neoforge {
         return ModList.get().getModContainerById(id).map(ModContainer::getModInfo).map(IModInfo::getDisplayName).orElse("%ERROR%");
@@ -27,5 +30,13 @@ public final class Platform {
         //? fabric {
         /*return FabricLoader.getInstance().getModContainer(id).map(ModContainer::getMetadata).map(ModMetadata::getName).orElse("%ERROR%");
          *///?}
+    }
+
+    public static boolean isClientSide() {
+        return CLIENT_SIDE;
+    }
+
+    public static void setClientSide(boolean clientSide) {
+        CLIENT_SIDE = clientSide;
     }
 }

@@ -1,20 +1,34 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
+    protected EnumEntry(Component name, T defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<T>> callbacks) {
+        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    }
+
     @SuppressWarnings({"unchecked", "removal"})
     @Deprecated(forRemoval = true)
     public EnumEntry(String nameKey, com.iafenvoy.jupiter.interfaces.IConfigEnumEntry defaultValue) {
-        super(nameKey, (T) defaultValue);
+        this(nameKey, (T) defaultValue);
     }
 
+    @SuppressWarnings("removal")
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
     public EnumEntry(String nameKey, T defaultValue) {
-        super(nameKey, defaultValue);
+        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -25,11 +39,43 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
 
     @Override
     public IConfigEntry<T> newInstance() {
-        return new EnumEntry<>(this.nameKey, this.defaultValue).visible(this.visible).json(this.jsonKey);
+        return new Builder<>(this).buildInternal();
     }
 
     @Override
     public Codec<T> getCodec() {
         return EnumHelper.getCodec(this.value);
+    }
+
+    public static <T extends Enum<T>> Builder<T> builder(Component name, T defaultValue) {
+        return new Builder<>(name, defaultValue);
+    }
+
+    public static <T extends Enum<T>> Builder<T> builder(String nameKey, T defaultValue) {
+        return new Builder<>(nameKey, defaultValue);
+    }
+
+    public static class Builder<T extends Enum<T>> extends BaseEntry.Builder<T, EnumEntry<T>, Builder<T>> {
+        public Builder(Component name, T defaultValue) {
+            super(name, defaultValue);
+        }
+
+        public Builder(String nameKey, T defaultValue) {
+            super(nameKey, defaultValue);
+        }
+
+        public Builder(EnumEntry<T> parent) {
+            super(parent);
+        }
+
+        @Override
+        public Builder<T> self() {
+            return this;
+        }
+
+        @Override
+        protected EnumEntry<T> buildInternal() {
+            return new EnumEntry<>(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+        }
     }
 }
