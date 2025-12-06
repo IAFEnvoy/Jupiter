@@ -21,9 +21,9 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     public SeparatorEntry() {
     }
 
-    protected SeparatorEntry(Component text, Component tooltip) {
-        this.text = text;
-        this.tooltip = tooltip;
+    protected SeparatorEntry(Builder builder) {
+        this.text = builder.text;
+        this.tooltip = builder.tooltip;
     }
 
     @Comment("Use builder instead")
@@ -149,7 +149,7 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
 
         @Override
         public SeparatorEntry build() {
-            return new SeparatorEntry(this.text, this.tooltip);
+            return new SeparatorEntry(this);
         }
     }
 }

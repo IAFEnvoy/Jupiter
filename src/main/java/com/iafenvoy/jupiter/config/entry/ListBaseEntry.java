@@ -1,19 +1,16 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ListBaseEntry<T> extends BaseEntry<List<T>> {
-    protected ListBaseEntry(Component name, List<T> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<List<T>>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected ListBaseEntry(Builder<List<T>, ?, ?> builder) {
+        super(builder);
     }
 
     @SuppressWarnings("removal")

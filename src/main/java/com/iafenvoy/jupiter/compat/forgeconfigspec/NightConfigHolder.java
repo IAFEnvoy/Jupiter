@@ -73,7 +73,7 @@ public final class NightConfigHolder {
             if (entryValue instanceof /*? >=1.20.2 {*/ ModConfigSpec/*?} else {*/ /*ForgeConfigSpec*//*?}*/.ValueSpec spec) {
                 Object defaultValue = spec.getDefault();
                 try {
-                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatable(spec.getTranslationKey()), entry, defaultValue, value, spec::test);
+                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatable(Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey)), entry, defaultValue, value, spec::test);
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {

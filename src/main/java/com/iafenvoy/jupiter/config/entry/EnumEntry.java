@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -8,13 +7,10 @@ import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
-    protected EnumEntry(Component name, T defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<T>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected EnumEntry(Builder<T> builder) {
+        super(builder);
     }
 
     @SuppressWarnings({"unchecked", "removal"})
@@ -74,7 +70,7 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
 
         @Override
         protected EnumEntry<T> buildInternal() {
-            return new EnumEntry<>(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new EnumEntry<>(this);
         }
     }
 }

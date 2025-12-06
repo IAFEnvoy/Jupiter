@@ -1,22 +1,19 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class MapDoubleEntry extends MapBaseEntry<Double> {
-    protected MapDoubleEntry(Component name, Map<String, Double> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Map<String, Double>>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected MapDoubleEntry(Builder builder) {
+        super(builder);
     }
 
     @SuppressWarnings("removal")
@@ -90,7 +87,7 @@ public class MapDoubleEntry extends MapBaseEntry<Double> {
 
         @Override
         protected MapDoubleEntry buildInternal() {
-            return new MapDoubleEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new MapDoubleEntry(this);
         }
     }
 }

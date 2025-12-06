@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -9,14 +8,12 @@ import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implements TextFieldConfigEntry {
-    protected ResourceLocationEntry(Component name, ResourceLocation defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<ResourceLocation>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected ResourceLocationEntry(Builder builder) {
+        super(builder);
     }
 
     @SuppressWarnings("removal")
@@ -79,7 +76,7 @@ public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implement
 
         @Override
         protected ResourceLocationEntry buildInternal() {
-            return new ResourceLocationEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new ResourceLocationEntry(this);
         }
     }
 }

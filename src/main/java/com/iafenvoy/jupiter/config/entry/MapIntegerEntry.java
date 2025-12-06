@@ -1,22 +1,19 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class MapIntegerEntry extends MapBaseEntry<Integer> {
-    protected MapIntegerEntry(Component name, Map<String, Integer> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Map<String, Integer>>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected MapIntegerEntry(Builder builder) {
+        super(builder);
     }
 
     @SuppressWarnings("removal")
@@ -90,7 +87,7 @@ public class MapIntegerEntry extends MapBaseEntry<Integer> {
 
         @Override
         protected MapIntegerEntry buildInternal() {
-            return new MapIntegerEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new MapIntegerEntry(this);
         }
     }
 }

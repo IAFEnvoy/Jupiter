@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -9,19 +8,17 @@ import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Function;
 
 public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long> {
     private final long minValue, maxValue;
     private boolean useSlider = false;
 
-    protected LongEntry(Component name, long defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Long>> callbacks, long minValue, long maxValue) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    protected LongEntry(Builder builder) {
+        super(builder);
+        this.minValue = builder.minValue;
+        this.maxValue = builder.maxValue;
     }
 
     @Comment("Use builder instead")
@@ -130,7 +127,7 @@ public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long>
 
         @Override
         protected LongEntry buildInternal() {
-            return new LongEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks, this.minValue, this.maxValue);
+            return new LongEntry(this);
         }
     }
 }

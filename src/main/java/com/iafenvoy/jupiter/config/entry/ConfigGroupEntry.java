@@ -1,19 +1,15 @@
 package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class ConfigGroupEntry extends BaseEntry<ConfigGroup> {
-    protected ConfigGroupEntry(Component name, ConfigGroup defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<ConfigGroup>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected ConfigGroupEntry(Builder builder) {
+        super(builder);
     }
 
     @Override
@@ -59,7 +55,7 @@ public class ConfigGroupEntry extends BaseEntry<ConfigGroup> {
 
         @Override
         protected ConfigGroupEntry buildInternal() {
-            return new ConfigGroupEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new ConfigGroupEntry(this);
         }
     }
 }

@@ -30,6 +30,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ConfigListScreen extends Screen implements JupiterScreen {
     private final Screen parent;
@@ -61,7 +62,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.titleStack.cacheTitle(this.width - this.font.width(this.getCurrentEditText()) - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
         this.calculateMaxEntries();
-        this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getName).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getName).filter(Objects::nonNull).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ENTRY_HEIGHT));

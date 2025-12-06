@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -8,9 +7,6 @@ import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<Double> {
     private final double minValue, maxValue;
@@ -31,10 +27,10 @@ public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<D
         this.maxValue = maxValue;
     }
 
-    protected DoubleEntry(Component name, double defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Double>> callbacks, double minValue, double maxValue) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    protected DoubleEntry(Builder builder) {
+        super(builder);
+        this.minValue = builder.minValue;
+        this.maxValue = builder.maxValue;
     }
 
     public DoubleEntry slider() {
@@ -127,7 +123,7 @@ public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<D
 
         @Override
         protected DoubleEntry buildInternal() {
-            return new DoubleEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks, this.minValue, this.maxValue);
+            return new DoubleEntry(this);
         }
     }
 }

@@ -1,19 +1,15 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class BooleanEntry extends BaseEntry<Boolean> {
-    protected BooleanEntry(Component name, boolean defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Boolean>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected BooleanEntry(Builder builder) {
+        super(builder);
     }
 
     @SuppressWarnings("removal")
@@ -66,7 +62,7 @@ public class BooleanEntry extends BaseEntry<Boolean> {
 
         @Override
         protected BooleanEntry buildInternal() {
-            return new BooleanEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new BooleanEntry(this);
         }
     }
 }

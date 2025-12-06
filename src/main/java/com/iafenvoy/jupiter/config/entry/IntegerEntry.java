@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -8,18 +7,15 @@ import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry<Integer> {
     private final int minValue, maxValue;
     private boolean useSlider = false;
 
-    protected IntegerEntry(Component name, int defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Integer>> callbacks, int minValue, int maxValue) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    protected IntegerEntry(Builder builder) {
+        super(builder);
+        this.minValue = builder.minValue;
+        this.maxValue = builder.maxValue;
     }
 
     @Comment("Use builder instead")
@@ -127,7 +123,7 @@ public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry
 
         @Override
         protected IntegerEntry buildInternal() {
-            return new IntegerEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks, this.minValue, this.maxValue);
+            return new IntegerEntry(this);
         }
     }
 }

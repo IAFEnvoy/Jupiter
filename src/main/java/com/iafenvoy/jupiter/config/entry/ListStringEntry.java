@@ -1,19 +1,17 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ListStringEntry extends ListBaseEntry<String> {
-    protected ListStringEntry(Component name, List<String> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<List<String>>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected ListStringEntry(Builder builder) {
+        super(builder);
     }
 
     @Comment("Use builder instead")
@@ -80,7 +78,7 @@ public class ListStringEntry extends ListBaseEntry<String> {
 
         @Override
         protected ListStringEntry buildInternal() {
-            return new ListStringEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new ListStringEntry(this);
         }
     }
 }

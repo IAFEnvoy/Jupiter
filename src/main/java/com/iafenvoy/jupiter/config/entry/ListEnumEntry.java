@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -8,16 +7,15 @@ import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
     private final T example;
 
-    protected ListEnumEntry(Component name, List<T> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<List<T>>> callbacks, T example) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
-        this.example = example;
+    protected ListEnumEntry(Builder<T> builder) {
+        super(builder);
+        this.example = builder.example;
     }
 
     @Comment("Use builder instead")
@@ -91,7 +89,7 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
 
         @Override
         protected ListEnumEntry<T> buildInternal() {
-            return new ListEnumEntry<>(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks, this.example);
+            return new ListEnumEntry<>(this);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -8,16 +7,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 
 @ApiStatus.Internal
 public class EntryDoubleEntry extends EntryBaseEntry<Double> {
-    protected EntryDoubleEntry(Component name, Map.Entry<String, Double> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<Map.Entry<String, Double>>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected EntryDoubleEntry(Builder builder) {
+        super(builder);
     }
 
     @Override
@@ -71,7 +68,7 @@ public class EntryDoubleEntry extends EntryBaseEntry<Double> {
 
         @Override
         protected EntryDoubleEntry buildInternal() {
-            return new EntryDoubleEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new EntryDoubleEntry(this);
         }
     }
 }

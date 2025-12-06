@@ -26,14 +26,14 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     protected boolean restartRequired;
     protected final List<ValueChangeCallback<T>> callbacks = new ArrayList<>();
 
-    protected BaseEntry(Component name, T defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<T>> callbacks) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.jsonKey = jsonKey;
-        this.tooltip = tooltip;
-        this.visible = visible;
-        this.restartRequired = restartRequired;
-        this.callbacks.addAll(callbacks);
+    protected BaseEntry(Builder<T, ?, ?> builder) {
+        this.name = builder.name;
+        this.defaultValue = builder.defaultValue;
+        this.jsonKey = builder.jsonKey;
+        this.tooltip = builder.tooltip;
+        this.visible = builder.visible;
+        this.restartRequired = builder.restartRequired;
+        this.callbacks.addAll(builder.callbacks);
     }
 
     @Comment("Use builder instead")

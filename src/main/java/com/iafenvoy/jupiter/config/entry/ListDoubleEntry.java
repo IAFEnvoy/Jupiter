@@ -1,13 +1,11 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -18,8 +16,8 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
         super(nameKey, defaultValue);
     }
 
-    protected ListDoubleEntry(Component name, List<Double> defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<List<Double>>> callbacks) {
-        super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
+    protected ListDoubleEntry(Builder builder) {
+        super(builder);
     }
 
     @Override
@@ -80,7 +78,7 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
 
         @Override
         protected ListDoubleEntry buildInternal() {
-            return new ListDoubleEntry(this.name, this.defaultValue, this.jsonKey, this.tooltip, this.visible, this.restartRequired, this.callbacks);
+            return new ListDoubleEntry(this);
         }
     }
 }
