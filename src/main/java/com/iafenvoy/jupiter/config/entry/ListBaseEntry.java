@@ -21,7 +21,7 @@ public abstract class ListBaseEntry<T> extends BaseEntry<List<T>> {
     @Comment("Use builder instead")
     @ApiStatus.Internal
     public ListBaseEntry(String nameKey, List<T> defaultValue) {
-        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
     }
 
     public abstract Codec<T> getValueCodec();

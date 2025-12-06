@@ -21,7 +21,7 @@ public abstract class MapBaseEntry<T> extends BaseEntry<Map<String, T>> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public MapBaseEntry(String nameKey, Map<String, T> defaultValue) {
-        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
     }
 
     public abstract Codec<T> getValueCodec();

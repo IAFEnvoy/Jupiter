@@ -1,4 +1,4 @@
-package com.iafenvoy.jupiter.interfaces;
+package com.iafenvoy.jupiter.config.interfaces;
 
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.ConfigSide;

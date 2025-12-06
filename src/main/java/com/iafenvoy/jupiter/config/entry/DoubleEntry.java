@@ -4,7 +4,7 @@ import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.interfaces.IRangeConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class DoubleEntry extends BaseEntry<Double> implements IRangeConfigEntry<Double> {
+public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<Double> {
     private final double minValue, maxValue;
     private boolean useSlider = false;
 
@@ -26,7 +26,7 @@ public class DoubleEntry extends BaseEntry<Double> implements IRangeConfigEntry<
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public DoubleEntry(String nameKey, double defaultValue, double minValue, double maxValue) {
-        super(Component.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
         this.minValue = minValue;
         this.maxValue = maxValue;
     }

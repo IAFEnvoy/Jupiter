@@ -6,6 +6,7 @@ import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -37,9 +38,9 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
 
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
-    public BaseEntry(Component name, @Nullable String jsonKey, T defaultValue) {
-        this.name = name;
-        this.jsonKey = jsonKey;
+    public BaseEntry(@NotNull String nameKey, T defaultValue) {
+        this.name = TextUtil.translatable(nameKey);
+        this.jsonKey = nameKey;
         this.defaultValue = defaultValue;
         this.value = this.copyDefaultData();
     }
@@ -91,7 +92,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
 
     @Override
     public Component getName() {
-        return this.restartRequired ? this.name.copy().append(Component.translatable("jupiter.screen.restart_required")) : this.name;
+        return this.restartRequired ? this.name.copy().append(TextUtil.translatable("jupiter.screen.restart_required")) : this.name;
     }
 
     @Override

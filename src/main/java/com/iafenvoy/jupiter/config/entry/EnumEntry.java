@@ -28,7 +28,7 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public EnumEntry(String nameKey, T defaultValue) {
-        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
     }
 
     @SuppressWarnings("unchecked")

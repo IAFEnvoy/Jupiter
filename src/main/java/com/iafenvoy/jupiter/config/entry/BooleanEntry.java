@@ -20,7 +20,7 @@ public class BooleanEntry extends BaseEntry<Boolean> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public BooleanEntry(String nameKey, boolean defaultValue) {
-        super(Component.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
     }
 
     @Override

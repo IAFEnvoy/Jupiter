@@ -4,9 +4,8 @@ import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.interfaces.IRangeConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
-public class LongEntry extends BaseEntry<Long> implements IRangeConfigEntry<Long> {
+public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long> {
     private final long minValue, maxValue;
     private boolean useSlider = false;
 
@@ -35,7 +34,7 @@ public class LongEntry extends BaseEntry<Long> implements IRangeConfigEntry<Long
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public LongEntry(String nameKey, long defaultValue, long minValue, long maxValue) {
-        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
         this.minValue = minValue;
         this.maxValue = maxValue;
     }

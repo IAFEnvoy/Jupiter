@@ -4,7 +4,7 @@ import com.google.gson.*;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
-import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;

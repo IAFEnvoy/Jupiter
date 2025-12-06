@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
-import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;

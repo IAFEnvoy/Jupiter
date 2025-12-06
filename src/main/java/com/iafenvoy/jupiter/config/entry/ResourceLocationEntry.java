@@ -4,9 +4,8 @@ import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.interfaces.ITextFieldConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implements ITextFieldConfigEntry {
+public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implements TextFieldConfigEntry {
     protected ResourceLocationEntry(Component name, ResourceLocation defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<ResourceLocation>> callbacks) {
         super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
     }
@@ -24,7 +23,7 @@ public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implement
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public ResourceLocationEntry(String nameKey, ResourceLocation defaultValue) {
-        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
     }
 
     @Override

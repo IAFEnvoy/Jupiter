@@ -7,16 +7,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 //Only BaseEntry will calculate text width
+@ApiStatus.Internal
 public interface IConfigEntry<T> {
     ConfigType<T> getType();
 
     @Nullable
-    String getJsonKey() ;
+    String getJsonKey();
 
     Component getName();
 

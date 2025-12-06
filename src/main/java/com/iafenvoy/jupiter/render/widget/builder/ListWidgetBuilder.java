@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
-import com.iafenvoy.jupiter.interfaces.ConfigMetaProvider;
+import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;

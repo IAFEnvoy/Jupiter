@@ -4,16 +4,15 @@ import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.interfaces.ITextFieldConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class StringEntry extends BaseEntry<String> implements ITextFieldConfigEntry {
+public class StringEntry extends BaseEntry<String> implements TextFieldConfigEntry {
     protected StringEntry(Component name, String defaultValue, @Nullable String jsonKey, @Nullable Component tooltip, boolean visible, boolean restartRequired, List<ValueChangeCallback<String>> callbacks) {
         super(name, defaultValue, jsonKey, tooltip, visible, restartRequired, callbacks);
     }
@@ -22,7 +21,7 @@ public class StringEntry extends BaseEntry<String> implements ITextFieldConfigEn
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public StringEntry(String nameKey, String defaultValue) {
-        super(TextUtil.translatable(nameKey), nameKey, defaultValue);
+        super(nameKey, defaultValue);
     }
 
     @Override

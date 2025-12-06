@@ -39,7 +39,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         this.screen = screen;
         //? <=1.20.1 {
         /*this.setRenderTopAndBottom(false);
-         *///?}
+        *///?}
     }
 
     public void update() {
@@ -53,12 +53,17 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     protected int scrollBarX() {
         return this.getRight() - 8;
     }
-    *///?} else {
+    *///?} else if >=1.20.2 {
     @Override
     protected int getScrollbarPosition() {
         return this.getRight() - 8;
     }
-    //?}
+   //?} else {
+    /*@Override
+    protected int getScrollbarPosition() {
+        return this.x1 - 8;
+    }
+    *///?}
 
     @Override
     public int getRowWidth() {

@@ -71,7 +71,7 @@ public final class NightConfigHolder {
     private String getTranslationKey(String key, String fallback) {
         if (key != null && I18n.exists(key)) return key;
         key = this.modId + ".configuration." + fallback;
-        if (!Platform.isClientSide() || I18n.exists(key)) return key;
+        if (I18n.exists(key)) return key;
         return TextFormatter.formatToTitleCase(fallback);
     }
 
