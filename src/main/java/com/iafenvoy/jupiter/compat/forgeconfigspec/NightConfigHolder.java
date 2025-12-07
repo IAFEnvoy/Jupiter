@@ -155,8 +155,8 @@ public final class NightConfigHolder {
 
     @SuppressWarnings("unchecked")
     private <T, E extends IConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
-        B builder = entryProvider.apply(name, List.copyOf((Collection<T>) defaultValue));
-        builder.callback((o, n, r, d) -> values.set(entry.getKey(), n)).value(new LinkedList<>((Collection<T>) value));
+        B builder = entryProvider.apply(name, (List<T>) defaultValue);
+        builder.callback((o, n, r, d) -> values.set(entry.getKey(), n)).value(new LinkedList<>((List<T>) value));
         reference.set(builder);
     }
 }

@@ -37,7 +37,7 @@ public abstract class ListBaseEntry<T> extends BaseEntry<List<T>> {
     }
 
     @Override
-    protected List<T> copyDefaultData() {
+    protected List<T> newDefaultValue() {
         return new ArrayList<>(this.defaultValue);
     }
 }

@@ -48,16 +48,16 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     }
 
     //? >=1.21.4 {
-    /*@Override
+    @Override
     protected int scrollBarX() {
         return this.getRight() - 8;
     }
-    *///?} else if >=1.20.2 {
-    @Override
+    //?} else if >=1.20.2 {
+    /*@Override
     protected int getScrollbarPosition() {
         return this.getRight() - 8;
     }
-   //?} else {
+   *///?} else {
     /*@Override
     protected int getScrollbarPosition() {
         return this.x1 - 8;

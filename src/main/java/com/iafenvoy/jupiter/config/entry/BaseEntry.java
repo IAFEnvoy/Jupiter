@@ -34,6 +34,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
         this.visible = builder.visible;
         this.restartRequired = builder.restartRequired;
         this.callbacks.addAll(builder.callbacks);
+        this.value = this.newDefaultValue();
     }
 
     @Comment("Use builder instead")
@@ -42,7 +43,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
         this.name = TextUtil.translatable(nameKey);
         this.jsonKey = nameKey;
         this.defaultValue = defaultValue;
-        this.value = this.copyDefaultData();
+        this.value = this.newDefaultValue();
     }
 
     @Comment("Use builder instead")
@@ -113,11 +114,11 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     @Override
     public void reset() {
         T oldValue = this.value;
-        this.value = this.copyDefaultData();
+        this.value = this.newDefaultValue();
         this.callbacks.forEach(x -> x.onValueChange(oldValue, this.value, true, true));
     }
 
-    protected T copyDefaultData() {
+    protected T newDefaultValue() {
         return this.defaultValue;
     }
 
@@ -198,7 +199,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
         @Override
         public E build() {
             E e = this.buildInternal();
-            e.setValue(this.value);
+            if (this.value != null) e.value = this.value;
             return e;
         }
     }

@@ -36,7 +36,7 @@ public abstract class MapBaseEntry<T> extends BaseEntry<Map<String, T>> {
     }
 
     @Override
-    protected Map<String, T> copyDefaultData() {
+    protected Map<String, T> newDefaultValue() {
         return new HashMap<>(this.defaultValue);
     }
 }

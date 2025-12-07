@@ -160,9 +160,9 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         if (this.entryScrollBar.isDragging()) this.updateEntryPos();
         IConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
         if (entry != null && entry.getTooltip() != null)
-            //? >=1.21.4 {
+            //? >=1.21.6 {
             /*graphics.setTooltipForNextFrame(entry.getTooltip(), mouseX, mouseY);
-             *///?} else >=1.19.3 {
+            *///?} else >=1.19.3 {
             this.setTooltipForNextRenderPass(entry.getTooltip());
         //?} else {
         /*this.renderTooltip(graphics, entry.getTooltip(), mouseX, mouseY);
