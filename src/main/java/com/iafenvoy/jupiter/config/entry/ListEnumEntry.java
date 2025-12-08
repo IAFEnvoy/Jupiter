@@ -11,23 +11,23 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
-    private final T example;
+    private final T newValue;
 
     protected ListEnumEntry(Builder<T> builder) {
         super(builder);
-        this.example = builder.example;
+        this.newValue = builder.newValue;
     }
 
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
-    public ListEnumEntry(String nameKey, List<T> defaultValue, T example) {
+    public ListEnumEntry(String nameKey, List<T> defaultValue, T newValue) {
         super(nameKey, defaultValue);
-        this.example = example;
+        this.newValue = newValue;
     }
 
     @Override
     public Codec<T> getValueCodec() {
-        return EnumHelper.getCodec(this.example);
+        return EnumHelper.getCodec(this.newValue);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
 
     @Override
     public T newValue() {
-        return this.example;
+        return this.newValue;
     }
 
     @SuppressWarnings("unchecked")
@@ -57,30 +57,30 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
         return new Builder<>(this).buildInternal();
     }
 
-    public static <T extends Enum<T>> Builder<T> builder(Component name, List<T> defaultValue, T example) {
-        return new Builder<>(name, defaultValue, example);
+    public static <T extends Enum<T>> Builder<T> builder(Component name, List<T> defaultValue, T newValue) {
+        return new Builder<>(name, defaultValue, newValue);
     }
 
-    public static <T extends Enum<T>> Builder<T> builder(String nameKey, List<T> defaultValue, T example) {
-        return new Builder<>(nameKey, defaultValue, example);
+    public static <T extends Enum<T>> Builder<T> builder(String nameKey, List<T> defaultValue, T newValue) {
+        return new Builder<>(nameKey, defaultValue, newValue);
     }
 
     public static class Builder<T extends Enum<T>> extends BaseEntry.Builder<List<T>, ListEnumEntry<T>, Builder<T>> {
-        protected final T example;
+        protected final T newValue;
 
-        public Builder(Component name, List<T> defaultValue, T example) {
+        public Builder(Component name, List<T> defaultValue, T newValue) {
             super(name, defaultValue);
-            this.example = example;
+            this.newValue = newValue;
         }
 
-        public Builder(String nameKey, List<T> defaultValue, T example) {
+        public Builder(String nameKey, List<T> defaultValue, T newValue) {
             super(nameKey, defaultValue);
-            this.example = example;
+            this.newValue = newValue;
         }
 
         public Builder(ListEnumEntry<T> parent) {
             super(parent);
-            this.example = parent.example;
+            this.newValue = parent.newValue;
         }
 
         @Override

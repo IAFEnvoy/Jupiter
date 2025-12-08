@@ -23,6 +23,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -62,7 +63,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.titleStack.cacheTitle(this.width - this.font.width(this.getCurrentEditText()) - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
         this.calculateMaxEntries();
-        this.textMaxLength = this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getName).filter(Objects::nonNull).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30;
+        this.textMaxLength = Mth.clamp(this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getName).filter(Objects::nonNull).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30, this.width / 2, this.width - 150);
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ENTRY_HEIGHT));
@@ -162,7 +163,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         if (entry != null && entry.getTooltip() != null)
             //? >=1.21.6 {
             /*graphics.setTooltipForNextFrame(entry.getTooltip(), mouseX, mouseY);
-            *///?} else >=1.19.3 {
+             *///?} else >=1.19.3 {
             this.setTooltipForNextRenderPass(entry.getTooltip());
         //?} else {
         /*this.renderTooltip(graphics, entry.getTooltip(), mouseX, mouseY);

@@ -2,39 +2,50 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
+import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
+import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.TextUtil;
+import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
 /*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
-//? >=1.19.3 {
-import net.minecraft.client.gui.components.Tooltip;
-//?} else {
-/*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
- *///?}
 
-public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileConfigContainer> extends Screen implements JupiterScreen {
+public class ConfigSelectScreen extends Screen implements JupiterScreen {
     private final Screen parent;
-    private final S serverConfig;
     @Nullable
-    private final C clientConfig;
-    @Nullable
-    private RemoteConfigWrapper fakeServerConfig;
+    private final AbstractConfigContainer common, client, server;
+    private final boolean displayCommon;
 
-    public ConfigSelectScreen(Component title, Screen parent, S serverConfig, @Nullable C clientConfig) {
+    @Comment("Use builder instead")
+    @Deprecated(forRemoval = true)
+    public ConfigSelectScreen(Component title, Screen parent, @Nullable FileConfigContainer serverConfig, @Nullable FileConfigContainer clientConfig) {
         super(title);
         this.parent = parent;
-        this.serverConfig = serverConfig;
-        this.clientConfig = clientConfig;
+        this.server = serverConfig;
+        this.client = clientConfig;
+        this.common = null;
+        this.displayCommon = false;
+    }
+
+    protected ConfigSelectScreen(Component title, Screen parent, @Nullable AbstractConfigContainer common, @Nullable AbstractConfigContainer client, @Nullable AbstractConfigContainer server, boolean displayCommon) {
+        super(title);
+        this.parent = parent;
+        this.common = common;
+        this.client = client;
+        this.server = server;
+        this.displayCommon = displayCommon;
     }
 
     @Override
@@ -43,68 +54,54 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         int x = this.width / 2;
         int y = this.height / 2;
         //Back
-        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.back"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - (this.displayCommon ? 60 : 45), 200, 20, TextUtil.translatable("jupiter.screen.back"), button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(this.parent);
         }));
-        //? >=1.19.3 {
-        final Button serverButton = this.addRenderableWidget(Button.builder(TextUtil.translatable("jupiter.screen.server_config"), button -> {
-            assert this.minecraft != null;
-            assert this.serverConfig != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.getServerConfig(), false));
-        }).bounds(x - 100, y - 10, 200, 20).tooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.check_server"))).build());
-        //?} else {
-        /*SimpleButtonTooltip serverButtonTooltip = new SimpleButtonTooltip(this, TextUtil.translatable("jupiter.screen.check_server"));
-        final Button serverButton = this.addRenderableWidget(new Button(x - 100, y - 10, 200, 20, TextUtil.translatable("jupiter.screen.server_config"), button -> {
-            assert this.minecraft != null;
-            assert this.serverConfig != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.getServerConfig(), false));
-        }, serverButtonTooltip));
-        *///?}
-        final Button clientButton = this.addRenderableWidget(JupiterScreen.createButton(this, x - 100, y + 25 - 10, 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
-            assert this.minecraft != null;
-            assert this.clientConfig != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.clientConfig, true));
-        }, TextUtil.translatable(this.clientConfig != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")));
-        serverButton.active = true;
-        clientButton.active = this.clientConfig != null;
 
+        if (this.displayCommon) {
+            Pair<Button, Consumer<Component>> commonPair = JupiterScreen.createButtonWithDynamicTooltip(this, x - 100, y - 30, 200, 20, TextUtil.translatable("jupiter.screen.common_config"), button -> {
+                assert this.minecraft != null && this.common != null;
+                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.common, false));
+            }, TextUtil.translatable("jupiter.screen.check_server"));
+            this.addRenderableWidget(commonPair.getFirst()).active = this.common != null;
+            if (this.common != null)
+                handleRemoteConfig(this.common, "jupiter.screen.open_common", b -> commonPair.getFirst().active = b, commonPair.getSecond());
+        }
+
+        Pair<Button, Consumer<Component>> serverPair = JupiterScreen.createButtonWithDynamicTooltip(this, x - 100, y - (this.displayCommon ? 0 : 15), 200, 20, TextUtil.translatable("jupiter.screen.server_config"), button -> {
+            assert this.minecraft != null && this.server != null;
+            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.server, false));
+        }, TextUtil.translatable("jupiter.screen.check_server"));
+        this.addRenderableWidget(serverPair.getFirst()).active = this.server != null;
+        if (this.server != null)
+            handleRemoteConfig(this.server, "jupiter.screen.open_server", b -> serverPair.getFirst().active = b, serverPair.getSecond());
+
+        Button clientButton = this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y + (this.displayCommon ? 30 : 15), 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
+            assert this.minecraft != null;
+            assert this.client != null;
+            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.client, true));
+        }, TextUtil.translatable(this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")));
+        clientButton.active = this.client != null;
+    }
+
+    private static void handleRemoteConfig(AbstractConfigContainer container, String openKey, BooleanConsumer buttonActive, Consumer<Component> tooltip) {
         if (JupiterScreen.connectedToDedicatedServer()) {
-            this.fakeServerConfig = new RemoteConfigWrapper(this.serverConfig);
-            serverButton.active = false;
-            ClientConfigNetwork.syncConfig(this.serverConfig.getConfigId(), nbt -> {
-                if (nbt == null)
-                    //? >=1.19.3 {
-                    serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.disable_server")));
-                    //?} else {
-                    /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.disable_server"));
-                     *///?}
+            buttonActive.accept(false);
+            ClientConfigNetwork.syncConfig(container.getConfigId(), nbt -> {
+                if (nbt == null) tooltip.accept(TextUtil.translatable("jupiter.screen.disable_server"));
                 else {
                     try {
-                        assert this.fakeServerConfig != null;
-                        this.fakeServerConfig.deserializeNbt(nbt);
-                        //? >=1.19.3 {
-                        serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.open_server")));
-                        //?} else {
-                        /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.open_server"));
-                         *///?}
-                        serverButton.active = true;
+                        container.deserializeNbt(nbt);
+                        tooltip.accept(TextUtil.translatable(openKey));
+                        buttonActive.accept(true);
                     } catch (Exception e) {
-                        Jupiter.LOGGER.error("Failed to parse server config data from server: {}", this.serverConfig.getConfigId(), e);
-                        //? >=1.19.3 {
-                        serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.error_server")));
-                        //?} else {
-                        /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.error_server"));
-                         *///?}
+                        Jupiter.LOGGER.error("Failed to parse config data from server: {}", container.getConfigId(), e);
+                        tooltip.accept(TextUtil.translatable("jupiter.screen.error_server"));
                     }
                 }
             });
-        } else
-            //? >=1.19.3 {
-            serverButton.setTooltip(Tooltip.create(TextUtil.translatable("jupiter.screen.open_server")));
-        //?} else {
-        /*serverButtonTooltip.setTooltip(TextUtil.translatable("jupiter.screen.open_server"));
-         *///?}
+        } else tooltip.accept(TextUtil.translatable(openKey));
     }
 
     @Override
@@ -114,7 +111,7 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
          *///?}
         assert this.minecraft != null;
         //? >=1.20 {
-        graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
+        graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - (this.displayCommon ? 80 : 65), -1);
         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
         context.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
@@ -133,10 +130,43 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         return true;
     }
 
-    private AbstractConfigContainer getServerConfig() {
-        if (!JupiterScreen.connectedToDedicatedServer())
-            return this.serverConfig;
-        assert this.fakeServerConfig != null;
-        return this.fakeServerConfig;
+    public static class Builder {
+        private final Component title;
+        private final Screen parent;
+        private AbstractConfigContainer common, client, server;
+        private boolean displayCommon = false;
+
+        public Builder(String titleKey, Screen parent) {
+            this(TextUtil.translatable(titleKey), parent);
+        }
+
+        public Builder(Component title, Screen parent) {
+            this.title = title;
+            this.parent = parent;
+        }
+
+        public Builder common(AbstractConfigContainer common) {
+            this.common = JupiterScreen.connectedToDedicatedServer() ? new RemoteConfigWrapper(common) : common;
+            return this.displayCommon();
+        }
+
+        public Builder displayCommon() {
+            this.displayCommon = true;
+            return this;
+        }
+
+        public Builder client(AbstractConfigContainer client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder server(AbstractConfigContainer server) {
+            this.server = JupiterScreen.connectedToDedicatedServer() ? new RemoteConfigWrapper(server) : server;
+            return this;
+        }
+
+        public ConfigSelectScreen build() {
+            return new ConfigSelectScreen(this.title, this.parent, this.common, this.client, this.server, this.displayCommon);
+        }
     }
 }

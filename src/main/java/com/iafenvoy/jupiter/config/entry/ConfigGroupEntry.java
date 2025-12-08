@@ -27,6 +27,11 @@ public class ConfigGroupEntry extends BaseEntry<ConfigGroup> {
         return this.value.getCodec();
     }
 
+    @Override
+    public Component getName() {
+        return super.getName().copy().append("...");
+    }
+
     public static Builder builder(Component name, ConfigGroup defaultValue) {
         return new Builder(name, defaultValue);
     }

@@ -3,6 +3,7 @@ package com.iafenvoy.jupiter.util;
 public class TextFormatter {
     public static String formatToTitleCase(String input) {
         if (input == null || input.trim().isEmpty()) return "";
+        if (input.contains(".")) return input;//Do not format translate key
         String withSpaces = input.replaceAll("_", " ");
         withSpaces = withSpaces.replaceAll("([a-z])([A-Z])", "$1 $2");
         String[] words = withSpaces.split("\\s+");

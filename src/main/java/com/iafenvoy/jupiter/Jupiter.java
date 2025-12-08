@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter;
 
+import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.network.ServerConfigNetwork;
 import com.iafenvoy.jupiter.test.TestConfig;
@@ -24,6 +25,7 @@ public final class Jupiter {
         ServerNetworkHelper.INSTANCE.registerPayloadType(ConfigErrorPayload.TYPE, ConfigErrorPayload.CODEC);
         //?}
 
+        ConfigManager.getInstance().registerServerConfigHandler(JupiterSettings.INSTANCE, ServerConfigManager.PermissionChecker.IS_OPERATOR);
         if (development) ConfigManager.getInstance().registerConfigHandler(new TestConfig());
     }
 

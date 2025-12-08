@@ -77,7 +77,7 @@ public final class NightConfigHolder {
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {
-                        if (builder instanceof BaseEntry.Builder<?, ?, ?> baseBuilder)
+                        if (builder instanceof BaseEntry.Builder<?, ?, ?> baseBuilder && spec.getComment() != null)
                             baseBuilder.tooltip(spec.getComment());
                         group.add(builder.build());
                     }

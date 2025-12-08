@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter.config.container;
 
 import com.google.gson.*;
 import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.config.ConfigDataFixer;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.entry.IntegerEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
@@ -23,6 +24,7 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     protected final ResourceLocation id;
     protected final Component title;
     protected final IntegerEntry version;
+    protected final ConfigDataFixer dataFixer = new ConfigDataFixer();
     private Codec<List<ConfigGroup>> cache;
 
     public AbstractConfigContainer(ResourceLocation id, Component title) {

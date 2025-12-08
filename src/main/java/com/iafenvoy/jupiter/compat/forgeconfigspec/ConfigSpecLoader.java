@@ -7,8 +7,9 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-//? >=1.21 {
 import com.iafenvoy.jupiter.config.container.wrapper.NightConfigWrapper;
+import com.iafenvoy.jupiter.internal.JupiterSettings;
+//? >=1.21 {
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfigs;
 //?} else >= 1.20.2 {
@@ -16,7 +17,7 @@ import net.neoforged.fml.config.ModConfigs;
  *///?}
 //? <=1.20.6 {
 /*import java.util.Locale;
-*///?}
+ *///?}
 //? >= 1.20.2 {
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -31,6 +32,7 @@ import java.util.Collection;
 
 public class ConfigSpecLoader {
     public static void scanConfig() {
+        if (!JupiterSettings.INSTANCE.general.loadForgeConfigs.getValue()) return;
         Collection<ModConfig> configs = /*? >=1.21 {*/ModConfigs.getFileMap().values()/*?} else {*//*ConfigTracker.INSTANCE.fileMap().values()*//*?}*/;
         for (ModConfig config : configs) {
             try {

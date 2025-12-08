@@ -93,7 +93,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
 
     @Override
     public Component getName() {
-        return this.restartRequired ? this.name.copy().append(TextUtil.translatable("jupiter.screen.restart_required")) : this.name;
+        return this.restartRequired ? this.name.copy().append(" ").append(TextUtil.translatable("jupiter.screen.restart_required")) : this.name;
     }
 
     @Override
@@ -113,7 +113,6 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
 
     @Override
     public void reset() {
-        T oldValue = this.value;
         this.value = this.newDefaultValue();
         this.callbacks.forEach(x -> x.onValueChange(this.value, true, true));
     }
