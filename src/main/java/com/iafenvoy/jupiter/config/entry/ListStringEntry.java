@@ -27,11 +27,12 @@ public class ListStringEntry extends ListBaseEntry<String> {
 
     @Override
     public IConfigEntry<String> newSingleInstance(String value, int index, Runnable reload) {
-        return StringEntry.builder(this.name, value).callback((o, n, r, d) -> {
+        return StringEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
                 reload.run();
-            } else this.getValue().set(index, value);
+            } else this.getValue().set(index, v);
+            this.setValue(this.getValue());
         }).buildInternal();
     }
 

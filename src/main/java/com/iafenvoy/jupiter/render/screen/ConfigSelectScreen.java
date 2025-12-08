@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -28,7 +28,7 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
     @Nullable
     private final C clientConfig;
     @Nullable
-    private FakeConfigContainer fakeServerConfig;
+    private RemoteConfigWrapper fakeServerConfig;
 
     public ConfigSelectScreen(Component title, Screen parent, S serverConfig, @Nullable C clientConfig) {
         super(title);
@@ -70,7 +70,7 @@ public class ConfigSelectScreen<S extends FileConfigContainer, C extends FileCon
         clientButton.active = this.clientConfig != null;
 
         if (JupiterScreen.connectedToDedicatedServer()) {
-            this.fakeServerConfig = new FakeConfigContainer(this.serverConfig);
+            this.fakeServerConfig = new RemoteConfigWrapper(this.serverConfig);
             serverButton.active = false;
             ClientConfigNetwork.syncConfig(this.serverConfig.getConfigId(), nbt -> {
                 if (nbt == null)

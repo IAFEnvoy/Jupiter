@@ -1,6 +1,7 @@
-package com.iafenvoy.jupiter.config.container;
+package com.iafenvoy.jupiter.config.container.wrapper;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
+import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 //? >=1.20.5 {
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
@@ -10,8 +11,8 @@ import com.iafenvoy.jupiter.network.NetworkConstants;
 import net.minecraft.network.FriendlyByteBuf;
 *///?}
 
-public class FakeConfigContainer extends AbstractConfigContainer {
-    public FakeConfigContainer(AbstractConfigContainer parent) {
+public class RemoteConfigWrapper extends AbstractConfigContainer {
+    public RemoteConfigWrapper(AbstractConfigContainer parent) {
         super(parent.getConfigId(), parent.getTitle());
         this.configTabs.addAll(parent.getConfigTabs().stream().map(ConfigGroup::copy).toList());
     }

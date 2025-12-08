@@ -27,11 +27,12 @@ public class ListBooleanEntry extends ListBaseEntry<Boolean> {
 
     @Override
     public IConfigEntry<Boolean> newSingleInstance(Boolean value, int index, Runnable reload) {
-        return BooleanEntry.builder(this.name, value).callback((o, n, r, d) -> {
+        return BooleanEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
                 reload.run();
-            } else this.getValue().set(index, value);
+            } else this.getValue().set(index, v);
+            this.setValue(this.getValue());
         }).buildInternal();
     }
 

@@ -30,17 +30,15 @@ public class MapDoubleEntry extends MapBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Map.Entry<String, Double>> newSingleInstance(Double value, String key, Runnable reload) {
-        return EntryDoubleEntry.builder(this.name, new AbstractMap.SimpleEntry<>(key, value)).callback((o, n, r, d) -> {
+        return EntryDoubleEntry.builder(this.name, new AbstractMap.SimpleEntry<>(key, value)).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(key);
                 reload.run();
-            } else {
-                if (!Objects.equals(o.getKey(), n.getKey())) {
-                    this.getValue().remove(o.getKey());
-                    this.getValue().put(n.getKey(), n.getValue());
-                } else if (!Objects.equals(o.getValue(), n.getValue()))
-                    this.getValue().put(o.getKey(), n.getValue());
-            }
+            } else if (!Objects.equals(key, v.getKey())) {
+                this.getValue().remove(key);
+                this.getValue().put(v.getKey(), v.getValue());
+            } else this.getValue().put(key, v.getValue());
+            this.setValue(this.getValue());
         }).buildInternal();
     }
 

@@ -10,7 +10,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.render.widget.builder.*;
-import com.iafenvoy.jupiter.util.EnumHelper;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -45,7 +44,8 @@ public class WidgetBuilderManager {
         register(ConfigTypes.LONG, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
         register(ConfigTypes.STRING, TextFieldWidgetBuilder::new);
-        register(ConfigTypes.ENUM, (provider, config) -> new ButtonWidgetBuilder<>(provider, config, button -> config.setValue(EnumHelper.cycle(config.getValue(), true)), () -> EnumHelper.getDisplayText(config.getValue())));
+        //noinspection rawtypes,unchecked
+        register(ConfigTypes.ENUM, (provider, config) -> new EnumWidgetBuilder<>(provider, (IConfigEntry) config));
         register(ConfigTypes.LIST_BOOLEAN, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Boolean>) config));
         register(ConfigTypes.LIST_INTEGER, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Integer>) config));
         register(ConfigTypes.LIST_LONG, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Long>) config));

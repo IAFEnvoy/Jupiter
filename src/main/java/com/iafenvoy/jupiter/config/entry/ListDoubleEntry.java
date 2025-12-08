@@ -27,11 +27,12 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Double> newSingleInstance(Double value, int index, Runnable reload) {
-        return DoubleEntry.builder(this.name, value).callback((o, n, r, d) -> {
+        return DoubleEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
                 reload.run();
-            } else this.getValue().set(index, value);
+            } else this.getValue().set(index, v);
+            this.setValue(this.getValue());
         }).buildInternal();
     }
 

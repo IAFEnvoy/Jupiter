@@ -1,5 +1,6 @@
-package com.iafenvoy.jupiter.compat.forgeconfigspec;
+package com.iafenvoy.jupiter.config.container.wrapper;
 
+import com.iafenvoy.jupiter.compat.forgeconfigspec.NightConfigHolder;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;

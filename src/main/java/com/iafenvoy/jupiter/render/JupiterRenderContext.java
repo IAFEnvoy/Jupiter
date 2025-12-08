@@ -1,8 +1,9 @@
 package com.iafenvoy.jupiter.render;
 
 //? <=1.19.4 {
-
-/*import com.mojang.blaze3d.systems.RenderSystem;
+/*import com.iafenvoy.jupiter.util.TextUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -74,6 +75,10 @@ public class JupiterRenderContext {
         consumer.vertex(matrix4f, (float) maxX, (float) maxY, (float) z).color(f, f1, f2, f3).endVertex();
         consumer.vertex(matrix4f, (float) maxX, (float) minY, (float) z).color(f, f1, f2, f3).endVertex();
         this.flush();
+    }
+
+    public void drawCenteredString(Font font, String text, int x, int y, int color) {
+        this.drawCenteredString(font, TextUtil.literal(text), x, y, color);
     }
 
     public void drawCenteredString(Font font, Component text, int x, int y, int color) {

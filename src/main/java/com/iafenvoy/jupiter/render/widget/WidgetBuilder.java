@@ -34,18 +34,10 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         Font font = this.minecraft.font;
         this.textWidget = new StringWidget(20, y, font.width(text), height, TextUtil.literal(text), font);
         context.addWidget(this.textWidget);
-        //? >=1.19.3 {
-        this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.remove"), button -> {
-            //FIXME::Do not reset this
-            this.config.reset();
-            this.refresh();
-        }).bounds(x + width - 50, y, 50, height).build();
-        //?} else {
-        /*this.resetButton = new Button(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.remove"), button -> {
+        this.resetButton = JupiterScreen.createButton(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.remove"), button -> {
             this.config.reset();
             this.refresh();
         });
-        *///?}
         this.refreshResetButton(true);
         context.addWidget(this.resetButton);
         this.addCustomElements(context, x, y, width - 55, height);
@@ -53,22 +45,15 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
 
     public void addElements(Context context, int x, int y, int width, int height) {
         Font font = this.minecraft.font;
-        Component component =this.config.getName();
+        Component component = this.config.getName();
         this.textWidget = new StringWidget(20, y, font.width(component), height, component, font);
         context.addWidget(this.textWidget);
-        //? >=1.19.3 {
-        this.resetButton = Button.builder(TextUtil.translatable("jupiter.screen.button.reset"), button -> {
-            this.config.reset();
-            this.refresh();
-        }).bounds(x + width - 50, y, 50, height).build();
-        //?} else {
-        /*this.resetButton = new Button(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.reset"), button -> {
+        this.resetButton = JupiterScreen.createButton(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.reset"), button -> {
             this.config.reset();
             this.refresh();
         });
-        *///?}
         this.refreshResetButton(false);
-        this.config.registerCallback((o, n, r, d) -> this.refreshResetButton(!d));
+        this.config.registerCallback((n, r, d) -> this.refreshResetButton(!d));
         context.addWidget(this.resetButton);
         this.addCustomElements(context, x, y, width - 55, height);
     }

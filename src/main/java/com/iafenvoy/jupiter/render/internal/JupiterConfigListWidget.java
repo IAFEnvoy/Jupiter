@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Locale;
 
 @ApiStatus.Internal
-public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigListWidget.ConfigEntry> {
+public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigListWidget.Entry> {
     private final JupiterConfigListScreen screen;
-    private final List<ConfigEntry> entries = new ArrayList<>();
+    private final List<Entry> entries = new ArrayList<>();
     private String filter = "";
 
     public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y/*? <=1.20.1 {*//*, int bottom*//*?}*/) {
@@ -38,26 +38,37 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         this.screen = screen;
         //? <=1.20.1 {
         /*this.setRenderTopAndBottom(false);
-        *///?}
+         *///?}
     }
 
     public void update() {
         this.entries.clear();
-        ConfigManager.getInstance().getConfigs().forEach(x -> this.entries.add(new ConfigEntry(this.screen, x)));
+        for (AbstractConfigContainer x : ConfigManager.getInstance().getConfigs()) this.entries.add(new Entry(this, x));
+        this.updateEntries();
+    }
+
+    private void updateEntries() {
+        this.clearEntries();
+        this.entries.stream().filter(x -> x.match(this.filter)).forEach(this::addEntry);
+        this.setScrollAmount(0);
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter.toLowerCase(Locale.ROOT);
         this.updateEntries();
     }
 
     //? >=1.21.4 {
-    @Override
+    /*@Override
     protected int scrollBarX() {
         return this.getRight() - 8;
     }
-    //?} else if >=1.20.2 {
-    /*@Override
+    *///?} else if >=1.20.2 {
+    @Override
     protected int getScrollbarPosition() {
         return this.getRight() - 8;
     }
-   *///?} else {
+   //?} else {
     /*@Override
     protected int getScrollbarPosition() {
         return this.x1 - 8;
@@ -70,44 +81,18 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     }
 
     @Override
-    public void setSelected(@Nullable JupiterConfigListWidget.ConfigEntry selected) {
+    public void setSelected(@Nullable JupiterConfigListWidget.Entry selected) {
         super.setSelected(selected);
         this.screen.setOpenConfigState(this.getSelected() != null);
     }
 
-    private void updateEntries() {
-        this.clearEntries();
-        this.entries.stream().filter(x -> x.match(this.filter)).forEach(this::addEntry);
-        this.setScrollAmount(0);
-    }
-
-    //? >=1.21.9 {
-    /*@Override
-    public boolean keyPressed(@NotNull KeyEvent event) {
-        *///?} else {
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        //?}
-        ConfigEntry entry = this.getSelected();
-        //? >=1.21.9 {
-        /*return entry != null && entry.keyPressed(event) || super.keyPressed(event);
-         *///?} else {
-        return entry != null && entry.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
-        //?}
-    }
-
-    public void setFilter(String filter) {
-        this.filter = filter.toLowerCase(Locale.ROOT);
-        this.updateEntries();
-    }
-
-    public static class ConfigEntry extends ObjectSelectionList.Entry<ConfigEntry> {
+    public static class Entry extends ObjectSelectionList.Entry<Entry> {
         private final Minecraft client = Minecraft.getInstance();
-        private final JupiterConfigListScreen screen;
+        private final JupiterConfigListWidget widget;
         private final AbstractConfigContainer handler;
 
-        public ConfigEntry(JupiterConfigListScreen screen, AbstractConfigContainer handler) {
-            this.screen = screen;
+        public Entry(JupiterConfigListWidget widget, AbstractConfigContainer handler) {
+            this.widget = widget;
             this.handler = handler;
         }
 
@@ -140,7 +125,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         @Override
         public boolean mouseClicked(double x, double y, int button) {
             //?}
-            this.screen.select(this);
+            this.widget.setSelected(this);
             return false;
         }
 

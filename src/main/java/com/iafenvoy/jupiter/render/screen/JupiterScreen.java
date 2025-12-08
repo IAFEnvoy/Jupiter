@@ -25,8 +25,7 @@ public interface JupiterScreen {
 
     static Screen getConfigScreen(Screen parent, AbstractConfigContainer container, boolean client) {
         List<ConfigGroup> groups = container.getConfigTabs();
-        if (groups.size() == 1)
-            return new ConfigListScreen(parent, TitleStack.create(container.getTitle()), container.getConfigId(), groups/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/.getConfigs(), client);
+        if (groups.size() == 1) return new SingleConfigScreen(parent, container, client);
         else return new ConfigContainerScreen(parent, container, client);
     }
 

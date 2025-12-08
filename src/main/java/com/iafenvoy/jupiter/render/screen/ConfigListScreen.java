@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.render.screen;
 
-import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.config.entry.BaseEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
@@ -201,7 +201,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
 
     protected String getCurrentEditText() {
         if (this.client) return I18n.get("jupiter.screen.current_modifying_client");
-        if (this.entries instanceof FakeConfigContainer)
+        if (this.entries instanceof RemoteConfigWrapper)
             return I18n.get("jupiter.screen.current_modifying_dedicate_server");
         return I18n.get("jupiter.screen.current_modifying_local_server");
     }

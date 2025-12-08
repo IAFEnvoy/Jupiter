@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 //WARNING!!! DO NOT try to understand how these code work!!!
 public final class NightConfigHolder {
@@ -73,7 +72,8 @@ public final class NightConfigHolder {
             if (entryValue instanceof /*? >=1.20.2 {*/ ModConfigSpec/*?} else {*/ /*ForgeConfigSpec*//*?}*/.ValueSpec spec) {
                 Object defaultValue = spec.getDefault();
                 try {
-                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatable(Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey)), entry, defaultValue, value, spec::test);
+                    String translateKey = Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey);
+                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatableWithFallback(translateKey, TextFormatter.formatToTitleCase(translateKey)), entry, defaultValue, value, spec::test);
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {
@@ -85,7 +85,7 @@ public final class NightConfigHolder {
                     Jupiter.LOGGER.error("Cannot load key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side, e);
                 }
             } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config) {
-                Component name = TextUtil.translatable(entry.getKey());
+                Component name = TextUtil.translatableWithFallback(entry.getKey(), TextFormatter.formatToTitleCase(entry.getKey()));
                 group.add(ConfigGroupEntry.builder(name, this.buildGroup(entry.getKey(), name, spec, config)).build());
             }
         }
@@ -130,33 +130,35 @@ public final class NightConfigHolder {
 
     @SuppressWarnings("unchecked")
     private <T extends Enum<T>> void processEnum(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<?> clazz) {
-        if (clazz.isEnum()) {
+        if (clazz.isEnum() && clazz.isAssignableFrom(defaultValue.getClass()) && value instanceof String valueStr) {
             Class<T> testClazz = (Class<T>) clazz;
-            if (value instanceof String string)
-                this.processEntry(reference, values, name, entry, defaultValue, Enum.valueOf(testClazz, string), testClazz, EnumEntry::builder);
-            else
-                this.processEntry(reference, values, name, entry, defaultValue, value, testClazz, EnumEntry::builder);
+            EnumEntry.Builder<T> builder = EnumEntry.builder(name, (T) defaultValue);
+            builder.callback((v, r, d) -> values.set(entry.getKey(), v.name())).value(Enum.valueOf(testClazz, valueStr));
+            reference.set(builder);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private <T, E extends IConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> testClazz, BiFunction<Component, T, B> entryProvider) {
-        if (testClazz.isAssignableFrom(defaultValue.getClass()) && testClazz.isAssignableFrom(value.getClass())) {
+    private <T, E extends IConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
+        if (clazz.isAssignableFrom(defaultValue.getClass()) && clazz.isAssignableFrom(value.getClass())) {
             B builder = entryProvider.apply(name, (T) defaultValue);
-            builder.callback((o, n, r, d) -> values.set(entry.getKey(), n)).value((T) value);
+            builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value((T) value);
             reference.set(builder);
         }
     }
 
     @SuppressWarnings("unchecked")
     private <T extends Enum<T>> void processEnumCollection(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, T any) {
-        this.<T, ListEnumEntry<T>, ListEnumEntry.Builder<T>>processCollectionEntry(reference, values, name, entry, defaultValue, ((List<Object>) value).stream().map(x -> x instanceof String s ? Enum.valueOf(any.getDeclaringClass(), s) : x).collect(Collectors.toList()), (k, v) -> ListEnumEntry.builder(k, v, any));
+        Class<T> clazz = any.getDeclaringClass();
+        ListEnumEntry.Builder<T> builder = ListEnumEntry.builder(name, ((List<T>) defaultValue), any);
+        builder.callback((v, r, d) -> values.set(entry.getKey(), v.stream().map(Enum::name).toList())).value(new LinkedList<>(((List<String>) value).stream().map(x -> Enum.valueOf(clazz, x)).toList()));
+        reference.set(builder);
     }
 
     @SuppressWarnings("unchecked")
     private <T, E extends IConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
         B builder = entryProvider.apply(name, (List<T>) defaultValue);
-        builder.callback((o, n, r, d) -> values.set(entry.getKey(), n)).value(new LinkedList<>((List<T>) value));
+        builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value(new LinkedList<>((List<T>) value));
         reference.set(builder);
     }
 }

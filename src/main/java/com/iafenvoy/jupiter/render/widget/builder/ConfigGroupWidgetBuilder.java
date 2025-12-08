@@ -10,30 +10,14 @@ import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
 import org.jetbrains.annotations.Nullable;
 
-public class ConfigGroupWidgetBuilder extends WidgetBuilder<ConfigGroup> {
-    @Nullable
-    private Button button;
-
+public class ConfigGroupWidgetBuilder extends AbstractButtonWidgetBuilder<ConfigGroup> {
     public ConfigGroupWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<ConfigGroup> config) {
-        super(provider, config);
+        super(provider, config, () -> TextUtil.translatable("jupiter.screen.edit"));
     }
 
     @Override
-    public void addCustomElements(Context context, int x, int y, int width, int height) {
+    protected Button createButton(Context context, int x, int y, int width, int height) {
         ConfigGroup group = this.config.getValue();
-        this.button = JupiterScreen.createButton(x, y, width, height, TextUtil.translatable("jupiter.screen.edit"), button -> this.minecraft.setScreen(new ConfigListScreen(context.parent(), context.push(group.getName()), this.provider.getConfigId(), group.getConfigs(), this.provider.isClientSide().orElse(false))));
-        context.addWidget(this.button);
-    }
-
-    @Override
-    public void updateCustom(boolean visible, int y) {
-        if (this.button == null) return;
-        this.button.visible = visible;
-        this.button./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
-    }
-
-    @Override
-    public void refresh() {
-        //Fixed button text
+        return JupiterScreen.createButton(x, y, width, height, this.nameSupplier.get(), button -> this.minecraft.setScreen(new ConfigListScreen(context.parent(), context.push(group.getName()), this.provider.getConfigId(), group.getConfigs(), this.provider.isClientSide().orElse(false))));
     }
 }

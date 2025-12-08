@@ -23,10 +23,10 @@ import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
  //?}
 //? >=1.21.4 {
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
-        //?} else {
-/*import net.neoforged.neoforge.event.AddReloadListenerEvent;
- *///?}
+/*import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+        *///?} else {
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+ //?}
 //? >=1.20.5 {
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -79,7 +79,7 @@ public class JupiterNeoForge {
     //? >=1.21 {
     @SubscribeEvent
             //?}
-    public static void registerServerListener(/*? >=1.21.4 {*/AddServerReloadListenersEvent/*?} else {*//*AddReloadListenerEvent*//*?}*/ event) {
-        event.addListener( /*? >=1.21.4 {*/Jupiter.id("server_config_reload"), /*?}*/new ServerConfigManager());
+    public static void registerServerListener(/*? >=1.21.4 {*//*AddServerReloadListenersEvent*//*?} else {*/AddReloadListenerEvent/*?}*/ event) {
+        event.addListener( /*? >=1.21.4 {*//*Jupiter.id("server_config_reload"), *//*?}*/new ServerConfigManager());
     }
 }

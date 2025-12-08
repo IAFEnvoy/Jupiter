@@ -27,11 +27,12 @@ public class ListLongEntry extends ListBaseEntry<Long> {
 
     @Override
     public IConfigEntry<Long> newSingleInstance(Long value, int index, Runnable reload) {
-        return LongEntry.builder(this.name, value).callback((o, n, r, d) -> {
+        return LongEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
                 reload.run();
-            } else this.getValue().set(index, value);
+            } else this.getValue().set(index, v);
+            this.setValue(this.getValue());
         }).buildInternal();
     }
 

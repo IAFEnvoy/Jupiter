@@ -32,11 +32,12 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
 
     @Override
     public IConfigEntry<T> newSingleInstance(T value, int index, Runnable reload) {
-        return EnumEntry.builder(this.name, value).callback((o, n, r, d) -> {
+        return EnumEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
                 reload.run();
-            } else this.getValue().set(index, value);
+            } else this.getValue().set(index, v);
+            this.setValue(this.getValue());
         }).buildInternal();
     }
 

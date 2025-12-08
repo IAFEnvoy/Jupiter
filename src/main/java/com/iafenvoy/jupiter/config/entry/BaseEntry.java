@@ -63,7 +63,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public BaseEntry<T> callback(Consumer<T> callback) {
-        this.callbacks.add((v1, v2, b1, b2) -> callback.accept(v2));
+        this.callbacks.add((v2, b1, b2) -> callback.accept(v2));
         return this;
     }
 
@@ -83,7 +83,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     public void setValue(T value) {
         T oldValue = this.value;
         this.value = value;
-        this.callbacks.forEach(x -> x.onValueChange(oldValue, this.value, false, Objects.equals(this.value, this.defaultValue)));
+        this.callbacks.forEach(x -> x.onValueChange(this.value, false, Objects.equals(this.value, this.defaultValue)));
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     public void reset() {
         T oldValue = this.value;
         this.value = this.newDefaultValue();
-        this.callbacks.forEach(x -> x.onValueChange(oldValue, this.value, true, true));
+        this.callbacks.forEach(x -> x.onValueChange(this.value, true, true));
     }
 
     protected T newDefaultValue() {

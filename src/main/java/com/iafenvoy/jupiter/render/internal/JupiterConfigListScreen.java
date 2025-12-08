@@ -3,7 +3,7 @@ package com.iafenvoy.jupiter.render.internal;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.compat.forgeconfigspec.ConfigSpecLoader;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.config.container.FakeConfigContainer;
+import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 //? >=1.20.5 {
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
-        //?}
+//?}
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
 //?} else {
@@ -56,7 +56,7 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         this.addRenderableWidget(JupiterScreen.createButton(40, 25, 60, 20, TextUtil.translatable("jupiter.screen.back"), button -> this.onClose()));
         this.addRenderableWidget(new EditBox(this.font, 105, 25, this.width - 230, 20, TextUtil.empty())).setResponder(this.widget::setFilter);
         this.openConfigButton = this.addRenderableWidget(JupiterScreen.createButton(this.width - 120, 25, 80, 20, TextUtil.translatable("jupiter.screen.open"), button -> {
-            JupiterConfigListWidget.ConfigEntry handler = this.widget.getSelected();
+            JupiterConfigListWidget.Entry handler = this.widget.getSelected();
             if (this.minecraft != null && handler != null) {
                 AbstractConfigContainer container = handler.getConfigContainer();
                 boolean server = ServerConfigManager.getServerConfigs().contains(container);
@@ -85,10 +85,6 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         *///?}
     }
 
-    public void select(JupiterConfigListWidget.ConfigEntry entry) {
-        this.widget.setSelected(entry);
-    }
-
     @Override
     public void onClose() {
         super.onClose();
@@ -97,6 +93,6 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
     }
 
     private AbstractConfigContainer getServerConfig(AbstractConfigContainer container) {
-        return JupiterScreen.connectedToDedicatedServer() ? new FakeConfigContainer(container) : container;
+        return JupiterScreen.connectedToDedicatedServer() ? new RemoteConfigWrapper(container) : container;
     }
 }

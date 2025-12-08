@@ -8,6 +8,7 @@ import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 //? >=1.21 {
+import com.iafenvoy.jupiter.config.container.wrapper.NightConfigWrapper;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfigs;
 //?} else >= 1.20.2 {
