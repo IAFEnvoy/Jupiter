@@ -145,7 +145,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-         *///?}
+        *///?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
@@ -157,7 +157,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         context.drawString(this.font, this.getTitle(), 40, 10, -1);
         context.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
         *///?}
-        this.entryScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - 70, (this.configPerPage + this.entryScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
+        this.entryScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - this.topBorder - 10, (this.configPerPage + this.entryScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
         if (this.entryScrollBar.isDragging()) this.updateEntryPos();
         IConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
         if (entry != null && entry.getTooltip() != null)

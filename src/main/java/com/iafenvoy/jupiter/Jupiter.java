@@ -1,5 +1,8 @@
 package com.iafenvoy.jupiter;
 
+import com.iafenvoy.jupiter.compat.ExtraConfigManager;
+import com.iafenvoy.jupiter.compat.forgeconfigspec.ConfigSpecLoader;
+import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.network.ServerConfigNetwork;
@@ -27,6 +30,8 @@ public final class Jupiter {
 
         ConfigManager.getInstance().registerServerConfigHandler(JupiterSettings.INSTANCE, ServerConfigManager.PermissionChecker.IS_OPERATOR);
         if (development) ConfigManager.getInstance().registerConfigHandler(new TestConfig());
+
+        ExtraConfigManager.registerScanner(ConfigSource.NIGHT_CONFIG, ConfigSpecLoader::scanConfig);
     }
 
     public static void process() {

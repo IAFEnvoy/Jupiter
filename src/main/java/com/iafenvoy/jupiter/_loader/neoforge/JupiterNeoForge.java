@@ -47,7 +47,7 @@ import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
  *///?} else {
 /*@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
  *///?}
-public class JupiterNeoForge {
+public class  JupiterNeoForge {
     public JupiterNeoForge() {
         Jupiter.init(!FMLEnvironment./*? >=1.21.9 {*//*isProduction()*//*?} else {*/production/*?}*/);
         //? <=1.20.6 {

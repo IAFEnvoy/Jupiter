@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter.render.internal;
 
 import com.iafenvoy.jupiter.ServerConfigManager;
+import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.compat.forgeconfigspec.ConfigSpecLoader;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
@@ -31,7 +32,7 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
     public JupiterConfigListScreen(Screen parent) {
         super(TextUtil.translatable("jupiter.screen.config_list.title"));
         this.parent = parent;
-        ConfigSpecLoader.scanConfig();
+        ExtraConfigManager.scanConfigs();
     }
 
     @Override

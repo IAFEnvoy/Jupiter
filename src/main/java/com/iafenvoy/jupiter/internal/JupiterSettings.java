@@ -13,11 +13,11 @@ public class JupiterSettings extends AutoInitConfigContainer {
         super(Jupiter.id("jupiter"), "jupiter.screen.config.title", "./config/jupiter.json");
     }
 
-    public static String name(String category, String name) {
+    private static String name(String category, String name) {
         return "config.%s.%s.%s".formatted(Jupiter.MOD_ID, category, name);
     }
 
-    public static String tooltip(String category, String name) {
+    private static String tooltip(String category, String name) {
         return "config.%s.%s.%s.tooltip".formatted(Jupiter.MOD_ID, category, name);
     }
 

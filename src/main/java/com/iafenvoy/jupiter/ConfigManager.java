@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter;
 
-import com.iafenvoy.jupiter.compat.forgeconfigspec.ConfigSpecLoader;
+import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -41,7 +41,7 @@ public class ConfigManager implements ResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@NotNull ResourceManager manager) {
-        ConfigSpecLoader.scanConfig();
+        ExtraConfigManager.scanConfigs();
         this.configHandlers.values().forEach(AbstractConfigContainer::load);
         Jupiter.LOGGER.info("Successfully reload {} common config(s).", this.configHandlers.size());
     }

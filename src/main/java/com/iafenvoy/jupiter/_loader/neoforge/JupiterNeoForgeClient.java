@@ -4,9 +4,14 @@ package com.iafenvoy.jupiter._loader.neoforge;
 
 import com.iafenvoy.jupiter.ConfigManager;
 import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.compat.ExtraConfigManager;
+import com.iafenvoy.jupiter.internal.ConfigButtonReplaceStrategy;
+import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.render.internal.JupiterConfigListScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 //? >=1.21.4 {
@@ -31,22 +36,34 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.fml.common.Mod;
 *///?}
 
+import java.util.Optional;
+
 //? >=1.21 {
 @EventBusSubscriber(Dist.CLIENT)
- //?} elif >=1.20.5 {
+        //?} elif >=1.20.5 {
 /*@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
  *///?} else {
 /*@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-*///?}
+ *///?}
 public class JupiterNeoForgeClient {
     @SubscribeEvent
     public static void processClient(FMLClientSetupEvent event) {
         Jupiter.processClient();
-        //? >=1.20.5 {
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (container, parent) -> new JupiterConfigListScreen(parent));
-        //?} else {
-        /*ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, parent) -> new JupiterConfigListScreen(parent)));
-        *///?}
+        ModLoadingContext.get().registerExtensionPoint(/*? >=1.20.5 {*/IConfigScreenFactory/*?} else {*//*ConfigScreenHandler.ConfigScreenFactory*//*?}*/.class, () -> /*? <=1.20.4 {*//*new ConfigScreenHandler.ConfigScreenFactory*//*?}*/((minecraft, parent) -> new JupiterConfigListScreen(parent)));
+        ExtraConfigManager.registerScanCallback(JupiterNeoForgeClient::fillExtensionPoints);
+    }
+
+    public static void fillExtensionPoints() {
+        ConfigButtonReplaceStrategy strategy = JupiterSettings.INSTANCE.general.configButtonReplacement.getValue();
+        if (strategy == ConfigButtonReplaceStrategy.NEVER) return;
+        for (String id : ExtraConfigManager.getProvidedMods()) {
+            Optional<? extends ModContainer> optional = ModList.get().getModContainerById(id);
+            if (optional.isEmpty()) continue;
+            ModContainer container = optional.get();
+            if ((strategy == ConfigButtonReplaceStrategy.UNAVAILABLE_ONLY && container.getCustomExtension(/*? >=1.20.5 {*/IConfigScreenFactory/*?} else {*//*ConfigScreenHandler.ConfigScreenFactory*//*?}*/.class).isPresent()))
+                continue;
+            container.registerExtensionPoint(/*? >=1.20.5 {*/IConfigScreenFactory/*?} else {*//*ConfigScreenHandler.ConfigScreenFactory*//*?}*/.class, /*? <=1.20.4 {*//*() -> new ConfigScreenHandler.ConfigScreenFactory*//*?}*/((c, parent) -> ExtraConfigManager.getScreen(id).apply(parent)));
+        }
     }
 
     //? >=1.21.4 {

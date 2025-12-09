@@ -15,9 +15,6 @@ import net.neoforged.fml.config.ModConfigs;
 //?} else >= 1.20.2 {
 /*import net.neoforged.fml.config.ConfigTracker;
  *///?}
-//? <=1.20.6 {
-/*import java.util.Locale;
- *///?}
 //? >= 1.20.2 {
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -25,14 +22,18 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 /*import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.config.ConfigTracker;
-import java.util.Locale;
 *///?}
 
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 public class ConfigSpecLoader {
-    public static void scanConfig() {
-        if (!JupiterSettings.INSTANCE.general.loadForgeConfigs.getValue()) return;
+    public static Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> scanConfig() {
+        Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> data = new LinkedHashMap<>();
+        if (!JupiterSettings.INSTANCE.general.loadForgeConfigs.getValue()) return data;
         Collection<ModConfig> configs = /*? >=1.21 {*/ModConfigs.getFileMap().values()/*?} else {*//*ConfigTracker.INSTANCE.fileMap().values()*//*?}*/;
         for (ModConfig config : configs) {
             try {
@@ -50,7 +51,8 @@ public class ConfigSpecLoader {
                 Runnable saver = valueHolder::save;
                 //?} else {
                 /*CommentedConfig values = config.getConfigData();
-                if (!(config.getSpec() instanceof /^? >=1.20.2 {^/ModConfigSpec/^?} else {^//^ForgeConfigSpec^//^?}^/ spec) || values == null) continue;
+                if (!(config.getSpec() instanceof /^? >=1.20.2 {^/ModConfigSpec/^?} else {^/ /^ForgeConfigSpec^//^?}^/ spec) || values == null)
+                    continue;
                 ConfigSide type = switch (config.getType()) {
                     case COMMON/^? >=1.20.5 {^/, STARTUP/^?}^/ -> ConfigSide.COMMON;
                     case CLIENT -> ConfigSide.CLIENT;
@@ -63,9 +65,12 @@ public class ConfigSpecLoader {
                 ConfigManager.getInstance().registerConfigHandler(container);
                 if (config.getType() != ModConfig.Type.CLIENT)
                     ServerConfigManager.registerServerConfig(container, ServerConfigManager.PermissionChecker.IS_OPERATOR, false);
+                data.computeIfAbsent(config.getModId(), s -> new EnumMap<>(ConfigSide.class)).put(type, container);
             } catch (Exception e) {
                 Jupiter.LOGGER.error("Failed to load config spec {}:{}:", config.getModId(), config.getType().extension(), e);
             }
         }
+        Jupiter.LOGGER.info("Config spec loading complete, found {} configs from {} mods.", data.values().stream().map(EnumMap::size).reduce(0, Integer::sum, Integer::sum), data.size());
+        return data;
     }
 }

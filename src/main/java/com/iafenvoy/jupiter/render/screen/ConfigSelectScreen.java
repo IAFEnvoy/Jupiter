@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
-//?} else {
+ //?} else {
 /*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -63,7 +63,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
             Pair<Button, Consumer<Component>> commonPair = JupiterScreen.createButtonWithDynamicTooltip(this, x - 100, y - 30, 200, 20, TextUtil.translatable("jupiter.screen.common_config"), button -> {
                 assert this.minecraft != null && this.common != null;
                 this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.common, false));
-            }, TextUtil.translatable("jupiter.screen.check_server"));
+            }, TextUtil.translatable("jupiter.screen.unavailable"));
             this.addRenderableWidget(commonPair.getFirst()).active = this.common != null;
             if (this.common != null)
                 handleRemoteConfig(this.common, "jupiter.screen.open_common", b -> commonPair.getFirst().active = b, commonPair.getSecond());
@@ -72,7 +72,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         Pair<Button, Consumer<Component>> serverPair = JupiterScreen.createButtonWithDynamicTooltip(this, x - 100, y - (this.displayCommon ? 0 : 15), 200, 20, TextUtil.translatable("jupiter.screen.server_config"), button -> {
             assert this.minecraft != null && this.server != null;
             this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.server, false));
-        }, TextUtil.translatable("jupiter.screen.check_server"));
+        }, TextUtil.translatable("jupiter.screen.unavailable"));
         this.addRenderableWidget(serverPair.getFirst()).active = this.server != null;
         if (this.server != null)
             handleRemoteConfig(this.server, "jupiter.screen.open_server", b -> serverPair.getFirst().active = b, serverPair.getSecond());
@@ -81,12 +81,13 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
             assert this.minecraft != null;
             assert this.client != null;
             this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.client, true));
-        }, TextUtil.translatable(this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.disable_client")));
+        }, TextUtil.translatable(this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.unavailable")));
         clientButton.active = this.client != null;
     }
 
     private static void handleRemoteConfig(AbstractConfigContainer container, String openKey, BooleanConsumer buttonActive, Consumer<Component> tooltip) {
         if (JupiterScreen.connectedToDedicatedServer()) {
+            tooltip.accept(TextUtil.translatable("jupiter.screen.check_server"));
             buttonActive.accept(false);
             ClientConfigNetwork.syncConfig(container.getConfigId(), nbt -> {
                 if (nbt == null) tooltip.accept(TextUtil.translatable("jupiter.screen.disable_server"));
@@ -108,15 +109,15 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
     public void render(/*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float delta) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-         *///?}
+        *///?}
+        super.render(graphics, mouseX, mouseY, delta);
         assert this.minecraft != null;
         //? >=1.20 {
         graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - (this.displayCommon ? 80 : 65), -1);
-        //?} else {
+         //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - 50, -1);
+        context.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - (this.displayCommon ? 80 : 65), -1);
         *///?}
-        super.render(graphics, mouseX, mouseY, delta);
     }
 
     @Override
@@ -128,6 +129,14 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
     @Override
     public boolean isPauseScreen() {
         return true;
+    }
+
+    public static Builder builder(String titleKey, Screen parent) {
+        return new Builder(titleKey, parent);
+    }
+
+    public static Builder builder(Component title, Screen parent) {
+        return new Builder(title, parent);
     }
 
     public static class Builder {
