@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigDataFixer;
 import com.iafenvoy.jupiter.config.ConfigGroup;
-import com.iafenvoy.jupiter.config.entry.IntegerEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -13,6 +12,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +24,13 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     protected final List<ConfigGroup> configTabs = new ArrayList<>();
     protected final ResourceLocation id;
     protected final Component title;
-    protected final IntegerEntry version;
     protected final ConfigDataFixer dataFixer = new ConfigDataFixer();
-    private Codec<List<ConfigGroup>> cache;
+    @Nullable
+    private Codec<List<ConfigGroup>> codecCache;
 
     public AbstractConfigContainer(ResourceLocation id, Component title) {
-        this(id, title, 0);
-    }
-
-    public AbstractConfigContainer(ResourceLocation id, Component title, int version) {
         this.id = id;
         this.title = title;
-        this.version = IntegerEntry.builder("version", version).build();
     }
 
     @Override
@@ -53,7 +49,7 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     public ConfigGroup createTab(String id, Component name) {
         ConfigGroup category = new ConfigGroup(id, name, new ArrayList<>());
         this.configTabs.add(category);
-        this.cache = null;
+        this.codecCache = null;
         return category;
     }
 
@@ -73,79 +69,75 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     public abstract void save();
 
     public String serialize() {
-        if (this.cache == null) this.cache = this.buildCodec();
-        JsonElement element = this.cache.encodeStart(JsonOps.INSTANCE, this.configTabs).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
-        if (element instanceof JsonObject obj)
-            this.writeCustomData(obj);
-        return GSON.toJson(element);
+        return GSON.toJson(this.getCodec().encodeStart(JsonOps.INSTANCE, this.configTabs).resultOrPartial(Jupiter.LOGGER::error).orElseThrow());
     }
 
     @Comment("For Network Usage Only")
-    public CompoundTag serializeNbt() {
-        if (this.cache == null) this.cache = this.buildCodec();
-        return (CompoundTag) this.cache.encodeStart(NbtOps.INSTANCE, this.configTabs).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
+    public final CompoundTag serializeNbt() {
+        return (CompoundTag) this.getCodec().encodeStart(NbtOps.INSTANCE, this.configTabs).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
     }
 
     public void deserialize(String data) {
         JsonElement element = JsonParser.parseString(data);
-        if (element instanceof JsonObject obj) {
-            if (!this.shouldLoad(obj)) return;
-            this.deserializeJson(obj);
-            this.readCustomData(obj);
-        }
-    }
-
-    public final void deserializeJson(JsonElement element) {
-        if (this.cache == null) this.cache = this.buildCodec();
-        this.cache.parse(JsonOps.INSTANCE, element);
+        if (element instanceof JsonObject obj) this.getCodec().parse(JsonOps.INSTANCE, obj);
     }
 
     @Comment("For Network Usage Only")
     public final void deserializeNbt(CompoundTag element) {
         if (element == null) return;
-        if (this.cache == null) this.cache = this.buildCodec();
-        this.cache.parse(NbtOps.INSTANCE, element);
+        this.getCodec().parse(NbtOps.INSTANCE, element);
+    }
+
+    @NotNull
+    public Codec<List<ConfigGroup>> getCodec() {
+        if (this.codecCache == null) this.codecCache = this.buildCodec();
+        return this.codecCache;
     }
 
     protected Codec<List<ConfigGroup>> buildCodec() {
-        return MapCodec.<List<ConfigGroup>>of(new MapEncoder.Implementation<>() {
-            @Override
-            public <T> Stream<T> keys(DynamicOps<T> ops) {
-                return AbstractConfigContainer.this.configTabs.stream().map(ConfigGroup::getId).map(ops::createString);
-            }
-
-            @Override
-            public <T> RecordBuilder<T> encode(List<ConfigGroup> input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
-                return input.stream().reduce(prefix, (p, c) -> p.add(c.getId(), c.encode(ops)), (a, b) -> null);
-            }
-        }, new MapDecoder.Implementation<>() {
-            @Override
-            public <T> Stream<T> keys(DynamicOps<T> ops) {
-                return AbstractConfigContainer.this.configTabs.stream().map(ConfigGroup::getId).map(ops::createString);
-            }
-
-            @Override
-            public <T> DataResult<List<ConfigGroup>> decode(DynamicOps<T> ops, MapLike<T> input) {
-                input.entries().forEach(x -> {
-                    String s = ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
-                    AbstractConfigContainer.this.configTabs.stream().filter(y -> y.getId().equals(s)).findFirst().ifPresent(y -> y.decode(ops, x.getSecond()));
-                });
-                return DataResult.success(AbstractConfigContainer.this.configTabs);
-            }
-        }).codec();
+        return new GroupsCodec(this).codec();
     }
 
-    //Can be used to check version, etc
+    @Deprecated(forRemoval = true)
     @Comment("Only call on saving to disk, not on network")
     protected boolean shouldLoad(JsonObject obj) {
         return true;
     }
 
+    @Deprecated(forRemoval = true)
     @Comment("Only call on saving to disk, not on network")
     protected void readCustomData(JsonObject obj) {
     }
 
+    @Deprecated(forRemoval = true)
     @Comment("Only call on saving to disk, not on network")
     protected void writeCustomData(JsonObject obj) {
+    }
+
+    private static class GroupsCodec extends MapCodec<List<ConfigGroup>> {
+        private final AbstractConfigContainer parent;
+
+        private GroupsCodec(AbstractConfigContainer parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public <T> Stream<T> keys(DynamicOps<T> ops) {
+            return this.parent.configTabs.stream().map(ConfigGroup::getId).map(ops::createString);
+        }
+
+        @Override
+        public <T> RecordBuilder<T> encode(List<ConfigGroup> input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
+            return input.stream().reduce(prefix, (p, c) -> p.add(c.getId(), c.encode(this.parent.dataFixer, ops)), (a, b) -> null);
+        }
+
+        @Override
+        public <T> DataResult<List<ConfigGroup>> decode(DynamicOps<T> ops, MapLike<T> input) {
+            input.entries().forEach(x -> {
+                String s = this.parent.dataFixer.fixKey(ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow());
+                this.parent.configTabs.stream().filter(y -> y.getId().equals(s)).findFirst().ifPresent(y -> y.decode(this.parent.dataFixer, ops, x.getSecond()));
+            });
+            return DataResult.success(this.parent.configTabs);
+        }
     }
 }

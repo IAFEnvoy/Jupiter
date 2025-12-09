@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-//TODO::DataFixer
 public class ConfigDataFixer {
     private final Map<String, String> exactKeyMapper = new LinkedHashMap<>();
     private final Map<Pattern, Function<String, String>> regexKeyMapper = new LinkedHashMap<>();

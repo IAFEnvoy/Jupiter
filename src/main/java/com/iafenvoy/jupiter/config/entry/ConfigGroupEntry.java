@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.ConfigDataFixer;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
@@ -24,7 +25,7 @@ public class ConfigGroupEntry extends BaseEntry<ConfigGroup> {
 
     @Override
     public Codec<ConfigGroup> getCodec() {
-        return this.value.getCodec();
+        return this.value.getCodec(new ConfigDataFixer());
     }
 
     @Override

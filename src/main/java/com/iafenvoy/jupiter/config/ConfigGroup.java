@@ -51,41 +51,54 @@ public class ConfigGroup {
         return new ConfigGroup(this.id, this.name, (List<IConfigEntry<?>>) (Object) this.configs.stream().map(IConfigEntry::newInstance).toList());
     }
 
-    public Codec<ConfigGroup> getCodec() {
-        return MapCodec.<ConfigGroup>of(new MapEncoder.Implementation<>() {
-            @Override
-            public <T> Stream<T> keys(DynamicOps<T> ops) {
-                return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).filter(Objects::nonNull).map(ops::createString);
-            }
-
-            @Override
-            public <T> RecordBuilder<T> encode(ConfigGroup input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
-                return input.configs.stream().reduce(prefix, (p, c) -> c.getJsonKey() == null ? p : p.add(c.getJsonKey(), c.encode(ops)), (a, b) -> null);
-            }
-        }, new MapDecoder.Implementation<>() {
-            @Override
-            public <T> Stream<T> keys(DynamicOps<T> ops) {
-                return ConfigGroup.this.configs.stream().map(IConfigEntry::getJsonKey).filter(Objects::nonNull).map(ops::createString);
-            }
-
-            @Override
-            public <T> DataResult<ConfigGroup> decode(DynamicOps<T> ops, MapLike<T> input) {
-                input.entries().forEach(x -> {
-                    String s = ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
-                    ConfigGroup.this.configs.stream().filter(y -> y.getJsonKey() != null && y.getJsonKey().equals(s)).findFirst().ifPresent(y -> y.decode(ops, x.getSecond()));
-                });
-                return DataResult.success(ConfigGroup.this);
-            }
-        }).codec();
+    public Codec<ConfigGroup> getCodec(ConfigDataFixer dataFixer) {
+        return new EntriesCodec(this, dataFixer).codec();
     }
 
     public <R> DataResult<R> encode(DynamicOps<R> ops) {
-        if (this.cache == null) this.cache = this.getCodec();
+        return this.encode(new ConfigDataFixer(), ops);
+    }
+
+    public <R> DataResult<R> encode(ConfigDataFixer dataFixer, DynamicOps<R> ops) {
+        if (this.cache == null) this.cache = this.getCodec(dataFixer);
         return this.cache.encodeStart(ops, this);
     }
 
     public <R> void decode(DynamicOps<R> ops, R input) {
-        if (this.cache == null) this.cache = this.getCodec();
+        this.decode(new ConfigDataFixer(), ops, input);
+    }
+
+    public <R> void decode(ConfigDataFixer dataFixer, DynamicOps<R> ops, R input) {
+        if (this.cache == null) this.cache = this.getCodec(dataFixer);
         this.cache.parse(ops, input).resultOrPartial(Jupiter.LOGGER::error).orElseThrow();
+    }
+
+    private static class EntriesCodec extends MapCodec<ConfigGroup> {
+        private final ConfigGroup parent;
+        private final ConfigDataFixer dataFixer;
+
+        private EntriesCodec(ConfigGroup parent, ConfigDataFixer dataFixer) {
+            this.parent = parent;
+            this.dataFixer = dataFixer;
+        }
+
+        @Override
+        public <T> Stream<T> keys(DynamicOps<T> ops) {
+            return this.parent.configs.stream().map(IConfigEntry::getJsonKey).filter(Objects::nonNull).map(ops::createString);
+        }
+
+        @Override
+        public <T> RecordBuilder<T> encode(ConfigGroup input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
+            return input.configs.stream().reduce(prefix, (p, c) -> c.getJsonKey() == null ? p : p.add(c.getJsonKey(), c.encode(ops)), (a, b) -> null);
+        }
+
+        @Override
+        public <T> DataResult<ConfigGroup> decode(DynamicOps<T> ops, MapLike<T> input) {
+            input.entries().forEach(x -> {
+                String s = this.dataFixer.fixKey(ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow());
+                this.parent.configs.stream().filter(y -> y.getJsonKey() != null && y.getJsonKey().equals(s)).findFirst().ifPresent(y -> y.decode(ops, x.getSecond()));
+            });
+            return DataResult.success(this.parent);
+        }
     }
 }
