@@ -2,7 +2,6 @@ package com.iafenvoy.jupiter.render.internal;
 
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
-import com.iafenvoy.jupiter.compat.forgeconfigspec.ConfigSpecLoader;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
