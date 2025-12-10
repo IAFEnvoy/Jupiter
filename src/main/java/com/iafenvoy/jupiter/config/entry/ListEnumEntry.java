@@ -38,7 +38,7 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
                 reload.run();
             } else this.getValue().set(index, v);
             this.setValue(this.getValue());
-        }).buildInternal();
+        }).build();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
 
     @Override
     public IConfigEntry<List<T>> newInstance() {
-        return new Builder<>(this).buildInternal();
+        return new Builder<>(this).build();
     }
 
     public static <T extends Enum<T>> Builder<T> builder(Component name, List<T> defaultValue, T newValue) {

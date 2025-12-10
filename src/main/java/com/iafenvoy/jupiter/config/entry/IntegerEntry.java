@@ -46,7 +46,7 @@ public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry
 
     @Override
     public IConfigEntry<Integer> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override
@@ -113,6 +113,12 @@ public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry
 
         public Builder max(int maxValue) {
             this.maxValue = maxValue;
+            return this;
+        }
+
+        public Builder range(int min, int max) {
+            this.min(min);
+            this.max(max);
             return this;
         }
 

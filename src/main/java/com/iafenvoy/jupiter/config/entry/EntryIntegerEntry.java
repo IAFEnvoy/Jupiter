@@ -29,7 +29,7 @@ public class EntryIntegerEntry extends EntryBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<Map.Entry<String, Integer>> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override

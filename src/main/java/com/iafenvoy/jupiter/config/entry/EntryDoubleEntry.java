@@ -19,7 +19,7 @@ public class EntryDoubleEntry extends EntryBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Double> newValueInstance() {
-        return DoubleEntry.builder(this.name, this.defaultValue.getValue()).buildInternal();
+        return DoubleEntry.builder(this.name, this.defaultValue.getValue()).build();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class EntryDoubleEntry extends EntryBaseEntry<Double> {
 
     @Override
     public IConfigEntry<Map.Entry<String, Double>> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override

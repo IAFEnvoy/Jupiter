@@ -30,7 +30,7 @@ public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implement
 
     @Override
     public IConfigEntry<ResourceLocation> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override

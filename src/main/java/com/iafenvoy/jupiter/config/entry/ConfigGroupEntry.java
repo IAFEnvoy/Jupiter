@@ -20,7 +20,7 @@ public class ConfigGroupEntry extends BaseEntry<ConfigGroup> {
 
     @Override
     public IConfigEntry<ConfigGroup> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override

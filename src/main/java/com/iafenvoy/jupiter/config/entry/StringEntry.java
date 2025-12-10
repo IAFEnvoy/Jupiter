@@ -27,7 +27,7 @@ public class StringEntry extends BaseEntry<String> implements TextFieldConfigEnt
 
     @Override
     public IConfigEntry<String> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override

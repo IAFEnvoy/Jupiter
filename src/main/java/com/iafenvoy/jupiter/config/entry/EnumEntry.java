@@ -7,10 +7,17 @@ import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
+    @Nullable
+    protected Function<T, Component> nameProvider;
+
     protected EnumEntry(Builder<T> builder) {
         super(builder);
+        this.nameProvider = builder.nameProvider;
     }
 
     @SuppressWarnings({"unchecked", "removal"})
@@ -34,7 +41,7 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
 
     @Override
     public IConfigEntry<T> newInstance() {
-        return new Builder<>(this).buildInternal();
+        return new Builder<>(this).build();
     }
 
     @Override
@@ -51,6 +58,8 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
     }
 
     public static class Builder<T extends Enum<T>> extends BaseEntry.Builder<T, EnumEntry<T>, Builder<T>> {
+        protected Function<T, Component> nameProvider;
+
         public Builder(Component name, T defaultValue) {
             super(name, defaultValue);
         }
@@ -61,6 +70,11 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
 
         public Builder(EnumEntry<T> parent) {
             super(parent);
+        }
+
+        public Builder<T> nameProvider(Function<T, Component> nameProvider) {
+            this.nameProvider = nameProvider;
+            return this;
         }
 
         @Override

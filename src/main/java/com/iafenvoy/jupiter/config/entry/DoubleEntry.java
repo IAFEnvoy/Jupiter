@@ -1,9 +1,9 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -46,7 +46,7 @@ public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<D
 
     @Override
     public IConfigEntry<Double> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override
@@ -113,6 +113,12 @@ public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<D
 
         public Builder max(double maxValue) {
             this.maxValue = maxValue;
+            return this;
+        }
+
+        public Builder range(double min, double max) {
+            this.min(min);
+            this.max(max);
             return this;
         }
 

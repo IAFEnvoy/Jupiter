@@ -39,7 +39,7 @@ public class MapIntegerEntry extends MapBaseEntry<Integer> {
                 this.getValue().put(v.getKey(), v.getValue());
             } else this.getValue().put(key, v.getValue());
             this.setValue(this.getValue());
-        }).buildInternal();
+        }).build();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MapIntegerEntry extends MapBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<Map<String, Integer>> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     public static Builder builder(Component name, Map<String, Integer> defaultValue) {

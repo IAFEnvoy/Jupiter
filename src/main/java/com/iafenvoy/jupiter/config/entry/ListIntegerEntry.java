@@ -33,7 +33,7 @@ public class ListIntegerEntry extends ListBaseEntry<Integer> {
                 reload.run();
             } else this.getValue().set(index, v);
             this.setValue(this.getValue());
-        }).buildInternal();
+        }).build();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ListIntegerEntry extends ListBaseEntry<Integer> {
 
     @Override
     public IConfigEntry<List<Integer>> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     public static Builder builder(Component name, List<Integer> defaultValue) {

@@ -33,7 +33,7 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
                 reload.run();
             } else this.getValue().set(index, v);
             this.setValue(this.getValue());
-        }).buildInternal();
+        }).build();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ListDoubleEntry extends ListBaseEntry<Double> {
 
     @Override
     public IConfigEntry<List<Double>> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     public static Builder builder(Component name, List<Double> defaultValue) {

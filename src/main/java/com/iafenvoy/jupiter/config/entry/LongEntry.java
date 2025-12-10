@@ -49,7 +49,7 @@ public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long>
 
     @Override
     public IConfigEntry<Long> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override
@@ -117,6 +117,12 @@ public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long>
 
         public Builder max(long maxValue) {
             this.maxValue = maxValue;
+            return this;
+        }
+
+        public Builder range(long min, long max) {
+            this.min(min);
+            this.max(max);
             return this;
         }
 

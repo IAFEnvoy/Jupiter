@@ -19,7 +19,7 @@ public class EntryStringEntry extends EntryBaseEntry<String> {
 
     @Override
     public IConfigEntry<String> newValueInstance() {
-        return StringEntry.builder(this.name, this.value.getValue()).buildInternal();
+        return StringEntry.builder(this.name, this.value.getValue()).build();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class EntryStringEntry extends EntryBaseEntry<String> {
 
     @Override
     public IConfigEntry<Map.Entry<String, String>> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override

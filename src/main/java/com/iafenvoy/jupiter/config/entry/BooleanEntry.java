@@ -26,7 +26,7 @@ public class BooleanEntry extends BaseEntry<Boolean> {
 
     @Override
     public IConfigEntry<Boolean> newInstance() {
-        return new Builder(this).buildInternal();
+        return new Builder(this).build();
     }
 
     @Override
