@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public abstract class AbstractConfigContainer implements ConfigMetaProvider {
@@ -133,10 +134,7 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
 
         @Override
         public <T> DataResult<List<ConfigGroup>> decode(DynamicOps<T> ops, MapLike<T> input) {
-            input.entries().forEach(x -> {
-                String s = this.parent.dataFixer.fixKey(ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow());
-                this.parent.configTabs.stream().filter(y -> y.getId().equals(s)).findFirst().ifPresent(y -> y.decode(this.parent.dataFixer, ops, x.getSecond()));
-            });
+            input.entries().forEach(x -> ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).map(this.parent.dataFixer::fixKey).ifPresent(s -> this.parent.configTabs.stream().filter(y -> Objects.equals(y.getId(), s)).forEach(y -> y.decode(this.parent.dataFixer, ops, x.getSecond()))));
             return DataResult.success(this.parent.configTabs);
         }
     }

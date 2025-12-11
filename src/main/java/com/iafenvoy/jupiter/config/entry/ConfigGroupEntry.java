@@ -2,9 +2,9 @@ package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.ConfigDataFixer;
 import com.iafenvoy.jupiter.config.ConfigGroup;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
@@ -19,7 +19,7 @@ public class ConfigGroupEntry extends BaseEntry<ConfigGroup> {
     }
 
     @Override
-    public IConfigEntry<ConfigGroup> newInstance() {
+    public ConfigEntry<ConfigGroup> newInstance() {
         return new Builder(this).build();
     }
 

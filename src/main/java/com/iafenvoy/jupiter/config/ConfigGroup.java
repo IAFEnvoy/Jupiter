@@ -1,7 +1,8 @@
 package com.iafenvoy.jupiter.config;
 
 import com.iafenvoy.jupiter.Jupiter;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
+import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.*;
 import net.minecraft.network.chat.Component;
@@ -15,21 +16,30 @@ public class ConfigGroup {
     public static final ConfigGroup EMPTY = new ConfigGroup("", TextUtil.empty());
     private final String id;
     private final Component name;
-    private final List<IConfigEntry<?>> configs;
+    private final List<ConfigEntry<?>> configs;
     private Codec<ConfigGroup> cache;
 
     public ConfigGroup(String id, Component name) {
         this(id, name, new LinkedList<>());
     }
 
-    public ConfigGroup(String id, Component name, List<IConfigEntry<?>> configs) {
+    public ConfigGroup(String id, Component name, List<ConfigEntry<?>> configs) {
         this.id = id;
         this.name = name;
         this.configs = configs;
     }
 
-    public ConfigGroup add(IConfigEntry<?> config) {
+    public ConfigGroup addEntry(ConfigEntry<?> config) {
         this.configs.add(config);
+        this.cache = null;
+        return this;
+    }
+
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    @Comment("Use addEntry instead")
+    public ConfigGroup add(com.iafenvoy.jupiter.interfaces.IConfigEntry<?> config) {
+        this.configs.add((ConfigEntry<?>) config);
         this.cache = null;
         return this;
     }
@@ -42,30 +52,22 @@ public class ConfigGroup {
         return this.name;
     }
 
-    public List<IConfigEntry<?>> getConfigs() {
+    public List<ConfigEntry<?>> getConfigs() {
         return this.configs;
     }
 
     @SuppressWarnings("unchecked")
     public ConfigGroup copy() {
-        return new ConfigGroup(this.id, this.name, (List<IConfigEntry<?>>) (Object) this.configs.stream().map(IConfigEntry::newInstance).toList());
+        return new ConfigGroup(this.id, this.name, (List<ConfigEntry<?>>) (Object) this.configs.stream().map(ConfigEntry::newInstance).toList());
     }
 
     public Codec<ConfigGroup> getCodec(ConfigDataFixer dataFixer) {
         return new EntriesCodec(this, dataFixer).codec();
     }
 
-    public <R> DataResult<R> encode(DynamicOps<R> ops) {
-        return this.encode(new ConfigDataFixer(), ops);
-    }
-
     public <R> DataResult<R> encode(ConfigDataFixer dataFixer, DynamicOps<R> ops) {
         if (this.cache == null) this.cache = this.getCodec(dataFixer);
         return this.cache.encodeStart(ops, this);
-    }
-
-    public <R> void decode(DynamicOps<R> ops, R input) {
-        this.decode(new ConfigDataFixer(), ops, input);
     }
 
     public <R> void decode(ConfigDataFixer dataFixer, DynamicOps<R> ops, R input) {
@@ -84,20 +86,17 @@ public class ConfigGroup {
 
         @Override
         public <T> Stream<T> keys(DynamicOps<T> ops) {
-            return this.parent.configs.stream().map(IConfigEntry::getJsonKey).filter(Objects::nonNull).map(ops::createString);
+            return this.parent.configs.stream().map(ConfigEntry::getKey).filter(Objects::nonNull).map(ops::createString);
         }
 
         @Override
         public <T> RecordBuilder<T> encode(ConfigGroup input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
-            return input.configs.stream().reduce(prefix, (p, c) -> c.getJsonKey() == null ? p : p.add(c.getJsonKey(), c.encode(ops)), (a, b) -> null);
+            return input.configs.stream().reduce(prefix, (p, c) -> c.getKey() == null ? p : p.add(c.getKey(), c.encode(this.dataFixer, ops)), (a, b) -> null);
         }
 
         @Override
         public <T> DataResult<ConfigGroup> decode(DynamicOps<T> ops, MapLike<T> input) {
-            input.entries().forEach(x -> {
-                String s = this.dataFixer.fixKey(ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).orElseThrow());
-                this.parent.configs.stream().filter(y -> y.getJsonKey() != null && y.getJsonKey().equals(s)).findFirst().ifPresent(y -> y.decode(ops, x.getSecond()));
-            });
+            input.entries().forEach(x -> ops.getStringValue(x.getFirst()).resultOrPartial(Jupiter.LOGGER::error).map(this.dataFixer::fixKey).ifPresent(s -> this.parent.configs.stream().filter(y -> Objects.equals(y.getKey(), s)).forEach(y -> y.decode(this.dataFixer, ops, x.getSecond()))));
             return DataResult.success(this.parent);
         }
     }

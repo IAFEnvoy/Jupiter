@@ -17,19 +17,19 @@ public class TestConfig extends FileConfigContainer {
     @Override
     public void init() {
         this.createTab("tab1", "jupiter.tab1")
-                .add(BooleanEntry.builder("this is boolean", false).build())
-                .add(IntegerEntry.builder("this is int", 0).build())
-                .add(IntegerEntry.builder("this is int with range", 0).min(-10).max(10).build())
-                .add(StringEntry.builder("this is string", "").build())
-                .add(ListStringEntry.builder("this is string list", List.of("1", "2", "3", "4", "5")).build())
-                .add(MapStringEntry.builder("this is string map", Map.of("1", "1", "2", "2")).build())
-                .add(SeparatorEntry.builder().build())
-                .add(IntegerEntry.builder("this is int", 0).restartRequired().build())
-                .add(IntegerEntry.builder("this is int", 0).build())
-                .add(IntegerEntry.builder("this is int", 0).build())
-                .add(IntegerEntry.builder("this is int", 0).build())
-                .add(IntegerEntry.builder("this is int", 0).build())
-                .add(IntegerEntry.builder("this is int", 0).build());
+                .addEntry(BooleanEntry.builder("this is boolean", false).build())
+                .addEntry(IntegerEntry.builder("this is int", 0).build())
+                .addEntry(IntegerEntry.builder("this is int with range", 0).min(-10).max(10).build())
+                .addEntry(StringEntry.builder("this is string", "").build())
+                .addEntry(ListStringEntry.builder("this is string list", List.of("1", "2", "3", "4", "5")).build())
+                .addEntry(MapStringEntry.builder("this is string map", Map.of("1", "1", "2", "2")).build())
+                .addEntry(SeparatorEntry.builder().build())
+                .addEntry(IntegerEntry.builder("this is int", 0).restartRequired().build())
+                .addEntry(IntegerEntry.builder("this is int", 0).build())
+                .addEntry(IntegerEntry.builder("this is int", 0).build())
+                .addEntry(IntegerEntry.builder("this is int", 0).build())
+                .addEntry(IntegerEntry.builder("this is int", 0).build())
+                .addEntry(IntegerEntry.builder("this is int", 0).build());
         this.createTab("tab2", "jupiter.tab2");
         this.createTab("tab3", "jupiter.tab3");
         this.createTab("tab4", "jupiter.tab4");
@@ -38,9 +38,5 @@ public class TestConfig extends FileConfigContainer {
         this.createTab("tab7", "jupiter.tab7");
         this.createTab("tab8", "jupiter.tab8");
         this.createTab("tab9", "jupiter.tab9");
-    }
-
-    private enum OptionsExample {
-        FIRST, SECOND, THIRD
     }
 }

@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -28,7 +28,7 @@ public class ListDialog<T> extends AbstractListDialog<List<T>, T> {
     }
 
     @Override
-    protected IConfigEntry<T> newSingleInstance(T value, int index, Runnable reload) {
+    protected ConfigEntry<T> newSingleInstance(T value, int index, Runnable reload) {
         return this.entry.newSingleInstance(value, index, reload);
     }
 }

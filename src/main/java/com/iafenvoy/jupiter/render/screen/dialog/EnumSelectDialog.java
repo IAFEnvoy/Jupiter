@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -21,7 +21,7 @@ public class EnumSelectDialog<T extends Enum<T>> extends Dialog<T> {
     private EnumSelectWidget<T> widget;
     private boolean initialized = false;
 
-    public EnumSelectDialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, IConfigEntry<T> entry) {
+    public EnumSelectDialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, ConfigEntry<T> entry) {
         super(parent, titleStack, provider, entry);
     }
 
@@ -62,7 +62,7 @@ public class EnumSelectDialog<T extends Enum<T>> extends Dialog<T> {
         *///?}
     }
 
-    IConfigEntry<T> getEntry() {
+    ConfigEntry<T> getEntry() {
         return this.entry;
     }
 }

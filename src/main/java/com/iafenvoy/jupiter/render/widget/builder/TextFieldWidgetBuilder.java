@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.render.widget.TextFieldWithErrorWidget;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
@@ -12,10 +12,10 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
     @Nullable
     private TextFieldWithErrorWidget widget;
 
-    public TextFieldWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<T> config) {
+    public TextFieldWidgetBuilder(ConfigMetaProvider provider, ConfigEntry<T> config) {
         super(provider, config);
         if (config instanceof TextFieldConfigEntry t) this.textFieldConfig = t;
-        else throw new IllegalArgumentException("TextFieldWidgetBuilder only accept ITextFieldConfigEntry");
+        else throw new IllegalArgumentException("TextFieldWidgetBuilder only accept TextFieldConfigEntry");
     }
 
     @Override

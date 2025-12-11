@@ -1,6 +1,6 @@
 package com.iafenvoy.jupiter.config.entry;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 
@@ -21,7 +21,7 @@ public abstract class MapBaseEntry<T> extends BaseEntry<Map<String, T>> {
 
     public abstract Codec<T> getValueCodec();
 
-    public abstract IConfigEntry<Map.Entry<String, T>> newSingleInstance(T value, String key, Runnable reload);
+    public abstract ConfigEntry<Map.Entry<String, T>> newSingleInstance(T value, String key, Runnable reload);
 
     public abstract T newValue();
 

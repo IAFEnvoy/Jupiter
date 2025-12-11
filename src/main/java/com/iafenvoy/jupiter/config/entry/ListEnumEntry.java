@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
@@ -31,7 +31,7 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
     }
 
     @Override
-    public IConfigEntry<T> newSingleInstance(T value, int index, Runnable reload) {
+    public ConfigEntry<T> newSingleInstance(T value, int index, Runnable reload) {
         return EnumEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
@@ -53,7 +53,7 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
     }
 
     @Override
-    public IConfigEntry<List<T>> newInstance() {
+    public ConfigEntry<List<T>> newInstance() {
         return new Builder<>(this).build();
     }
 

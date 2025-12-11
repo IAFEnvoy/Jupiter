@@ -1,8 +1,6 @@
 package com.iafenvoy.jupiter.config.interfaces;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
-
-public interface RangeConfigEntry<T extends Number> extends IConfigEntry<T>, TextFieldConfigEntry {
+public interface RangeConfigEntry<T extends Number> extends ConfigEntry<T>, TextFieldConfigEntry {
     T getMinValue();
 
     T getMaxValue();

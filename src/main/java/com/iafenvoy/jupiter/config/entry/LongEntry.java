@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
@@ -36,19 +36,13 @@ public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long>
         this.maxValue = maxValue;
     }
 
-    public LongEntry slider() {
-        if (Long.MIN_VALUE < this.minValue && this.maxValue < Long.MAX_VALUE)
-            this.useSlider = true;
-        return this;
-    }
-
     @Override
     public ConfigType<Long> getType() {
         return ConfigTypes.LONG;
     }
 
     @Override
-    public IConfigEntry<Long> newInstance() {
+    public ConfigEntry<Long> newInstance() {
         return new Builder(this).build();
     }
 

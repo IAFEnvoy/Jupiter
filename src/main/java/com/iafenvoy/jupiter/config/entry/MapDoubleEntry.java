@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -29,7 +29,7 @@ public class MapDoubleEntry extends MapBaseEntry<Double> {
     }
 
     @Override
-    public IConfigEntry<Map.Entry<String, Double>> newSingleInstance(Double value, String key, Runnable reload) {
+    public ConfigEntry<Map.Entry<String, Double>> newSingleInstance(Double value, String key, Runnable reload) {
         return EntryDoubleEntry.builder(this.name, new AbstractMap.SimpleEntry<>(key, value)).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(key);
@@ -53,7 +53,7 @@ public class MapDoubleEntry extends MapBaseEntry<Double> {
     }
 
     @Override
-    public IConfigEntry<Map<String, Double>> newInstance() {
+    public ConfigEntry<Map<String, Double>> newInstance() {
         return new Builder(this).build();
     }
 

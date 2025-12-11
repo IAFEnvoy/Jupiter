@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -26,7 +26,7 @@ public class ListStringEntry extends ListBaseEntry<String> {
     }
 
     @Override
-    public IConfigEntry<String> newSingleInstance(String value, int index, Runnable reload) {
+    public ConfigEntry<String> newSingleInstance(String value, int index, Runnable reload) {
         return StringEntry.builder(this.name, value).callback((v, r, d) -> {
             if (r) {
                 this.getValue().remove(index);
@@ -47,7 +47,7 @@ public class ListStringEntry extends ListBaseEntry<String> {
     }
 
     @Override
-    public IConfigEntry<List<String>> newInstance() {
+    public ConfigEntry<List<String>> newInstance() {
         return new Builder(this).build();
     }
 

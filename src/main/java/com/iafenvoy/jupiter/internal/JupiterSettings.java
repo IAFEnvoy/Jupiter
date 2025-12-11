@@ -22,8 +22,8 @@ public class JupiterSettings extends AutoInitConfigContainer {
     }
 
     public static class General extends AutoInitConfigCategoryBase {
-        public final BooleanEntry loadForgeConfigs = BooleanEntry.builder(name("general", "loadForgeConfigs"), true).json("loadForgeConfigs").tooltip(tooltip("general", "loadForgeConfigs")).restartRequired().build();
-        public final EnumEntry<ConfigButtonReplaceStrategy> configButtonReplacement = EnumEntry.builder(name("general", "configButtonReplacement"), ConfigButtonReplaceStrategy.NEVER).json("configButtonReplacement").restartRequired().build();
+        public final BooleanEntry loadForgeConfigs = BooleanEntry.builder(name("general", "loadForgeConfigs"), true).key("loadForgeConfigs").tooltip(tooltip("general", "loadForgeConfigs")).restartRequired().build();
+        public final EnumEntry<ConfigButtonReplaceStrategy> configButtonReplacement = EnumEntry.builder(name("general", "configButtonReplacement"), ConfigButtonReplaceStrategy.NEVER).key("configButtonReplacement").restartRequired().build();
 
         private General() {
             super("general", "jupiter.screen.config.general");

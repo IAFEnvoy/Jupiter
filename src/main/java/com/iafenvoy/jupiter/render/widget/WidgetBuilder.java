@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -20,12 +20,12 @@ import java.util.function.Consumer;
 public abstract class WidgetBuilder<T> implements JupiterScreen {
     protected final Minecraft minecraft = Minecraft.getInstance();
     protected final ConfigMetaProvider provider;
-    protected final IConfigEntry<T> config;
+    protected final ConfigEntry<T> config;
     protected StringWidget textWidget;
     protected Button resetButton;
     protected boolean canSave = true;
 
-    protected WidgetBuilder(ConfigMetaProvider provider, IConfigEntry<T> config) {
+    protected WidgetBuilder(ConfigMetaProvider provider, ConfigEntry<T> config) {
         this.provider = provider;
         this.config = config;
     }
@@ -88,7 +88,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         return this.textWidget.visible && this.textWidget.isMouseOver(mouseX, mouseY);
     }
 
-    public IConfigEntry<T> getConfig() {
+    public ConfigEntry<T> getConfig() {
         return this.config;
     }
 

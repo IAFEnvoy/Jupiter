@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -19,9 +19,9 @@ public class Dialog<T> extends Screen implements JupiterScreen {
     private final Screen parent;
     protected final TitleStack titleStack;
     protected final ConfigMetaProvider provider;
-    protected final IConfigEntry<T> entry;
+    protected final ConfigEntry<T> entry;
 
-    protected Dialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, IConfigEntry<T> entry) {
+    protected Dialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, ConfigEntry<T> entry) {
         super(TextUtil.empty());
         this.parent = parent;
         this.titleStack = titleStack;

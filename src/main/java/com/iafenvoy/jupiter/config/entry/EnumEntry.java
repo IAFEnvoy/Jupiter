@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
@@ -40,7 +40,7 @@ public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
     }
 
     @Override
-    public IConfigEntry<T> newInstance() {
+    public ConfigEntry<T> newInstance() {
         return new Builder<>(this).build();
     }
 

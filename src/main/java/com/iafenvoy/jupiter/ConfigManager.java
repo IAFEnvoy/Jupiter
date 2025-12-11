@@ -2,19 +2,19 @@ package com.iafenvoy.jupiter;
 
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
+import com.iafenvoy.jupiter.util.CopyOnWriteHashMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigManager implements ResourceManagerReloadListener {
     private static final ConfigManager INSTANCE = new ConfigManager();
 
-    private final Map<ResourceLocation, AbstractConfigContainer> configHandlers = new HashMap<>();
+    private final Map<ResourceLocation, AbstractConfigContainer> configHandlers = new CopyOnWriteHashMap<>();
 
     public static ConfigManager getInstance() {
         return INSTANCE;

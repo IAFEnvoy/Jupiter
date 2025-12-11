@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -25,7 +25,7 @@ public class BooleanEntry extends BaseEntry<Boolean> {
     }
 
     @Override
-    public IConfigEntry<Boolean> newInstance() {
+    public ConfigEntry<Boolean> newInstance() {
         return new Builder(this).build();
     }
 

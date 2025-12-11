@@ -2,18 +2,15 @@ package com.iafenvoy.jupiter.render.widget.builder;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.ConfigSide;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.screen.ConfigListScreen;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
-import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
-import org.apache.commons.compress.archivers.sevenz.CLI;
-import org.jetbrains.annotations.Nullable;
 
 public class ConfigGroupWidgetBuilder extends AbstractButtonWidgetBuilder<ConfigGroup> {
-    public ConfigGroupWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<ConfigGroup> config) {
+    public ConfigGroupWidgetBuilder(ConfigMetaProvider provider, ConfigEntry<ConfigGroup> config) {
         super(provider, config, () -> TextUtil.translatable("jupiter.screen.edit"));
     }
 

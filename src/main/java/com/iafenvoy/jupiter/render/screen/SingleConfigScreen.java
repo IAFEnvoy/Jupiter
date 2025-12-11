@@ -14,7 +14,7 @@ public class SingleConfigScreen extends ConfigListScreen {
 
     @Override
     public void onClose() {
-        super.onClose();
         this.container.onConfigsChanged();
+        super.onClose();
     }
 }

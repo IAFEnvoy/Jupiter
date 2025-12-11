@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter;
 
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
+import com.iafenvoy.jupiter.util.CopyOnWriteHashMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,12 +11,11 @@ import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ServerConfigManager implements ResourceManagerReloadListener {
-    private static final Map<ResourceLocation, ServerConfigHolder> CONFIGS = new HashMap<>();
+    private static final Map<ResourceLocation, ServerConfigHolder> CONFIGS = new CopyOnWriteHashMap<>();
 
     public static void registerServerConfig(AbstractConfigContainer data, PermissionChecker checker) {
         registerServerConfig(data, checker, false);

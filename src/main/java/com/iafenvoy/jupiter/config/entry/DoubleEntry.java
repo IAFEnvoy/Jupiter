@@ -1,9 +1,9 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -33,19 +33,13 @@ public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<D
         this.maxValue = builder.maxValue;
     }
 
-    public DoubleEntry slider() {
-        if (Integer.MIN_VALUE < this.minValue && this.maxValue < Integer.MAX_VALUE)
-            this.useSlider = true;
-        return this;
-    }
-
     @Override
     public ConfigType<Double> getType() {
         return ConfigTypes.DOUBLE;
     }
 
     @Override
-    public IConfigEntry<Double> newInstance() {
+    public ConfigEntry<Double> newInstance() {
         return new Builder(this).build();
     }
 

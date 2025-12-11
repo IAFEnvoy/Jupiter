@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
@@ -26,7 +26,7 @@ public class StringEntry extends BaseEntry<String> implements TextFieldConfigEnt
     }
 
     @Override
-    public IConfigEntry<String> newInstance() {
+    public ConfigEntry<String> newInstance() {
         return new Builder(this).build();
     }
 

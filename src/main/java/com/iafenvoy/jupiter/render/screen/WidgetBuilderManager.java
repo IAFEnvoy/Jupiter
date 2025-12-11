@@ -4,10 +4,10 @@ import com.iafenvoy.jupiter.Platform;
 import com.iafenvoy.jupiter.config.entry.EntryBaseEntry;
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.render.widget.builder.*;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -24,15 +24,15 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class WidgetBuilderManager {
-    private static final Map<ConfigType<?>, BiFunction<ConfigMetaProvider, IConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
+    private static final Map<ConfigType<?>, BiFunction<ConfigMetaProvider, ConfigEntry<?>, WidgetBuilder<?>>> BUILDERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> void register(ConfigType<T> type, BiFunction<ConfigMetaProvider, IConfigEntry<T>, WidgetBuilder<T>> builder) {
-        BUILDERS.put(type, (BiFunction<ConfigMetaProvider, IConfigEntry<?>, WidgetBuilder<?>>) (Object) builder);
+    public static <T> void register(ConfigType<T> type, BiFunction<ConfigMetaProvider, ConfigEntry<T>, WidgetBuilder<T>> builder) {
+        BUILDERS.put(type, (BiFunction<ConfigMetaProvider, ConfigEntry<?>, WidgetBuilder<?>>) (Object) builder);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> WidgetBuilder<T> get(ConfigMetaProvider provider, IConfigEntry<T> entry) {
+    public static <T> WidgetBuilder<T> get(ConfigMetaProvider provider, ConfigEntry<T> entry) {
         return (WidgetBuilder<T>) BUILDERS.getOrDefault(entry.getType(), Fallback::new).apply(provider, entry);
     }
 
@@ -45,7 +45,7 @@ public class WidgetBuilderManager {
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
         register(ConfigTypes.STRING, TextFieldWidgetBuilder::new);
         //noinspection rawtypes,unchecked
-        register(ConfigTypes.ENUM, (provider, config) -> new EnumWidgetBuilder<>(provider, (IConfigEntry) config));
+        register(ConfigTypes.ENUM, (provider, config) -> new EnumWidgetBuilder<>(provider, (ConfigEntry) config));
         register(ConfigTypes.LIST_BOOLEAN, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Boolean>) config));
         register(ConfigTypes.LIST_INTEGER, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Integer>) config));
         register(ConfigTypes.LIST_LONG, (provider, config) -> new ListWidgetBuilder<>(provider, (ListBaseEntry<Long>) config));
@@ -63,7 +63,7 @@ public class WidgetBuilderManager {
 
     //When a widget not found, it should navigate to this one
     private static class Fallback<T> extends WidgetBuilder<T> {
-        public Fallback(ConfigMetaProvider configMetaProvider, IConfigEntry<T> config) {
+        public Fallback(ConfigMetaProvider configMetaProvider, ConfigEntry<T> config) {
             super(configMetaProvider, config);
         }
 

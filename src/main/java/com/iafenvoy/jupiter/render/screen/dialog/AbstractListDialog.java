@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
@@ -29,7 +29,7 @@ public abstract class AbstractListDialog<T, S> extends Dialog<T> {
     protected final List<WidgetBuilder<S>> widgets = new ArrayList<>();
     private int configPerPage;
 
-    protected AbstractListDialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, IConfigEntry<T> entry) {
+    protected AbstractListDialog(Screen parent, TitleStack titleStack, ConfigMetaProvider provider, ConfigEntry<T> entry) {
         super(parent, titleStack, provider, entry);
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractListDialog<T, S> extends Dialog<T> {
 
     protected abstract Collection<S> getValues();
 
-    protected abstract IConfigEntry<S> newSingleInstance(S value, int index, Runnable reload);
+    protected abstract ConfigEntry<S> newSingleInstance(S value, int index, Runnable reload);
 
     public void calculateMaxItems() {
         this.configPerPage = Math.max(0, (this.height - 30) / (ENTRY_HEIGHT + ENTRY_SEPARATOR));

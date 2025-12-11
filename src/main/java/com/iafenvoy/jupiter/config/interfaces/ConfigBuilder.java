@@ -1,9 +1,8 @@
 package com.iafenvoy.jupiter.config.interfaces;
 
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import net.minecraft.network.chat.Component;
 
-public interface ConfigBuilder<T, E extends IConfigEntry<T>, B extends ConfigBuilder<T, E, B>> {
+public interface ConfigBuilder<T, E extends ConfigEntry<T>, B extends ConfigBuilder<T, E, B>> {
     B tooltip(String tooltipKey);
 
     B tooltip(Component tooltipKey);

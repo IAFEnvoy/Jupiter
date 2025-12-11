@@ -1,10 +1,10 @@
 package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SeparatorEntry implements IConfigEntry<Unit> {
+public class SeparatorEntry implements ConfigEntry<Unit> {
     private Component text = null, tooltip;
 
     @Comment("Use builder instead")
@@ -58,7 +58,7 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     }
 
     @Override
-    public @Nullable String getJsonKey() {
+    public @Nullable String getKey() {
         return null;
     }
 
@@ -73,7 +73,7 @@ public class SeparatorEntry implements IConfigEntry<Unit> {
     }
 
     @Override
-    public IConfigEntry<Unit> newInstance() {
+    public ConfigEntry<Unit> newInstance() {
         return new Builder().build();
     }
 

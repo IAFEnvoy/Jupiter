@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public abstract class BaseEntry<T> implements IConfigEntry<T> {
+public abstract class BaseEntry<T> implements ConfigEntry<T> {
     protected final Component name;
     @Nullable
-    protected String jsonKey;
+    protected String key;
     @Nullable
     protected Component tooltip = null;
     protected boolean visible;
@@ -29,7 +29,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     protected BaseEntry(Builder<T, ?, ?> builder) {
         this.name = builder.name;
         this.defaultValue = builder.defaultValue;
-        this.jsonKey = builder.jsonKey;
+        this.key = builder.key;
         this.tooltip = builder.tooltip;
         this.visible = builder.visible;
         this.restartRequired = builder.restartRequired;
@@ -41,7 +41,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     @Deprecated(forRemoval = true)
     public BaseEntry(@NotNull String nameKey, T defaultValue) {
         this.name = TextUtil.translatable(nameKey);
-        this.jsonKey = nameKey;
+        this.key = nameKey;
         this.defaultValue = defaultValue;
         this.value = this.newDefaultValue();
     }
@@ -56,7 +56,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public BaseEntry<T> json(String jsonKey) {
-        this.jsonKey = jsonKey;
+        this.key = jsonKey;
         return this;
     }
 
@@ -87,8 +87,8 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
     }
 
     @Override
-    public @Nullable String getJsonKey() {
-        return this.jsonKey;
+    public @Nullable String getKey() {
+        return this.key;
     }
 
     @Override
@@ -126,7 +126,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
         protected final T defaultValue;
         protected T value;
         @Nullable
-        protected String jsonKey;
+        protected String key;
         @Nullable
         protected Component tooltip;
         protected boolean visible = true;
@@ -146,7 +146,7 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
         public Builder(E parent) {
             this.name = parent.name;
             this.defaultValue = this.value = parent.defaultValue;
-            this.jsonKey = parent.jsonKey;
+            this.key = parent.key;
             this.tooltip = parent.tooltip;
             this.visible = parent.visible;
             this.restartRequired = parent.restartRequired;
@@ -158,10 +158,17 @@ public abstract class BaseEntry<T> implements IConfigEntry<T> {
             return this.self();
         }
 
+        @Deprecated(forRemoval = true)
+        @Comment("Use key() instead")
         public B json(String jsonKey) {
-            this.jsonKey = jsonKey;
+            return this.key(jsonKey);
+        }
+
+        public B key(String key) {
+            this.key = key;
             return this.self();
         }
+
 
         public B restartRequired() {
             this.restartRequired = true;

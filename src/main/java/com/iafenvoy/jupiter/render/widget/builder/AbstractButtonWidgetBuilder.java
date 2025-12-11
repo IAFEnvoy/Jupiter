@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.render.widget.builder;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -14,7 +14,7 @@ public abstract class AbstractButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     @Nullable
     private Button button;
 
-    protected AbstractButtonWidgetBuilder(ConfigMetaProvider provider, IConfigEntry<T> config, Supplier<Component> nameSupplier) {
+    protected AbstractButtonWidgetBuilder(ConfigMetaProvider provider, ConfigEntry<T> config, Supplier<Component> nameSupplier) {
         super(provider, config);
         this.nameSupplier = nameSupplier;
     }

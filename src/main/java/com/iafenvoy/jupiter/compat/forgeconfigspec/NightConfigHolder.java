@@ -7,7 +7,7 @@ import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.util.TextFormatter;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
@@ -46,7 +46,7 @@ public final class NightConfigHolder {
     }
 
     public Component title() {
-        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId + "_" + this.side.name().toLowerCase(Locale.ROOT) + "_config"));
+        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable("jupiter.screen.%s_config".formatted(this.side.name().toLowerCase(Locale.ROOT))));
     }
 
     public ConfigSide getSide() {
@@ -79,14 +79,14 @@ public final class NightConfigHolder {
                     else {
                         if (builder instanceof BaseEntry.Builder<?, ?, ?> baseBuilder && spec.getComment() != null)
                             baseBuilder.tooltip(spec.getComment());
-                        group.add(builder.build());
+                        group.addEntry(builder.build());
                     }
                 } catch (Exception e) {
                     Jupiter.LOGGER.error("Cannot load key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side, e);
                 }
             } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config) {
                 Component name = TextUtil.translatableWithFallback(entry.getKey(), TextFormatter.formatToTitleCase(entry.getKey()));
-                group.add(ConfigGroupEntry.builder(name, this.buildGroup(entry.getKey(), name, spec, config)).build());
+                group.addEntry(ConfigGroupEntry.builder(name, this.buildGroup(entry.getKey(), name, spec, config)).build());
             }
         }
         return group;
@@ -139,7 +139,7 @@ public final class NightConfigHolder {
     }
 
     @SuppressWarnings("unchecked")
-    private <T, E extends IConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
+    private <T, E extends ConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
         if (clazz.isAssignableFrom(defaultValue.getClass()) && clazz.isAssignableFrom(value.getClass())) {
             B builder = entryProvider.apply(name, (T) defaultValue);
             builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value((T) value);
@@ -156,7 +156,7 @@ public final class NightConfigHolder {
     }
 
     @SuppressWarnings("unchecked")
-    private <T, E extends IConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
+    private <T, E extends ConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
         B builder = entryProvider.apply(name, (List<T>) defaultValue);
         builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value(new LinkedList<>((List<T>) value));
         reference.set(builder);

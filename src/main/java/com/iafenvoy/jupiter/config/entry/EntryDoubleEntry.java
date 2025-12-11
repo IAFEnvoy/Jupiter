@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.config.entry;
 
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
@@ -18,7 +18,7 @@ public class EntryDoubleEntry extends EntryBaseEntry<Double> {
     }
 
     @Override
-    public IConfigEntry<Double> newValueInstance() {
+    public ConfigEntry<Double> newValueInstance() {
         return DoubleEntry.builder(this.name, this.defaultValue.getValue()).build();
     }
 
@@ -28,7 +28,7 @@ public class EntryDoubleEntry extends EntryBaseEntry<Double> {
     }
 
     @Override
-    public IConfigEntry<Map.Entry<String, Double>> newInstance() {
+    public ConfigEntry<Map.Entry<String, Double>> newInstance() {
         return new Builder(this).build();
     }
 

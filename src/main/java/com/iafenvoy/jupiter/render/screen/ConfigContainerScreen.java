@@ -78,8 +78,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
     @Override
     public void onClose() {
         this.container.onConfigsChanged();
-        assert this.minecraft != null;
-        this.minecraft.setScreen(this.parent);
+        super.onClose();
     }
 
     @Override

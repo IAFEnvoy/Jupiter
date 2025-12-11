@@ -1,8 +1,8 @@
 package com.iafenvoy.jupiter.render.screen.dialog;
 
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -28,7 +28,7 @@ public class MapDialog<T> extends AbstractListDialog<Map<String, T>, Map.Entry<S
     }
 
     @Override
-    protected IConfigEntry<Map.Entry<String, T>> newSingleInstance(Map.Entry<String, T> value, int index, Runnable reload) {
+    protected ConfigEntry<Map.Entry<String, T>> newSingleInstance(Map.Entry<String, T> value, int index, Runnable reload) {
         return this.entry.newSingleInstance(value.getValue(), value.getKey(), reload);
     }
 }

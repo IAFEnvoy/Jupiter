@@ -2,8 +2,8 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.config.entry.BaseEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
-import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
@@ -40,11 +40,11 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     private final boolean client;
     protected final List<WidgetBuilder<?>> configWidgets = new ArrayList<>();
     protected final VerticalScrollBar entryScrollBar = new VerticalScrollBar();
-    protected List<IConfigEntry<?>> entries = List.of();
+    protected List<ConfigEntry<?>> entries = List.of();
     protected int topBorder = 30;
     private int configPerPage, textMaxLength;
 
-    public ConfigListScreen(Screen parent, TitleStack titleStack, ResourceLocation id, List<IConfigEntry<?>> entries, boolean client) {
+    public ConfigListScreen(Screen parent, TitleStack titleStack, ResourceLocation id, List<ConfigEntry<?>> entries, boolean client) {
         this(parent, titleStack, id, client);
         this.entries = entries;
     }
@@ -63,7 +63,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.titleStack.cacheTitle(this.width - this.font.width(this.getCurrentEditText()) - 70);
         this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
         this.calculateMaxEntries();
-        this.textMaxLength = Mth.clamp(this.entries.stream().filter(x -> x instanceof BaseEntry).map(IConfigEntry::getName).filter(Objects::nonNull).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30, this.width / 2, this.width - 150);
+        this.textMaxLength = Mth.clamp(this.entries.stream().filter(x -> x instanceof BaseEntry).map(ConfigEntry::getName).filter(Objects::nonNull).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30, this.width / 2, this.width - 150);
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ENTRY_HEIGHT));
@@ -105,7 +105,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     }
 
     @Nullable
-    public IConfigEntry<?> getMouseOverEntry(int mouseX, int mouseY) {
+    public ConfigEntry<?> getMouseOverEntry(int mouseX, int mouseY) {
         return this.configWidgets.stream().filter(widget -> widget.isMouseOver(mouseX, mouseY)).findFirst().map(WidgetBuilder::getConfig).orElse(null);
     }
 
@@ -159,7 +159,7 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         *///?}
         this.entryScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - this.topBorder - 10, (this.configPerPage + this.entryScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
         if (this.entryScrollBar.isDragging()) this.updateEntryPos();
-        IConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
+        ConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
         if (entry != null && entry.getTooltip() != null)
             //? >=1.21.6 {
             /*graphics.setTooltipForNextFrame(entry.getTooltip(), mouseX, mouseY);
