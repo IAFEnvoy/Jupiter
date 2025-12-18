@@ -6,15 +6,14 @@ import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.network.ServerConfigNetwork;
-import com.iafenvoy.jupiter.test.TestConfig;
-import net.minecraft.resources.ResourceLocation;
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
-//? >=1.20.5 {
 import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
+import com.iafenvoy.jupiter.test.TestConfig;
+import com.mojang.logging.LogUtils;
+import net.minecraft.resources.ResourceLocation;
+import org.slf4j.Logger;
 //?}
 
 public final class Jupiter {
@@ -30,8 +29,14 @@ public final class Jupiter {
 
         ConfigManager.getInstance().registerServerConfigHandler(JupiterSettings.INSTANCE, ServerConfigManager.PermissionChecker.IS_OPERATOR);
         if (development) ConfigManager.getInstance().registerConfigHandler(new TestConfig());
-
-        ExtraConfigManager.registerScanner(ConfigSource.NIGHT_CONFIG, ConfigSpecLoader::scanConfig);
+        if (Platform.isModLoaded("forge") || Platform.isModLoaded("neoforge") || Platform.isModLoaded("forgeconfigapiport")) {
+            LOGGER.info("Config spec system detected, register to Jupiter Config System.");
+            try {
+                ExtraConfigManager.registerScanner(ConfigSource.NIGHT_CONFIG, ConfigSpecLoader::scanConfig);
+            } catch (Exception e) {
+                LOGGER.error("Failed to register config spec loader", e);
+            }
+        }
     }
 
     public static void process() {
@@ -40,7 +45,6 @@ public final class Jupiter {
 
     public static void processClient() {
         ClientConfigNetwork.init();
-        Platform.setClientSide(true);
     }
 
     //? forge {

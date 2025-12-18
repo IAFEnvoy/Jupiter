@@ -21,12 +21,12 @@ import java.util.Map;
 //? <=1.21.6 && >=1.20.5 {
 import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
- //?}
+//?}
 //? >=1.21.4 {
 /*import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
-        *///?} else {
+*///?} else {
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
- //?}
+//?}
 //? >=1.20.5 {
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -47,7 +47,7 @@ import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
  *///?} else {
 /*@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
  *///?}
-public class  JupiterNeoForge {
+public class JupiterNeoForge {
     public JupiterNeoForge() {
         Jupiter.init(!FMLEnvironment./*? >=1.21.9 {*//*isProduction()*//*?} else {*/production/*?}*/);
         //? <=1.20.6 {
@@ -65,7 +65,7 @@ public class  JupiterNeoForge {
     public static void registerNetwork(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
         for (Map.Entry<CustomPacketPayload.Type<CustomPacketPayload>, StreamCodec<FriendlyByteBuf, CustomPacketPayload>> entry : ServerNetworkHelperImpl.TYPES.entrySet())
-            registrar.playBidirectional(entry.getKey(), entry.getValue(), /*? >=1.21.7 {*//*ServerNetworkHelperImpl::handleData*//*?} else {*/new DirectionalPayloadHandler<>(ServerNetworkHelperImpl::handleData, ClientNetworkHelperImpl::handleData)/*?}*/);
+            registrar.playBidirectional(entry.getKey(), entry.getValue(), /*? >=1.21.7 {*//*ServerNetworkHelperImpl::handleData*//*?} else {*/new DirectionalPayloadHandler<>(ClientNetworkHelperImpl::handleData, ServerNetworkHelperImpl::handleData)/*?}*/);
     }
     //?} else {
     /*@SubscribeEvent

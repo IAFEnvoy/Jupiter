@@ -55,9 +55,9 @@ dependencies {
 
     // @formatter:off
     // Night Config
-    modImplementation("com.electronwill.night-config:core:3.8.2")
-    modImplementation("com.electronwill.night-config:toml:3.8.2")
-    modImplementation("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")?.let { include(it) }
+    modCompileOnly("com.electronwill.night-config:core:3.8.2")
+    modCompileOnly("com.electronwill.night-config:toml:3.8.2")
+    modCompileOnly("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")
     // @formatter:on
 }
 

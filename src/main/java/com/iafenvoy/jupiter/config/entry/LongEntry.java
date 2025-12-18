@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long> {
     private final long minValue, maxValue;
-    private boolean useSlider = false;
+    private final boolean useSlider = false;
 
     protected LongEntry(Builder builder) {
         super(builder);

@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 
 public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry<Integer> {
     private final int minValue, maxValue;
-    private boolean useSlider = false;
+    private final boolean useSlider = false;
 
     protected IntegerEntry(Builder builder) {
         super(builder);

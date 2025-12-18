@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 
 public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<Double> {
     private final double minValue, maxValue;
-    private boolean useSlider = false;
+    private final boolean useSlider = false;
 
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
