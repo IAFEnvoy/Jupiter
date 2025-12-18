@@ -3,6 +3,7 @@ package com.iafenvoy.jupiter.config.container;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
+import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +46,7 @@ public class AutoInitConfigContainer extends FileConfigContainer {
             if (!this.loaded) {
                 this.loaded = true;
                 for (Field field : this.getClass().getFields())
-                    if (ConfigEntry.class.isAssignableFrom(field.getType()))
+                    if (ConfigEntry.class.isAssignableFrom(field.getType()) || IConfigEntry.class.isAssignableFrom(field.getType()))
                         try {
                             this.category.addEntry((ConfigEntry<?>) field.get(this));
                         } catch (Exception e) {

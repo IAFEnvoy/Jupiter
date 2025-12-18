@@ -10,7 +10,7 @@ Jupiter is a powerful, auto sync config library.
 
 - Convenient in-game config edit screens.
 - Auto sync with server if you are connect to dedicated servers & you have proper permissions.
-- (Neo)Forge config system support, you can also edit them in `Jupiter`.
+- (Neo)Forge config system support, you can also edit them in `Jupiter`. (Also capable with `Forge Config API Port`)
 
 ### For develops
 
