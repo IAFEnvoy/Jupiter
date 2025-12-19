@@ -27,6 +27,11 @@ jsonlang {
 
 repositories {
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+    maven("https://maven.shedaniel.me/") { name = "Cloth Config API" }
+}
+
+dependencies {
+    compileOnly("me.shedaniel.cloth:cloth-config-forge:${property("deps.cloth_config_version")}")
 }
 
 legacyForge {

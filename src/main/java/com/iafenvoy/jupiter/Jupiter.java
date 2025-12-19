@@ -6,14 +6,15 @@ import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.network.ServerConfigNetwork;
+import com.iafenvoy.jupiter.test.TestConfig;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
+//? >=1.20.5 {
 import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
-import com.iafenvoy.jupiter.test.TestConfig;
-import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
 //?}
 
 public final class Jupiter {

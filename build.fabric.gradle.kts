@@ -31,6 +31,7 @@ repositories {
     maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
     maven("https://maven.nucleoid.xyz/") { name = "Placeholder API" }
     maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
+    maven("https://maven.shedaniel.me/") { name = "Cloth Config API" }
 }
 
 dependencies {
@@ -53,12 +54,10 @@ dependencies {
 
     modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
 
-    // @formatter:off
-    // Night Config
     modCompileOnly("com.electronwill.night-config:core:3.8.2")
     modCompileOnly("com.electronwill.night-config:toml:3.8.2")
     modCompileOnly("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")
-    // @formatter:on
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${property("deps.cloth_config_version")}")
 }
 
 fabricApi {
