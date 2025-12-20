@@ -41,6 +41,7 @@ public class AutoInitConfigContainer extends FileConfigContainer {
             this.category = new ConfigGroup(id, name);
         }
 
+        @SuppressWarnings("removal")
         public ConfigGroup getCategory() {
             if (!this.loaded) {
                 this.loaded = true;

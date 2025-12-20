@@ -21,3 +21,6 @@ side = "BOTH"
 [[dependencies.jupiter]]
 modId = "minecraft"
 type = "required"
+
+[[mixins]]
+config = "jupiter.mixins.json"

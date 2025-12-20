@@ -57,7 +57,7 @@ dependencies {
     modCompileOnly("com.electronwill.night-config:core:3.8.2")
     modCompileOnly("com.electronwill.night-config:toml:3.8.2")
     modCompileOnly("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")
-    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${property("deps.cloth_config_version")}")
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("deps.cloth_config_version")}")
 }
 
 fabricApi {
@@ -117,6 +117,8 @@ publishMods {
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
+        optional("forge-config-api-port")
+        optional("cloth-config")
     }
 
     curseforge {
@@ -124,5 +126,7 @@ publishMods {
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
+        optional("forge-config-api-port")
+        optional("cloth-config")
     }
 }

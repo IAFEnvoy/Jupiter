@@ -22,3 +22,6 @@ side = "BOTH"
 modId = "minecraft"
 mandatory = true
 versionRange = "[0,)"
+
+[[mixins]]
+config = "jupiter.mixins.json"

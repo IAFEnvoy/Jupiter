@@ -3,6 +3,7 @@
   "config.jupiter.general.configButtonReplacement.tooltip": "Whether redirect open config buttons in mod menu to Jupiter",
   "config.jupiter.general.loadForgeConfigs": "Load (Neo)Forge Configs",
   "config.jupiter.general.loadForgeConfigs.tooltip": "Load config files from (Neo)Forge and Forge Config API Port",
+  "jupiter.config_source.cloth_config": "Cloth",
   "jupiter.config_source.jupiter": "Jupiter",
   "jupiter.config_source.night_config": "(Neo)Forge",
   "jupiter.screen.back": "Back",

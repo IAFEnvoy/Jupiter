@@ -3,7 +3,8 @@ package com.iafenvoy.jupiter.config;
 public enum ConfigSide {
     COMMON("Common", 0xFFFFC0CB),
     CLIENT("Client", 0xFF00FFFF),
-    SERVER("Server", 0xFF6666FF);
+    SERVER("Server", 0xFF6666FF),
+    UNKNOWN("Unknown", 0xFFAAAAAA);
     private final String displayText;
     private final int color;
 

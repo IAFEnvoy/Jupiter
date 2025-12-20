@@ -7,7 +7,7 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.config.container.wrapper.NightConfigWrapper;
+import com.iafenvoy.jupiter.config.container.wrapper.ExtraConfigWrapper;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
 //? >=1.21 {
 import net.neoforged.fml.config.IConfigSpec;
@@ -29,8 +29,7 @@ import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
-public class ConfigSpecLoader {
+public final class ConfigSpecLoader {
     public static Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> scanConfig() {
         Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> data = new LinkedHashMap<>();
         if (!JupiterSettings.INSTANCE.general.loadForgeConfigs.getValue()) return data;
@@ -61,7 +60,7 @@ public class ConfigSpecLoader {
                 UnmodifiableConfig defaults = spec.getSpec();
                 Runnable saver = config::save;
                 *///?}
-                AbstractConfigContainer container = new NightConfigWrapper(new NightConfigHolder(config.getModId(), type, config.getFileName(), defaults, values, saver));
+                AbstractConfigContainer container = new ExtraConfigWrapper(new NightConfigHolder(config.getModId(), type, config.getFileName(), defaults, values, saver));
                 ConfigManager.getInstance().registerConfigHandler(container);
                 if (config.getType() != ModConfig.Type.CLIENT)
                     ServerConfigManager.registerServerConfig(container, ServerConfigManager.PermissionChecker.IS_OPERATOR, false);

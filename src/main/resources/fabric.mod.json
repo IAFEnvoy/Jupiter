@@ -25,6 +25,9 @@
       "com.iafenvoy.jupiter._loader.fabric.compat.ModMenu"
     ]
   },
+  "mixins": [
+    "jupiter.mixins.json"
+  ],
   "depends": {
     "fabric-api": "*"
   }

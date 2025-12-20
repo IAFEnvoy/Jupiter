@@ -1,21 +1,23 @@
 package com.iafenvoy.jupiter.config.container.wrapper;
 
-import com.iafenvoy.jupiter.compat.forgeconfigspec.NightConfigHolder;
+import com.iafenvoy.jupiter.compat.ExtraConfigHolder;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 
-public class NightConfigWrapper extends AbstractConfigContainer {
+public class ExtraConfigWrapper extends AbstractConfigContainer {
     private final ConfigSide side;
+    private final ConfigSource source;
     private final String filePath;
     private final Runnable saveCaller;
 
-    public NightConfigWrapper(NightConfigHolder holder) {
-        super(holder.id(), holder.title());
+    public ExtraConfigWrapper(ExtraConfigHolder holder) {
+        super(holder.getConfigId(), holder.getTitle());
         this.side = holder.getSide();
-        this.filePath = holder.getFileName();
+        this.source = holder.getSource();
+        this.filePath = holder.getPath();
         this.saveCaller = holder::save;
-        this.configTabs.addAll(holder.toGroups());
+        this.configTabs.addAll(holder.buildGroups());
     }
 
     @Override
@@ -44,6 +46,6 @@ public class NightConfigWrapper extends AbstractConfigContainer {
 
     @Override
     public ConfigSource getSource() {
-        return ConfigSource.NIGHT_CONFIG;
+        return this.source;
     }
 }

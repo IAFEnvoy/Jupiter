@@ -31,7 +31,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("me.shedaniel.cloth:cloth-config-forge:${property("deps.cloth_config_version")}")
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    modImplementation("me.shedaniel.cloth:cloth-config-forge:${property("deps.cloth_config_version")}")
 }
 
 legacyForge {
@@ -63,6 +64,11 @@ legacyForge {
     sourceSets["main"].resources.srcDir("src/main/generated")
 }
 
+mixin {
+    add(sourceSets["main"], "${property("mod.id")}.refmap.json")
+    config("${property("mod.id")}.mixins.json")
+}
+
 tasks {
     processResources {
         exclude("**/fabric.mod.json", "**/neoforge.mods.toml", "**/*.accesswidener")
@@ -79,7 +85,8 @@ tasks {
         dependsOn("build")
     }
 
-    named("jar") {
+    jar {
+        manifest.attributes["MixinConfigs"] = "${project.property("mod.id")}.mixins.json"
         finalizedBy("reobfJar")
     }
 }
@@ -120,6 +127,7 @@ publishMods {
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
+        optional("cloth-config")
     }
 
     curseforge {
@@ -127,5 +135,6 @@ publishMods {
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
+        optional("cloth-config")
     }
 }

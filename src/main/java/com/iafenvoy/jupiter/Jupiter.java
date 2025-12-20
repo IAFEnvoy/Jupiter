@@ -1,6 +1,7 @@
 package com.iafenvoy.jupiter;
 
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
+import com.iafenvoy.jupiter.compat.clothconfig.ClothConfigLoader;
 import com.iafenvoy.jupiter.compat.forgeconfigspec.ConfigSpecLoader;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
@@ -30,12 +31,21 @@ public final class Jupiter {
 
         ConfigManager.getInstance().registerServerConfigHandler(JupiterSettings.INSTANCE, ServerConfigManager.PermissionChecker.IS_OPERATOR);
         if (development) ConfigManager.getInstance().registerConfigHandler(new TestConfig());
+
         if (Platform.isModLoaded("forge") || Platform.isModLoaded("neoforge") || Platform.isModLoaded("forgeconfigapiport")) {
             LOGGER.info("Config spec system detected, register to Jupiter Config System.");
             try {
                 ExtraConfigManager.registerScanner(ConfigSource.NIGHT_CONFIG, ConfigSpecLoader::scanConfig);
             } catch (Exception e) {
                 LOGGER.error("Failed to register config spec loader", e);
+            }
+        }
+        if (Platform.isModLoaded("cloth-config") || Platform.isModLoaded("cloth-config2") || Platform.isModLoaded("cloth_config") || Platform.isModLoaded("cloth_config2")) {
+            LOGGER.info("Cloth Config API detected, register to Jupiter Config System.");
+            try {
+                ExtraConfigManager.registerScanner(ConfigSource.CLOTH_CONFIG, ClothConfigLoader::scanConfig);
+            } catch (Exception e) {
+                LOGGER.error("Failed to register Cloth Config loader", e);
             }
         }
     }

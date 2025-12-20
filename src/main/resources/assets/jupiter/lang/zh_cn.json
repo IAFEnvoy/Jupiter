@@ -3,6 +3,7 @@
   "config.jupiter.general.configButtonReplacement.tooltip": "是否重定向模组列表中的打开配置按钮到Jupiter",
   "config.jupiter.general.loadForgeConfigs": "加载(Neo)Forge的配置文件",
   "config.jupiter.general.loadForgeConfigs.tooltip": "从(Neo)Forge和Forge Config API Port中加载配置文件",
+  "jupiter.config_source.cloth_config": "Cloth",
   "jupiter.config_source.jupiter": "Jupiter",
   "jupiter.config_source.night_config": "(Neo)Forge",
   "jupiter.screen.back": "返回",

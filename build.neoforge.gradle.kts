@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${property("deps.cloth_config_version")}")
+    implementation("me.shedaniel.cloth:cloth-config-neoforge:${property("deps.cloth_config_version")}")
 }
 
 neoForge {
@@ -119,6 +119,7 @@ publishMods {
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
+        optional("cloth-config")
     }
 
     curseforge {
@@ -126,5 +127,6 @@ publishMods {
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.add(stonecutter.current.version)
         minecraftVersions.addAll(additionalVersions)
+        optional("cloth-config")
     }
 }

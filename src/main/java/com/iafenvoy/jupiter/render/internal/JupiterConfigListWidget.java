@@ -68,7 +68,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     protected int getScrollbarPosition() {
         return this.getRight() - 8;
     }
-   //?} else {
+    //?} else {
     /*@Override
     protected int getScrollbarPosition() {
         return this.x1 - 8;
@@ -138,10 +138,12 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
             return TextUtil.empty();
         }
 
-        public boolean match(String filter) {
+        public boolean match(String filter) {//FIXME::WTF
             return this.handler.getTitle().getString().toLowerCase(Locale.ROOT).contains(filter) ||
                     this.handler.getConfigId().toString().contains(filter) ||
-                    this.handler.getPath().contains(filter);
+                    this.handler.getPath().contains(filter) ||
+                    this.handler.getSource().name().getString().toLowerCase(Locale.ROOT).contains(filter) ||
+                    this.handler.getSide().name().toLowerCase(Locale.ROOT).contains(filter);
         }
     }
 }

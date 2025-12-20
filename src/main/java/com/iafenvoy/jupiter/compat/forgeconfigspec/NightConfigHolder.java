@@ -3,8 +3,10 @@ package com.iafenvoy.jupiter.compat.forgeconfigspec;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.compat.ExtraConfigHolder;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.ConfigSide;
+import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
@@ -24,7 +26,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 //WARNING!!! DO NOT try to understand how these code work!!!
-public final class NightConfigHolder {
+public final class NightConfigHolder implements ExtraConfigHolder {
     private final String modId;
     private final ConfigSide side;
     private final String fileName;
@@ -41,28 +43,39 @@ public final class NightConfigHolder {
         this.save = save;
     }
 
-    public ResourceLocation id() {
+    @Override
+    public ResourceLocation getConfigId() {
         return Jupiter.id(this.modId, this.side.name().toLowerCase(Locale.ROOT));
     }
 
-    public Component title() {
+    @Override
+    public Component getTitle() {
         return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable("jupiter.screen.%s_config".formatted(this.side.name().toLowerCase(Locale.ROOT))));
     }
 
+    @Override
     public ConfigSide getSide() {
         return this.side;
     }
 
-    public String getFileName() {
+    @Override
+    public ConfigSource getSource() {
+        return ConfigSource.NIGHT_CONFIG;
+    }
+
+    @Override
+    public String getPath() {
         return this.fileName;
     }
 
+    @Override
     public void save() {
         this.save.run();
     }
 
-    public List<ConfigGroup> toGroups() {
-        return List.of(this.buildGroup(this.id().toString(), this.title(), this.defaults, this.values));
+    @Override
+    public List<ConfigGroup> buildGroups() {
+        return List.of(this.buildGroup(this.getConfigId().toString(), this.getTitle(), this.defaults, this.values));
     }
 
     public ConfigGroup buildGroup(String id, Component groupName, UnmodifiableConfig defaults, CommentedConfig values) {
@@ -129,6 +142,15 @@ public final class NightConfigHolder {
     }
 
     @SuppressWarnings("unchecked")
+    private <T, E extends ConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
+        if (clazz.isAssignableFrom(defaultValue.getClass()) && clazz.isAssignableFrom(value.getClass())) {
+            B builder = entryProvider.apply(name, (T) defaultValue);
+            builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value((T) value);
+            reference.set(builder);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     private <T extends Enum<T>> void processEnum(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<?> clazz) {
         if (clazz.isEnum() && clazz.isAssignableFrom(defaultValue.getClass()) && value instanceof String valueStr) {
             Class<T> testClazz = (Class<T>) clazz;
@@ -139,12 +161,10 @@ public final class NightConfigHolder {
     }
 
     @SuppressWarnings("unchecked")
-    private <T, E extends ConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
-        if (clazz.isAssignableFrom(defaultValue.getClass()) && clazz.isAssignableFrom(value.getClass())) {
-            B builder = entryProvider.apply(name, (T) defaultValue);
-            builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value((T) value);
-            reference.set(builder);
-        }
+    private <T, E extends ConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
+        B builder = entryProvider.apply(name, (List<T>) defaultValue);
+        builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value(new LinkedList<>((List<T>) value));
+        reference.set(builder);
     }
 
     @SuppressWarnings("unchecked")
@@ -152,13 +172,6 @@ public final class NightConfigHolder {
         Class<T> clazz = any.getDeclaringClass();
         ListEnumEntry.Builder<T> builder = ListEnumEntry.builder(name, ((List<T>) defaultValue), any);
         builder.callback((v, r, d) -> values.set(entry.getKey(), v.stream().map(Enum::name).toList())).value(new LinkedList<>(((List<String>) value).stream().map(x -> Enum.valueOf(clazz, x)).toList()));
-        reference.set(builder);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T, E extends ConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
-        B builder = entryProvider.apply(name, (List<T>) defaultValue);
-        builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value(new LinkedList<>((List<T>) value));
         reference.set(builder);
     }
 }

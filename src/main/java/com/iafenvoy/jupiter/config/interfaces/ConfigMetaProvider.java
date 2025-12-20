@@ -5,7 +5,9 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public interface ConfigMetaProvider {
     ResourceLocation getConfigId();
 
