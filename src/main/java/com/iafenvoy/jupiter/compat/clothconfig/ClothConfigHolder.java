@@ -7,8 +7,7 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
-import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
-import com.iafenvoy.jupiter.util.ReflectUtil;
+import com.iafenvoy.jupiter.util.JupiterUtils;
 import com.iafenvoy.jupiter.util.TextUtil;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigManager;
@@ -18,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -32,7 +32,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     public ClothConfigHolder(ConfigManager<D> manager) {
         this.manager = manager;
-        this.modId = this.manager.getDefinition().name();
+        this.modId = this.manager.getDefinition().name().toLowerCase(Locale.ROOT);
         this.values = manager.getConfig();
         this.defaults = manager.getSerializer().createDefault();
     }
@@ -43,12 +43,12 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public ResourceLocation getConfigId() {
-        return Jupiter.id(this.modId.toLowerCase(Locale.ROOT), "config");
+        return Jupiter.id(this.modId, "config");
     }
 
     @Override
     public String getPath() {
-        return Utils.getConfigFolder().resolve(this.modId + ".json").toString();
+        return this.modId + ".json";
     }
 
     public String baseTranslateKey() {
@@ -57,7 +57,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public Component getTitle() {
-        return TextUtil.translatable(this.baseTranslateKey());
+        return TextUtil.translatable("%s.title".formatted(this.baseTranslateKey()));
     }
 
     @Override
@@ -84,18 +84,17 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
         //TODO::Implement background texture feature
         ConfigGroup group = new ConfigGroup(id, groupName);
         for (Field field : defaults.getClass().getDeclaredFields()) {
-            if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
+            if (Modifier.isStatic(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
                 continue;
             try {
                 ConfigBuilder<?, ?, ?> builder = this.process(defaults, values, field);
-                if (builder == null && field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject.class) != null)
+                if (builder == null)
                     builder = ConfigGroupEntry.builder(groupName, this.buildGroup(field.getName(), TextUtil.translatable("%s.category.%s".formatted(this.baseTranslateKey(), field.getName())), field.get(defaults), field.get(values)));
-                if (builder != null) {
-                    if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip.class) != null)
-                        builder.tooltip(String.format("%s.option.%s", this.baseTranslateKey(), field.getName()));
-                }
+                if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip.class) != null)
+                    builder.tooltip(String.format("%s.option.%s", this.baseTranslateKey(), field.getName()));
+                group.addEntry(builder.build());
             } catch (Exception e) {
-                Jupiter.LOGGER.error("Failed to load field {} from class {}", field.getName(), defaults.getClass().getName(), e);
+                Jupiter.LOGGER.error("Failed to load field {} class {} from class {}", field.getName(), field.getType(), defaults.getClass().getName(), e);
             }
         }
         return group;
@@ -110,8 +109,15 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
         this.processEntry(holder, name, field, defaults, values, Integer.class, IntegerEntry::builder);
         this.processEntry(holder, name, field, defaults, values, Long.class, LongEntry::builder);
         this.processEntry(holder, name, field, defaults, values, Double.class, DoubleEntry::builder);
+        this.processEntry(holder, name, field, defaults, values, Float.class, FloatEntry::builder);
         this.processEntry(holder, name, field, defaults, values, String.class, StringEntry::builder);
         this.processEntry(holder, name, field, defaults, values, Enum.class, EnumEntry::builder);
+        //Primitive
+        this.processEntry(holder, name, field, defaults, values, Boolean.TYPE, BooleanEntry::builder);
+        this.processEntry(holder, name, field, defaults, values, Integer.TYPE, IntegerEntry::builder);
+        this.processEntry(holder, name, field, defaults, values, Long.TYPE, LongEntry::builder);
+        this.processEntry(holder, name, field, defaults, values, Double.TYPE, DoubleEntry::builder);
+        this.processEntry(holder, name, field, defaults, values, Float.TYPE, FloatEntry::builder);
         //Array
         if (field.getType().isArray()) {
             this.processArrayEntry(holder, name, field, defaults, values, Boolean.class, ListBooleanEntry::builder);
@@ -119,7 +125,6 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
             this.processArrayEntry(holder, name, field, defaults, values, Long.class, ListLongEntry::builder);
             this.processArrayEntry(holder, name, field, defaults, values, Double.class, ListDoubleEntry::builder);
             this.processArrayEntry(holder, name, field, defaults, values, String.class, ListStringEntry::builder);
-//            this.processArrayEntry(holder, name, field, defaults, values, Enum.class, ListEnumEntry::builder);
         }
         if (List.class.isAssignableFrom(field.getType())) {
             this.processCollectionEntry(holder, name, field, defaults, values, Boolean.class, ListBooleanEntry::builder);
@@ -131,7 +136,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
         return holder.get();
     }
 
-    private <V, T, E extends ConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
+    private <V, T, B extends ConfigBuilder<T, ?, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
         if (clazz.isAssignableFrom(field.getType())) {
             B builder = entryProvider.apply(name, Utils.getUnsafely(field, defaults));
             builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v)).value(Utils.getUnsafely(field, values));
@@ -140,7 +145,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     }
 
     @SuppressWarnings("unchecked")
-    private <V, T, E extends ConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processArrayEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, List<T>, B> entryProvider) {
+    private <V, T, B extends ConfigBuilder<List<T>, ?, B>> void processArrayEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, List<T>, B> entryProvider) {
         if (clazz.isAssignableFrom(field.getType().componentType())) {
             B builder = entryProvider.apply(name, List.of(Utils.getUnsafely(field, defaults)));
             builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v.toArray((T[]) Array.newInstance(clazz, 0)))).value(List.of(Utils.getUnsafely(field, values)));
@@ -148,8 +153,8 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
         }
     }
 
-    private <V, T, E extends ConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, List<T>, B> entryProvider) {
-        Class<?> actual = ReflectUtil.getGenericActualClass(field);
+    private <V, T, B extends ConfigBuilder<List<T>, ?, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, List<T>, B> entryProvider) {
+        Class<?> actual = JupiterUtils.getGenericActualClass(field);
         if (actual != null && clazz.isAssignableFrom(actual)) {
             B builder = entryProvider.apply(name, Utils.getUnsafely(field, defaults));
             builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v)).value(Utils.getUnsafely(field, values));

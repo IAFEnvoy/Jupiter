@@ -15,6 +15,7 @@ public interface ConfigTypes {
     ConfigType<Integer> INTEGER = new SingleConfigType<>();
     ConfigType<Long> LONG = new SingleConfigType<>();
     ConfigType<Double> DOUBLE = new SingleConfigType<>();
+    ConfigType<Float> FLOAT = new SingleConfigType<>();
     ConfigType<String> STRING = new SingleConfigType<>();
     @ApiStatus.Internal
     ConfigType<Map.Entry<String, String>> ENTRY_STRING = new SingleConfigType<>();

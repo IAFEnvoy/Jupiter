@@ -12,6 +12,7 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.util.TextFormatter;
 import com.iafenvoy.jupiter.util.TextUtil;
+import com.iafenvoy.jupiter.util.JupiterUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 //? >= 1.20.2 {
@@ -86,7 +87,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
                 Object defaultValue = spec.getDefault();
                 try {
                     String translateKey = Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey);
-                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatableWithFallback(translateKey, TextFormatter.formatToTitleCase(translateKey)), entry, defaultValue, value, spec::test);
+                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatableWithFallback(translateKey, TextFormatter.formatToTitleCase(translateKey)), entry, defaultValue, value, JupiterUtils.packPredicate(spec::test));
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {
@@ -120,15 +121,15 @@ public final class NightConfigHolder implements ExtraConfigHolder {
         if (Collection.class.isAssignableFrom(defaultValue.getClass()))
             //Some magic hack
             if (validator.test(List.of(false)))
-                this.<Boolean, ListBooleanEntry, ListBooleanEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListBooleanEntry::builder);
+                this.<Boolean, ListBooleanEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListBooleanEntry::builder);
             else if (validator.test(List.of(0)))
-                this.<Integer, ListIntegerEntry, ListIntegerEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListIntegerEntry::builder);
+                this.<Integer, ListIntegerEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListIntegerEntry::builder);
             else if (validator.test(List.of(0L)))
-                this.<Long, ListLongEntry, ListLongEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListLongEntry::builder);
+                this.<Long, ListLongEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListLongEntry::builder);
             else if (validator.test(List.of(0D)))
-                this.<Double, ListDoubleEntry, ListDoubleEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListDoubleEntry::builder);
+                this.<Double, ListDoubleEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListDoubleEntry::builder);
             else if (validator.test(List.of("")))
-                this.<String, ListStringEntry, ListStringEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListStringEntry::builder);
+                this.<String, ListStringEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListStringEntry::builder);
             else {//This method is unstable and usually failed to get
                 Optional<?> any = ((List<?>) defaultValue).stream().findAny();
                 if (any.isPresent() && any.get().getClass().isEnum())
@@ -142,7 +143,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     }
 
     @SuppressWarnings("unchecked")
-    private <T, E extends ConfigEntry<T>, B extends ConfigBuilder<T, E, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
+    private <T, B extends ConfigBuilder<T, ?, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
         if (clazz.isAssignableFrom(defaultValue.getClass()) && clazz.isAssignableFrom(value.getClass())) {
             B builder = entryProvider.apply(name, (T) defaultValue);
             builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value((T) value);
@@ -161,7 +162,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     }
 
     @SuppressWarnings("unchecked")
-    private <T, E extends ConfigEntry<List<T>>, B extends ConfigBuilder<List<T>, E, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
+    private <T, B extends ConfigBuilder<List<T>, ?, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
         B builder = entryProvider.apply(name, (List<T>) defaultValue);
         builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value(new LinkedList<>((List<T>) value));
         reference.set(builder);

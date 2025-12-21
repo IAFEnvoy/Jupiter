@@ -1,5 +1,6 @@
 package com.iafenvoy.jupiter.compat;
 
+import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
@@ -24,7 +25,11 @@ public final class ExtraConfigManager {
 
     public static void scanConfigs() {
         for (Map.Entry<ConfigSource, Supplier<Map<String, EnumMap<ConfigSide, AbstractConfigContainer>>>> entry : SCANNERS.entrySet())
-            CONFIGS.put(entry.getKey(), entry.getValue().get());
+            try {
+                CONFIGS.put(entry.getKey(), entry.getValue().get());
+            } catch (Exception e) {
+                Jupiter.LOGGER.error("Failed to scan from config source {}", entry.getKey().name().getString(), e);
+            }
         CALLBACKS.forEach(Runnable::run);
     }
 

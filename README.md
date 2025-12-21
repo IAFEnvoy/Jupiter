@@ -10,31 +10,25 @@ Jupiter is a powerful, auto sync config library.
 
 - Convenient in-game config edit screens.
 - Auto sync with server if you are connect to dedicated servers & you have proper permissions.
-- (Neo)Forge config system support, you can also edit them in `Jupiter`. (Also capable with `Forge Config API Port`)
 
 ### For develops
+
+**For how to use, see [document](https://docs.iafenvoy.com/docs/library/jupiter).**
 
 - Simple creation of config instance.
 - Config support `int`, `double`, `string`,`list` and so on.
 - Customized codec based config entry: You can add config entry for any value type.
 - Permission control for dedicate server config.
 
-#### How to use (For developer)
+### Extra Config System
 
-1.Create config class and extend `FileConfigContainer`.
+Extra config system aims at loading config files from other config systems. Configs loaded by this system can also use
+Jupiter's features such as auto generated config screens and dedicated server sync.
 
-2.Add config in `init`
-method. ([Example](https://github.com/IAFEnvoy/Jupiter/blob/main/src/main/java/com/iafenvoy/jupiter/test/TestConfig.java))
+Currently supported:
 
-3.If your config is for server/common, register it with `ServerConfigManager.registerServerConfig`.
-
-4.Create your config screen. There are 3 types of screen to select.
-
-i.`ConfigSelectScreen`: Create a config select screen. User can select which config to edit. Include permission check.
-
-ii.`ClientConfigScreen`: Create a client config edit screen.
-
-iii.`ServerConfigScreen`: Create a server config edit screen. **Not include permission check.**
+- (Neo)Forge config system (Also capable with `Forge Config API Port`)
+- Cloth Config API
 
 ## Special thanks
 

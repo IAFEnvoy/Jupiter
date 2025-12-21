@@ -43,6 +43,7 @@ public class WidgetBuilderManager {
         register(ConfigTypes.INTEGER, TextFieldWidgetBuilder::new);
         register(ConfigTypes.LONG, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
+        register(ConfigTypes.FLOAT, TextFieldWidgetBuilder::new);
         register(ConfigTypes.STRING, TextFieldWidgetBuilder::new);
         //noinspection rawtypes,unchecked
         register(ConfigTypes.ENUM, (provider, config) -> new EnumWidgetBuilder<>(provider, (ConfigEntry) config));
