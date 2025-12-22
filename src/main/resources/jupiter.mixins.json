@@ -4,6 +4,7 @@
   "package": "com.iafenvoy.jupiter.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "AutoConfigAccessor",
     "AutoConfigMixin"
   ],
   "client": [

@@ -7,6 +7,7 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.ExtraConfigWrapper;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
+import com.iafenvoy.jupiter.mixin.AutoConfigAccessor;
 import com.iafenvoy.jupiter.mixin.AutoConfigMixin;
 import net.minecraft.Util;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +25,7 @@ public final class ClothConfigLoader {
         BY_CLASS.clear();
         Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> data = new LinkedHashMap<>();
         if (!JupiterSettings.INSTANCE.general.loadClothConfigs.getValue()) return data;
-        List<me.shedaniel.autoconfig.ConfigManager> holders = AutoConfigMixin.getAllConfigs().values().stream().map(me.shedaniel.autoconfig.ConfigManager.class::cast).toList();
+        List<me.shedaniel.autoconfig.ConfigManager> holders = AutoConfigAccessor.getAllConfigs().values().stream().map(me.shedaniel.autoconfig.ConfigManager.class::cast).toList();
         for (me.shedaniel.autoconfig.ConfigManager<?> manager : holders) {
             ClothConfigHolder<?> holder = new ClothConfigHolder<>(manager);
             AbstractConfigContainer container = new ExtraConfigWrapper(holder);
