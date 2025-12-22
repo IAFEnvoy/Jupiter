@@ -77,21 +77,22 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public Collection<? extends ConfigGroup> buildGroups() {
-        return List.of(this.buildGroup(this.getConfigId().toString(), this.getTitle(), this.defaults, this.values));
+        return List.of(this.buildGroup(this.getConfigId().toString(), "%s.option".formatted(this.baseTranslateKey()), this.defaults, this.values));
     }
 
-    public <T> ConfigGroup buildGroup(String id, Component groupName, T defaults, T values) {
+    public <T> ConfigGroup buildGroup(String id, String baseKey, T defaults, T values) {
         //TODO::Implement background texture feature
-        ConfigGroup group = new ConfigGroup(id, groupName);
+        ConfigGroup group = new ConfigGroup(id, TextUtil.translatable(baseKey));
         for (Field field : defaults.getClass().getDeclaredFields()) {
-            if (Modifier.isStatic(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
+            if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
                 continue;
             try {
-                ConfigBuilder<?, ?, ?> builder = this.process(defaults, values, field);
+                String nameKey = "%s.%s".formatted(baseKey, field.getName());
+                ConfigBuilder<?, ?, ?> builder = this.process(nameKey, defaults, values, field);
                 if (builder == null)
-                    builder = ConfigGroupEntry.builder(groupName, this.buildGroup(field.getName(), TextUtil.translatable("%s.category.%s".formatted(this.baseTranslateKey(), field.getName())), field.get(defaults), field.get(values)));
+                    builder = ConfigGroupEntry.builder(nameKey, this.buildGroup(field.getName(), nameKey, field.get(defaults), field.get(values)));
                 if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip.class) != null)
-                    builder.tooltip(String.format("%s.option.%s", this.baseTranslateKey(), field.getName()));
+                    builder.tooltip("%s.@Tooltip".formatted(nameKey));
                 group.addEntry(builder.build());
             } catch (Exception e) {
                 Jupiter.LOGGER.error("Failed to load field {} class {} from class {}", field.getName(), field.getType(), defaults.getClass().getName(), e);
@@ -101,9 +102,9 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     }
 
     @SuppressWarnings("unchecked")
-    private <T> ConfigBuilder<?, ?, ?> process(T defaults, T values, Field field) {
+    private <T> ConfigBuilder<?, ?, ?> process(String nameKey, T defaults, T values, Field field) {
         AtomicReference<ConfigBuilder<?, ?, ?>> holder = new AtomicReference<>(null);
-        Component name = TextUtil.translatable(String.format("%s.option.%s", this.baseTranslateKey(), field.getName()));
+        Component name = TextUtil.translatable(nameKey);
         //Simple
         this.processEntry(holder, name, field, defaults, values, Boolean.class, BooleanEntry::builder);
         this.processEntry(holder, name, field, defaults, values, Integer.class, IntegerEntry::builder);
