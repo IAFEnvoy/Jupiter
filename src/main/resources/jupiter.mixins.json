@@ -4,10 +4,10 @@
   "package": "com.iafenvoy.jupiter.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AutoConfigAccessor",
-    "AutoConfigMixin"
+    "AutoConfigAccessor"
   ],
   "client": [
+    "AutoConfigMixin"
   ],
   "injectors": {
     "defaultRequire": 1

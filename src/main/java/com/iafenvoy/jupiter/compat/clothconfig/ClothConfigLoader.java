@@ -8,7 +8,6 @@ import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.ExtraConfigWrapper;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.mixin.AutoConfigAccessor;
-import com.iafenvoy.jupiter.mixin.AutoConfigMixin;
 import net.minecraft.Util;
 import org.jetbrains.annotations.Nullable;
 

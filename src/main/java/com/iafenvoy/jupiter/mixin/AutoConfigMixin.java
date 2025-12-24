@@ -8,12 +8,14 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Supplier;
 
+@Pseudo
 @Mixin(value = AutoConfig.class, remap = false)
 public class AutoConfigMixin {
     @Inject(method = "getConfigScreen", at = @At("RETURN"), cancellable = true)
