@@ -1,34 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "jupiter",
-  "name": "Jupiter",
-  "version": "${version}",
+  "id": "${mod_id}",
+  "name": "${mod_name}",
+  "version": "${mod_version}",
   "authors": [
-    "IAFEnvoy"
+    "${mod_authors}"
   ],
   "contact": {
-    "sources": "https://github.com/IAFEnvoy/Jupiter",
-    "issues": "https://github.com/IAFEnvoy/Jupiter/issues"
+    "sources": "${mod_repo_url}",
+    "issues": "${mod_repo_url}/issues"
   },
-  "description": "A powerful, auto sync config library.",
-  "icon": "logo.png",
-  "license": "LGPL-3.0",
+  "description": "${mod_description}",
+  "icon": "${mod_logo}",
+  "license": "${mod_license}",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.iafenvoy.jupiter._loader.fabric.JupiterFabric"
-    ],
-    "client": [
-      "com.iafenvoy.jupiter._loader.fabric.JupiterFabricClient"
-    ],
-    "modmenu": [
-      "com.iafenvoy.jupiter._loader.fabric.compat.ModMenu"
-    ]
   },
   "mixins": [
-    "jupiter.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
-    "fabric-api": "*"
+    "minecraft": [${supported_minecraft_versions}]
   }
 }

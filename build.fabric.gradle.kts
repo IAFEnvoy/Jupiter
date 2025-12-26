@@ -6,17 +6,6 @@ plugins {
     id("me.modmuss50.mod-publish-plugin")
 }
 
-tasks.named<ProcessResources>("processResources") {
-    val props = HashMap<String, String>().apply {
-        this["version"] = project.property("mod.version") as String
-        this["minecraft"] = project.property("deps.minecraft") as String
-    }
-
-    filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
-        expand(props)
-    }
-}
-
 version = "${property("mod.version")}-${property("deps.minecraft")}-fabric"
 base.archivesName = property("mod.id") as String
 
@@ -28,10 +17,6 @@ jsonlang {
 repositories {
     mavenLocal()
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
-    maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
-    maven("https://maven.nucleoid.xyz/") { name = "Placeholder API" }
-    maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
-    maven("https://maven.shedaniel.me/") { name = "Cloth Config API" }
 }
 
 dependencies {
@@ -42,22 +27,6 @@ dependencies {
             parchment("org.parchmentmc.data:parchment-${property("deps.parchment")}@zip")
     })
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
-
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
-    var fabricApiVersion = property("deps.fabric-api") as String
-    include(fabricApi.module("fabric-api-base", fabricApiVersion))
-    include(fabricApi.module("fabric-networking-api-v1", fabricApiVersion))
-    if (stonecutter.eval(stonecutter.current.version, "<=1.21.8"))
-        include(fabricApi.module("fabric-resource-loader-v0", fabricApiVersion))
-    else
-        include(fabricApi.module("fabric-resource-loader-v1", fabricApiVersion))
-
-    modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
-
-    modCompileOnly("com.electronwill.night-config:core:3.8.2")
-    modCompileOnly("com.electronwill.night-config:toml:3.8.2")
-    modCompileOnly("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("deps.cloth_config_version")}")
 }
 
 fabricApi {
@@ -91,12 +60,33 @@ java {
     targetCompatibility = javaCompat
 }
 
-val additionalVersionsStr = findProperty("publish.additionalVersions") as String?
-val additionalVersions: List<String> = additionalVersionsStr
-    ?.split(",")
-    ?.map { it.trim() }
-    ?.filter { it.isNotEmpty() }
-    ?: emptyList()
+val supportedMinecraftVersions: List<String> = com.google.common.collect.ImmutableList.builder<String>()
+    .addAll(
+        (property("publish.additionalVersions") as String?)
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?: emptyList())
+    .add(stonecutter.current.version)
+    .build()
+
+tasks.named<ProcessResources>("processResources") {
+    val props = HashMap<String, String>().apply {
+        this["mod_id"] = project.property("mod.id") as String
+        this["mod_name"] = project.property("mod.name") as String
+        this["mod_description"] = project.property("mod.description") as String
+        this["mod_version"] = project.property("mod.version") as String
+        this["mod_authors"] = project.property("mod.authors") as String
+        this["mod_repo_url"] = project.property("mod.repo_url") as String
+        this["mod_license"] = project.property("mod.license") as String
+        this["mod_logo"] = project.property("mod.logo") as String
+        this["supported_minecraft_versions"] = supportedMinecraftVersions.joinToString(",") { x -> "\"${x}\"" }
+    }
+
+    filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
+        expand(props)
+    }
+}
 
 publishMods {
     file = tasks.remapJar.map { it.archiveFile.get() }
@@ -115,18 +105,12 @@ publishMods {
     modrinth {
         projectId = property("publish.modrinth") as String
         accessToken = env.MODRINTH_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
-        optional("forge-config-api-port")
-        optional("cloth-config")
+        minecraftVersions.addAll(supportedMinecraftVersions)
     }
 
     curseforge {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
-        optional("forge-config-api-port")
-        optional("cloth-config")
+        minecraftVersions.addAll(supportedMinecraftVersions)
     }
 }
