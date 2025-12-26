@@ -17,6 +17,10 @@ jsonlang {
 repositories {
     mavenLocal()
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+    maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
+    maven("https://maven.nucleoid.xyz/") { name = "Placeholder API" }
+    maven("https://api.modrinth.com/maven") { name = "Forge Config Api Port" }
+    maven("https://maven.shedaniel.me/") { name = "Cloth Config API" }
 }
 
 dependencies {
@@ -27,6 +31,22 @@ dependencies {
             parchment("org.parchmentmc.data:parchment-${property("deps.parchment")}@zip")
     })
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
+
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
+    var fabricApiVersion = property("deps.fabric-api") as String
+    include(fabricApi.module("fabric-api-base", fabricApiVersion))
+    include(fabricApi.module("fabric-networking-api-v1", fabricApiVersion))
+    if (stonecutter.eval(stonecutter.current.version, "<=1.21.8"))
+        include(fabricApi.module("fabric-resource-loader-v0", fabricApiVersion))
+    else
+        include(fabricApi.module("fabric-resource-loader-v1", fabricApiVersion))
+
+    modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
+
+    modCompileOnly("com.electronwill.night-config:core:3.8.2")
+    modCompileOnly("com.electronwill.night-config:toml:3.8.2")
+    modCompileOnly("maven.modrinth:forge-config-api-port:${property("deps.forge_config_api_port")}")
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("deps.cloth_config_version")}")
 }
 
 fabricApi {

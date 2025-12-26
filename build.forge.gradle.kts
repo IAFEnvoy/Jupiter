@@ -14,10 +14,12 @@ jsonlang {
 
 repositories {
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+    maven("https://maven.shedaniel.me/") { name = "Cloth Config API" }
 }
 
 dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    modImplementation("me.shedaniel.cloth:cloth-config-forge:${property("deps.cloth_config_version")}")
 }
 
 legacyForge {
