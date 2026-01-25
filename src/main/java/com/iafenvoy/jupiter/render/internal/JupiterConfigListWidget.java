@@ -83,7 +83,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     @Override
     public void setSelected(@Nullable JupiterConfigListWidget.Entry selected) {
         super.setSelected(selected);
-        this.screen.setOpenConfigState(this.getSelected() != null);
+        this.screen.updateButtonState();
     }
 
     public static class Entry extends ObjectSelectionList.Entry<Entry> {

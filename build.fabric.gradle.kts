@@ -6,17 +6,6 @@ plugins {
     id("me.modmuss50.mod-publish-plugin")
 }
 
-tasks.named<ProcessResources>("processResources") {
-    val props = HashMap<String, String>().apply {
-        this["version"] = project.property("mod.version") as String
-        this["minecraft"] = project.property("deps.minecraft") as String
-    }
-
-    filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
-        expand(props)
-    }
-}
-
 version = "${property("mod.version")}-${property("deps.minecraft")}-fabric"
 base.archivesName = property("mod.id") as String
 
@@ -91,12 +80,33 @@ java {
     targetCompatibility = javaCompat
 }
 
-val additionalVersionsStr = findProperty("publish.additionalVersions") as String?
-val additionalVersions: List<String> = additionalVersionsStr
-    ?.split(",")
-    ?.map { it.trim() }
-    ?.filter { it.isNotEmpty() }
-    ?: emptyList()
+val supportedMinecraftVersions: List<String> = com.google.common.collect.ImmutableList.builder<String>()
+    .addAll(
+        (property("publish.additionalVersions") as String?)
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?: emptyList())
+    .add(stonecutter.current.version)
+    .build()
+
+tasks.named<ProcessResources>("processResources") {
+    val props = HashMap<String, String>().apply {
+        this["mod_id"] = project.property("mod.id") as String
+        this["mod_name"] = project.property("mod.name") as String
+        this["mod_description"] = project.property("mod.description") as String
+        this["mod_version"] = project.property("mod.version") as String
+        this["mod_authors"] = project.property("mod.authors") as String
+        this["mod_repo_url"] = project.property("mod.repo_url") as String
+        this["mod_license"] = project.property("mod.license") as String
+        this["mod_logo"] = project.property("mod.logo") as String
+        this["supported_minecraft_versions"] = supportedMinecraftVersions.joinToString(",") { x -> "\"${x}\"" }
+    }
+
+    filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
+        expand(props)
+    }
+}
 
 publishMods {
     file = tasks.remapJar.map { it.archiveFile.get() }
@@ -115,8 +125,7 @@ publishMods {
     modrinth {
         projectId = property("publish.modrinth") as String
         accessToken = env.MODRINTH_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
+        minecraftVersions.addAll(supportedMinecraftVersions)
         optional("forge-config-api-port")
         optional("cloth-config")
     }
@@ -124,8 +133,7 @@ publishMods {
     curseforge {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
+        minecraftVersions.addAll(supportedMinecraftVersions)
         optional("forge-config-api-port")
         optional("cloth-config")
     }

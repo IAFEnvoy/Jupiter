@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ConfigContainerScreen extends ConfigListScreen {
-    private final Screen parent;
     protected final AbstractConfigContainer container;
     protected final List<TabButton> groupButtons = new ArrayList<>();
     protected final HorizontalScrollBar groupScrollBar = new HorizontalScrollBar();
@@ -30,7 +29,6 @@ public class ConfigContainerScreen extends ConfigListScreen {
 
     public ConfigContainerScreen(Screen parent, AbstractConfigContainer container, boolean client) {
         super(parent, TitleStack.create(container.getTitle()), container.getConfigId(), client);
-        this.parent = parent;
         this.container = container;
         this.currentGroup = container.getConfigTabs().isEmpty() ? ConfigGroup.EMPTY : container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
         this.topBorder = 60;

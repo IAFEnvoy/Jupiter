@@ -1,9 +1,10 @@
 package com.iafenvoy.jupiter.render.internal;
 
-import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
+import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
+import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
@@ -21,11 +22,15 @@ import net.minecraft.client.gui.GuiGraphics;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @ApiStatus.Internal
 public class JupiterConfigListScreen extends Screen implements JupiterScreen {
+    private final Map<AbstractConfigContainer, RemoteConfigWrapper> remoteCache = new LinkedHashMap<>();
     private final Screen parent;
     private JupiterConfigListWidget widget;
-    private Button openConfigButton = null;
+    private Button editLocalButton = null, editRemoteButton = null;
     private boolean initialized = false;
 
     public JupiterConfigListScreen(Screen parent) {
@@ -52,22 +57,45 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         this.widget.setLeftPos(40);
         *///?}
         this.widget.update();
+        this.remoteCache.clear();
+
         this.addRenderableWidget(this.widget);
         this.addRenderableWidget(JupiterScreen.createButton(40, 25, 60, 20, TextUtil.translatable("jupiter.screen.back"), button -> this.onClose()));
-        this.addRenderableWidget(new EditBox(this.font, 105, 25, this.width - 230, 20, TextUtil.empty())).setResponder(this.widget::setFilter);
-        this.openConfigButton = this.addRenderableWidget(JupiterScreen.createButton(this.width - 120, 25, 80, 20, TextUtil.translatable("jupiter.screen.open"), button -> {
+        this.addRenderableWidget(new EditBox(this.font, 105, 25, Math.max(10, this.width - 315), 20, TextUtil.empty())).setResponder(this.widget::setFilter);
+        this.editLocalButton = this.addRenderableWidget(JupiterScreen.createButton(this.width - 205, 25, 80, 20, TextUtil.translatable("jupiter.screen.edit_local"), button -> {
+            JupiterConfigListWidget.Entry handler = this.widget.getSelected();
+            if (this.minecraft != null && handler != null)
+                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, handler.getConfigContainer(), false));
+        }));
+        this.editRemoteButton = this.addRenderableWidget(JupiterScreen.createButton(this.width - 120, 25, 80, 20, TextUtil.translatable("jupiter.screen.edit_remote"), button -> {
             JupiterConfigListWidget.Entry handler = this.widget.getSelected();
             if (this.minecraft != null && handler != null) {
                 AbstractConfigContainer container = handler.getConfigContainer();
-                boolean server = ServerConfigManager.getServerConfigs().contains(container);
-                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, server ? this.getServerConfig(container) : container, !server));
+                if (this.remoteCache.containsKey(container))
+                    this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.remoteCache.get(container), false));
             }
         }));
-        this.setOpenConfigState(this.widget.getSelected() != null);
+        this.updateButtonState();
     }
 
-    public void setOpenConfigState(boolean active) {
-        if (this.openConfigButton != null) this.openConfigButton.active = active;
+    public void updateButtonState() {
+        JupiterConfigListWidget.Entry entry = this.widget.getSelected();
+        if (this.editLocalButton != null) this.editLocalButton.active = entry != null;
+        if (this.editRemoteButton != null) {
+            this.editRemoteButton.active = false;
+            if (entry == null) return;
+            final AbstractConfigContainer origin = entry.getConfigContainer();
+            if (origin.getSide() == ConfigSide.CLIENT || this.remoteCache.containsKey(origin) || !JupiterScreen.connectedToDedicatedServer())
+                return;
+            ClientConfigNetwork.syncConfig(origin.getConfigId(), tag -> {
+                if (tag != null) {
+                    this.editRemoteButton.active = true;
+                    RemoteConfigWrapper wrapper = new RemoteConfigWrapper(origin);
+                    wrapper.deserializeNbt(tag);
+                    this.remoteCache.put(origin, wrapper);
+                }
+            });
+        }
     }
 
     @Override
@@ -90,9 +118,5 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         super.onClose();
         assert this.minecraft != null;
         this.minecraft.setScreen(this.parent);
-    }
-
-    private AbstractConfigContainer getServerConfig(AbstractConfigContainer container) {
-        return JupiterScreen.connectedToDedicatedServer() ? new RemoteConfigWrapper(container) : container;
     }
 }

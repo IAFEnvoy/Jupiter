@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 //? >=1.20 {
 import net.minecraft.client.gui.GuiGraphics;
- //?} else {
+        //?} else {
 /*import com.iafenvoy.jupiter.render.JupiterRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -48,6 +48,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         this.displayCommon = displayCommon;
     }
 
+    @SuppressWarnings("AssignmentUsedAsCondition")
     @Override
     protected void init() {
         super.init();
@@ -59,62 +60,77 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
             this.minecraft.setScreen(this.parent);
         }));
 
+        final boolean connectedToRemote = JupiterScreen.connectedToDedicatedServer();
+
         if (this.displayCommon) {
-            Pair<Button, Consumer<Component>> commonPair = JupiterScreen.createButtonWithDynamicTooltip(this, x - 100, y - 30, 200, 20, TextUtil.translatable("jupiter.screen.common_config"), button -> {
+            this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y - 30, 95, 20, TextUtil.translatable("jupiter.screen.local_common_config"), button -> {
+                assert this.minecraft != null;
+                assert this.common != null;
+                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.common, true));
+            }, TextUtil.translatable(this.common != null ? "jupiter.screen.open_local_common" : "jupiter.screen.unavailable"))).active = this.common != null;
+
+            Pair<Button, Consumer<Component>> commonPair = JupiterScreen.createButtonWithDynamicTooltip(this, x + 5, y - 30, 95, 20, TextUtil.translatable("jupiter.screen.remote_common_config"), button -> {
                 assert this.minecraft != null && this.common != null;
-                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.common, false));
+                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.common), false));
             }, TextUtil.translatable("jupiter.screen.unavailable"));
-            this.addRenderableWidget(commonPair.getFirst()).active = this.common != null;
+            this.addRenderableWidget(commonPair.getFirst()).active = this.common != null && connectedToRemote;
             if (this.common != null)
-                handleRemoteConfig(this.common, "jupiter.screen.open_common", b -> commonPair.getFirst().active = b, commonPair.getSecond());
+                if (connectedToRemote)
+                    handleRemoteConfig(this.common, "jupiter.screen.open_remote_common", b -> commonPair.getFirst().active = b, commonPair.getSecond());
+                else commonPair.getSecond().accept(TextUtil.translatable("jupiter.screen.need_remote_server"));
         }
 
-        Pair<Button, Consumer<Component>> serverPair = JupiterScreen.createButtonWithDynamicTooltip(this, x - 100, y - (this.displayCommon ? 0 : 15), 200, 20, TextUtil.translatable("jupiter.screen.server_config"), button -> {
-            assert this.minecraft != null && this.server != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.server, false));
-        }, TextUtil.translatable("jupiter.screen.unavailable"));
-        this.addRenderableWidget(serverPair.getFirst()).active = this.server != null;
-        if (this.server != null)
-            handleRemoteConfig(this.server, "jupiter.screen.open_server", b -> serverPair.getFirst().active = b, serverPair.getSecond());
+        this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y - (this.displayCommon ? 0 : 15), 95, 20, TextUtil.translatable("jupiter.screen.local_server_config"), button -> {
+            assert this.minecraft != null;
+            assert this.server != null;
+            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.server, true));
+        }, TextUtil.translatable(this.server != null ? "jupiter.screen.open_local_server" : "jupiter.screen.unavailable"))).active = this.server != null;
 
-        Button clientButton = this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y + (this.displayCommon ? 30 : 15), 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
+        Pair<Button, Consumer<Component>> serverPair = JupiterScreen.createButtonWithDynamicTooltip(this, x + 5, y - (this.displayCommon ? 0 : 15), 95, 20, TextUtil.translatable("jupiter.screen.remove_server_config"), button -> {
+            assert this.minecraft != null && this.server != null;
+            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.server), false));
+        }, TextUtil.translatable("jupiter.screen.unavailable"));
+        this.addRenderableWidget(serverPair.getFirst()).active = this.server != null && connectedToRemote;
+        if (this.server != null)
+            if (connectedToRemote)
+                handleRemoteConfig(this.server, "jupiter.screen.open_remote_server", b -> serverPair.getFirst().active = b, serverPair.getSecond());
+            else serverPair.getSecond().accept(TextUtil.translatable("jupiter.screen.need_remote_server"));
+
+        this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y + (this.displayCommon ? 30 : 15), 200, 20, TextUtil.translatable("jupiter.screen.client_config"), button -> {
             assert this.minecraft != null;
             assert this.client != null;
             this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.client, true));
-        }, TextUtil.translatable(this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.unavailable")));
-        clientButton.active = this.client != null;
+        }, TextUtil.translatable(this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.unavailable"))).active = this.client != null;
     }
 
     private static void handleRemoteConfig(AbstractConfigContainer container, String openKey, BooleanConsumer buttonActive, Consumer<Component> tooltip) {
-        if (JupiterScreen.connectedToDedicatedServer()) {
-            tooltip.accept(TextUtil.translatable("jupiter.screen.check_server"));
-            buttonActive.accept(false);
-            ClientConfigNetwork.syncConfig(container.getConfigId(), nbt -> {
-                if (nbt == null) tooltip.accept(TextUtil.translatable("jupiter.screen.disable_server"));
-                else {
-                    try {
-                        container.deserializeNbt(nbt);
-                        tooltip.accept(TextUtil.translatable(openKey));
-                        buttonActive.accept(true);
-                    } catch (Exception e) {
-                        Jupiter.LOGGER.error("Failed to parse config data from server: {}", container.getConfigId(), e);
-                        tooltip.accept(TextUtil.translatable("jupiter.screen.error_server"));
-                    }
+        tooltip.accept(TextUtil.translatable("jupiter.screen.check_server"));
+        buttonActive.accept(false);
+        ClientConfigNetwork.syncConfig(container.getConfigId(), nbt -> {
+            if (nbt == null) tooltip.accept(TextUtil.translatable("jupiter.screen.disable_server"));
+            else {
+                try {
+                    container.deserializeNbt(nbt);
+                    tooltip.accept(TextUtil.translatable(openKey));
+                    buttonActive.accept(true);
+                } catch (Exception e) {
+                    Jupiter.LOGGER.error("Failed to parse config data from server: {}", container.getConfigId(), e);
+                    tooltip.accept(TextUtil.translatable("jupiter.screen.error_server"));
                 }
-            });
-        } else tooltip.accept(TextUtil.translatable(openKey));
+            }
+        });
     }
 
     @Override
     public void render(/*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float delta) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-        *///?}
+         *///?}
         super.render(graphics, mouseX, mouseY, delta);
         assert this.minecraft != null;
         //? >=1.20 {
         graphics.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - (this.displayCommon ? 80 : 65), -1);
-         //?} else {
+        //?} else {
         /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
         context.drawCenteredString(this.minecraft.font, this.title, this.width / 2, this.height / 2 - (this.displayCommon ? 80 : 65), -1);
         *///?}
@@ -155,7 +171,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         }
 
         public Builder common(AbstractConfigContainer common) {
-            this.common = JupiterScreen.connectedToDedicatedServer() ? new RemoteConfigWrapper(common) : common;
+            this.common = common;
             return this.displayCommon();
         }
 
@@ -170,7 +186,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         }
 
         public Builder server(AbstractConfigContainer server) {
-            this.server = JupiterScreen.connectedToDedicatedServer() ? new RemoteConfigWrapper(server) : server;
+            this.server = server;
             return this;
         }
 
