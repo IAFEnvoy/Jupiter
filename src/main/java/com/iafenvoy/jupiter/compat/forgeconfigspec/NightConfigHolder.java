@@ -51,7 +51,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
 
     @Override
     public Component getTitle() {
-        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable("jupiter.screen.%s_config".formatted(this.side.name().toLowerCase(Locale.ROOT))));
+        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable(String.format("jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT))));
     }
 
     @Override

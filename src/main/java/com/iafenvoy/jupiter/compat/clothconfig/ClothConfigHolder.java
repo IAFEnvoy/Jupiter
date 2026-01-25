@@ -48,16 +48,16 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public String getPath() {
-        return this.modId + ".json";
+        return String.format("%s.json", this.modId);
     }
 
     public String baseTranslateKey() {
-        return "text.autoconfig.%s".formatted(this.modId);
+        return String.format("text.autoconfig.%s", this.modId);
     }
 
     @Override
     public Component getTitle() {
-        return TextUtil.translatable("%s.title".formatted(this.baseTranslateKey()));
+        return TextUtil.translatable(String.format("%s.title", this.baseTranslateKey()));
     }
 
     @Override
@@ -89,7 +89,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
             try {
                 ConfigBuilder<?, ?, ?> builder = this.process(defaults, values, field);
                 if (builder == null)
-                    builder = ConfigGroupEntry.builder(groupName, this.buildGroup(field.getName(), TextUtil.translatable("%s.category.%s".formatted(this.baseTranslateKey(), field.getName())), field.get(defaults), field.get(values)));
+                    builder = ConfigGroupEntry.builder(groupName, this.buildGroup(field.getName(), TextUtil.translatable(String.format("%s.category.%s", this.baseTranslateKey(), field.getName())), field.get(defaults), field.get(values)));
                 if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip.class) != null)
                     builder.tooltip(String.format("%s.option.%s", this.baseTranslateKey(), field.getName()));
                 group.addEntry(builder.build());

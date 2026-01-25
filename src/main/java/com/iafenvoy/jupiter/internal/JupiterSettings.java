@@ -14,11 +14,11 @@ public class JupiterSettings extends AutoInitConfigContainer {
     }
 
     private static String name(String category, String name) {
-        return "config.%s.%s.%s".formatted(Jupiter.MOD_ID, category, name);
+        return String.format("config.%s.%s.%s", Jupiter.MOD_ID, category, name);
     }
 
     private static String tooltip(String category, String name) {
-        return "config.%s.%s.%s.tooltip".formatted(Jupiter.MOD_ID, category, name);
+        return String.format("config.%s.%s.%s.tooltip", Jupiter.MOD_ID, category, name);
     }
 
     public static class General extends AutoInitConfigCategoryBase {
