@@ -9,7 +9,7 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
-import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
+import com.iafenvoy.jupiter.util.RLUtil;
 import com.iafenvoy.jupiter.util.TextFormatter;
 import com.iafenvoy.jupiter.util.TextUtil;
 import com.iafenvoy.jupiter.util.JupiterUtils;
@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import org.jetbrains.annotations.Nullable;
 
 //WARNING!!! DO NOT try to understand how these code work!!!
 public final class NightConfigHolder implements ExtraConfigHolder {
@@ -46,7 +47,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
 
     @Override
     public ResourceLocation getConfigId() {
-        return Jupiter.id(this.modId, this.side.name().toLowerCase(Locale.ROOT));
+        return RLUtil.id(this.modId, this.side.name().toLowerCase(Locale.ROOT));
     }
 
     @Override
@@ -72,6 +73,11 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     @Override
     public void save() {
         this.save.run();
+    }
+
+    @Override
+    public @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+        return null;
     }
 
     @Override

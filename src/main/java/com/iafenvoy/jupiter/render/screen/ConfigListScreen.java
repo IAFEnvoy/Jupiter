@@ -8,6 +8,7 @@ import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.util.TextUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 //? >=1.21.9 {
@@ -141,11 +142,63 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         this.minecraft.setScreen(this.parent);
     }
 
+    @Nullable
+    protected ResourceLocation getBackgroundTexture(boolean ingame) {
+        return null;
+    }
+
+    //? >=1.20.5 {
+    @Override
+    protected void renderMenuBackground(@NotNull GuiGraphics guiGraphics, int x, int y, int width, int height) {
+        assert this.minecraft != null;
+        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
+        if (texture == null) super.renderMenuBackground(guiGraphics, x, y, width, height);
+        else renderMenuBackgroundTexture(guiGraphics, texture, x, y, 0.0F, 0.0F, width, height);
+    }
+    //?} else >=1.20.2 {
+    /*@Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        assert this.minecraft != null;
+        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
+        if (texture == null) super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        else {
+            guiGraphics.setColor(0.25F, 0.25F, 0.25F, 1);
+            guiGraphics.blit(texture, 0, 0, 0, 0, 0, this.width, this.height, 32, 32);
+            guiGraphics.setColor(1, 1, 1, 1);
+        }
+    }
+    *///?} else >=1.20 {
+    /*@Override
+    public void renderBackground(GuiGraphics guiGraphics) {
+        assert this.minecraft != null;
+        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
+        if (texture == null) super.renderBackground(guiGraphics);
+        else {
+            guiGraphics.setColor(0.25F, 0.25F, 0.25F, 1);
+            guiGraphics.blit(texture, 0, 0, 0, 0, 0, this.width, this.height, 32, 32);
+            guiGraphics.setColor(1, 1, 1, 1);
+        }
+    }
+    *///?} else {
+    /*@Override
+    public void renderBackground(PoseStack poseStack) {
+        assert this.minecraft != null;
+        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
+        if (texture == null) super.renderBackground(poseStack);
+        else {
+            RenderSystem.setShaderTexture(0, texture);
+            RenderSystem.setShaderColor(0.25F, 0.25F, 0.25F, 1);
+            blit(poseStack, 0, 0, 0, 0, 0, this.width, this.height, 32, 32);
+            RenderSystem.setShaderColor(1, 1, 1, 1);
+        }
+    }
+    *///?}
+
     @Override
     public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
         //? <=1.20.1 {
         /*this.renderBackground(graphics);
-        *///?}
+         *///?}
         super.render(graphics, mouseX, mouseY, partialTicks);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);

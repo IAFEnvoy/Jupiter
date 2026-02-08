@@ -99,6 +99,11 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
         return new GroupsCodec(this).codec();
     }
 
+    @Nullable
+    public ResourceLocation getBackgroundTexture(boolean ingame) {
+        return null;
+    }
+
     @Deprecated(forRemoval = true)
     @Comment("Only call on saving to disk, not on network")
     protected boolean shouldLoad(JsonObject obj) {

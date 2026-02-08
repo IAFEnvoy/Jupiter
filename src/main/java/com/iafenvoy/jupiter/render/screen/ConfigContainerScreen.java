@@ -14,7 +14,9 @@ import net.minecraft.client.gui.GuiGraphics;
 //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
  *///?}
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +79,11 @@ public class ConfigContainerScreen extends ConfigListScreen {
     public void onClose() {
         this.container.onConfigsChanged();
         super.onClose();
+    }
+
+    @Override
+    protected @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+        return this.container.getBackgroundTexture(ingame);
     }
 
     @Override

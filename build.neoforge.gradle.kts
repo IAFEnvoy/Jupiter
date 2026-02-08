@@ -70,9 +70,7 @@ tasks {
 java {
     withSourcesJar()
     val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) JavaVersion.VERSION_21
-    else if (stonecutter.eval(stonecutter.current.version, ">=1.18")) JavaVersion.VERSION_17
-    else if (stonecutter.eval(stonecutter.current.version, ">=1.17")) JavaVersion.VERSION_16
-    else JavaVersion.VERSION_1_8
+    else throw IllegalArgumentException("This template only support NeoForge on 1.20.5+ but version ${stonecutter.current.version} received!")
     sourceCompatibility = javaCompat
     targetCompatibility = javaCompat
 }
@@ -80,10 +78,10 @@ java {
 val supportedMinecraftVersions: List<String> = com.google.common.collect.ImmutableList.builder<String>()
     .addAll(
         (property("publish.additionalVersions") as String?)
-        ?.split(",")
-        ?.map { it.trim() }
-        ?.filter { it.isNotEmpty() }
-        ?: emptyList())
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?: emptyList())
     .add(stonecutter.current.version)
     .build()
 

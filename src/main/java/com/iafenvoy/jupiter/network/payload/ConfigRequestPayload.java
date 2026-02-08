@@ -1,7 +1,7 @@
 package com.iafenvoy.jupiter.network.payload;
 
 //? >=1.20.5 {
-import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.util.RLUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public record ConfigRequestPayload(ResourceLocation id) implements CustomPacketPayload {
-    public static final Type<ConfigRequestPayload> TYPE = new Type<>(Jupiter.id("config_request"));
+    public static final Type<ConfigRequestPayload> TYPE = new Type<>(RLUtil.id("config_request"));
     public static final StreamCodec<FriendlyByteBuf, ConfigRequestPayload> CODEC = StreamCodec.of((buf, value) -> buf.writeResourceLocation(value.id), buf -> new ConfigRequestPayload(buf.readResourceLocation()));
 
     @Override

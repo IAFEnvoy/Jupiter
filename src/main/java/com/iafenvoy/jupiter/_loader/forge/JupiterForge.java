@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter._loader.forge;
 
 //? forge {
 /*import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.util.RLUtil;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter._loader.forge.network.packet.ByteBufC2S;
 import com.iafenvoy.jupiter._loader.forge.network.packet.ByteBufS2C;
@@ -16,7 +17,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 @Mod(Jupiter.MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class JupiterForge {
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(Jupiter.id("buf"), () -> "1", s -> true, s -> true);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(RLUtil.id("buf"), () -> "1", s -> true, s -> true);
 
     @SuppressWarnings("UnstableApiUsage")
     public JupiterForge() {

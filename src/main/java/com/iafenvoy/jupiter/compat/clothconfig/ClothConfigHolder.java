@@ -8,12 +8,15 @@ import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.util.JupiterUtils;
+import com.iafenvoy.jupiter.util.RLUtil;
 import com.iafenvoy.jupiter.util.TextUtil;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigManager;
+import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.util.Utils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -21,6 +24,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
@@ -43,7 +47,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public ResourceLocation getConfigId() {
-        return Jupiter.id(this.modId, "config");
+        return RLUtil.id(this.modId, "config");
     }
 
     @Override
@@ -76,12 +80,17 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     }
 
     @Override
+    public @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+        Config.Gui.Background background=this.values.getClass().getAnnotation(Config.Gui.Background.class);
+        return background == null ? null : RLUtil.tryParse(background.value());
+    }
+
+    @Override
     public Collection<? extends ConfigGroup> buildGroups() {
         return List.of(this.buildGroup(this.getConfigId().toString(), "%s.option".formatted(this.baseTranslateKey()), this.defaults, this.values));
     }
 
     public <T> ConfigGroup buildGroup(String id, String baseKey, T defaults, T values) {
-        //TODO::Implement background texture feature
         ConfigGroup group = new ConfigGroup(id, TextUtil.translatable(baseKey));
         for (Field field : defaults.getClass().getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)

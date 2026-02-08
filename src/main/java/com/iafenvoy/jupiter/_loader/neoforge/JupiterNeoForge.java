@@ -1,7 +1,6 @@
 package com.iafenvoy.jupiter._loader.neoforge;
 
 //? neoforge {
-
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,7 +22,8 @@ import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 //?}
 //? >=1.21.4 {
-/*import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+/*import com.iafenvoy.jupiter.util.RLUtil;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 *///?} else {
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 //?}
@@ -80,6 +80,6 @@ public class JupiterNeoForge {
     @SubscribeEvent
             //?}
     public static void registerServerListener(/*? >=1.21.4 {*//*AddServerReloadListenersEvent*//*?} else {*/AddReloadListenerEvent/*?}*/ event) {
-        event.addListener( /*? >=1.21.4 {*//*Jupiter.id("server_config_reload"), *//*?}*/new ServerConfigManager());
+        event.addListener( /*? >=1.21.4 {*//*RLUtil.id("server_config_reload"), *//*?}*/new ServerConfigManager());
     }
 }

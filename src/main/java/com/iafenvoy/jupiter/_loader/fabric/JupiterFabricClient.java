@@ -2,6 +2,7 @@ package com.iafenvoy.jupiter._loader.fabric;
 
 //? fabric {
 /*import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.util.RLUtil;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.server.packs.PackType;
 //? >=1.21.9 {
@@ -17,7 +18,7 @@ public final class JupiterFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         Jupiter.processClient();
         //? if >=1.21.9 {
-        /^ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(Jupiter.id("client_config_reload"), new ConfigManager());
+        /^ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(RLUtil.id("client_config_reload"), new ConfigManager());
         ^///?} else {
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new ClientConfigReloader());
          //?}

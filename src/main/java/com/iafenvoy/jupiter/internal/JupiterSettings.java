@@ -4,13 +4,14 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.AutoInitConfigContainer;
 import com.iafenvoy.jupiter.config.entry.BooleanEntry;
 import com.iafenvoy.jupiter.config.entry.EnumEntry;
+import com.iafenvoy.jupiter.util.RLUtil;
 
 public class JupiterSettings extends AutoInitConfigContainer {
     public static final JupiterSettings INSTANCE = new JupiterSettings();
     public final General general = new General();
 
     private JupiterSettings() {
-        super(Jupiter.id("jupiter"), "jupiter.screen.config.title", "./config/jupiter.json");
+        super(RLUtil.id("jupiter"), "jupiter.screen.config.title", "./config/jupiter.json");
     }
 
     private static String name(String category, String name) {
