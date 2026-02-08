@@ -2,22 +2,22 @@ package com.iafenvoy.jupiter._loader.neoforge.network;
 
 //? neoforge {
 
-import com.iafenvoy.jupiter.network.ClientNetworkHelper;
+/*import com.iafenvoy.jupiter.network.ClientNetworkHelper;
 import net.minecraft.client.Minecraft;
 //? >=1.21.7 {
-/*import net.neoforged.neoforge.client.network.ClientPacketDistributor;
- *///?} else {
+/^import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+ ^///?} else {
 import net.neoforged.neoforge.network.PacketDistributor;
 //?}
 //? >=1.20.5 {
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 //?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
+/^import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufC2S;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
-*///?}
+^///?}
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,13 +40,13 @@ public class ClientNetworkHelperImpl implements ClientNetworkHelper {
     @Override
     public void sendToServer(CustomPacketPayload payload) {
         //? >=1.21.7 {
-        /*ClientPacketDistributor.sendToServer(payload);
-         *///?} else {
+        /^ClientPacketDistributor.sendToServer(payload);
+         ^///?} else {
         PacketDistributor.sendToServer(payload);
         //?}
     }
     //?} else {
-    /*private static final Map<ResourceLocation, ClientNetworkHelper.Handler> RECEIVERS = new HashMap<>();
+    /^private static final Map<ResourceLocation, ClientNetworkHelper.Handler> RECEIVERS = new HashMap<>();
 
     @Override
     public void sendToServer(ResourceLocation id, FriendlyByteBuf buf) {
@@ -65,5 +65,6 @@ public class ClientNetworkHelperImpl implements ClientNetworkHelper {
         if (runnable != null) Minecraft.getInstance().execute(runnable);
         return true;
     }
-    *///?}
+    ^///?}
 }
+*/

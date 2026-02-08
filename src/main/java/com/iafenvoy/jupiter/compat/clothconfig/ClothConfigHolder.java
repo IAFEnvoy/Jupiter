@@ -52,16 +52,16 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public String getPath() {
-        return String.format("%s.json", this.modId);
+        return String.format(Locale.ROOT, "%s.json", this.modId);
     }
 
     public String baseTranslateKey() {
-        return String.format("text.autoconfig.%s", this.modId);
+        return String.format(Locale.ROOT, "text.autoconfig.%s", this.modId);
     }
 
     @Override
     public Component getTitle() {
-        return TextUtil.translatable(String.format("%s.title", this.baseTranslateKey()));
+        return TextUtil.translatable(String.format(Locale.ROOT, "%s.title", this.baseTranslateKey()));
     }
 
     @Override
@@ -81,13 +81,16 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
-        Config.Gui.Background background=this.values.getClass().getAnnotation(Config.Gui.Background.class);
-        return background == null ? null : RLUtil.tryParse(background.value());
+        Config.Gui.Background background = this.values.getClass().getAnnotation(Config.Gui.Background.class);
+        if (background == null) return null;
+        String id = background.value();
+        if (Config.Gui.Background.TRANSPARENT.equals(id)) return null;
+        return RLUtil.tryParse(id);
     }
 
     @Override
     public Collection<? extends ConfigGroup> buildGroups() {
-        return List.of(this.buildGroup(this.getConfigId().toString(), "%s.option".formatted(this.baseTranslateKey()), this.defaults, this.values));
+        return List.of(this.buildGroup(this.getConfigId().toString(), String.format(Locale.ROOT, "%s.option", this.baseTranslateKey()), this.defaults, this.values));
     }
 
     public <T> ConfigGroup buildGroup(String id, String baseKey, T defaults, T values) {
@@ -96,12 +99,12 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
             if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
                 continue;
             try {
-                String nameKey = "%s.%s".formatted(baseKey, field.getName());
+                String nameKey = String.format(Locale.ROOT, "%s.%s", baseKey, field.getName());
                 ConfigBuilder<?, ?, ?> builder = this.process(nameKey, defaults, values, field);
                 if (builder == null)
                     builder = ConfigGroupEntry.builder(nameKey, this.buildGroup(field.getName(), nameKey, field.get(defaults), field.get(values)));
                 if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip.class) != null)
-                    builder.tooltip("%s.@Tooltip".formatted(nameKey));
+                    builder.tooltip(String.format(Locale.ROOT, "%s.@Tooltip", nameKey));
                 group.addEntry(builder.build());
             } catch (Exception e) {
                 Jupiter.LOGGER.error("Failed to load field {} class {} from class {}", field.getName(), field.getType(), defaults.getClass().getName(), e);

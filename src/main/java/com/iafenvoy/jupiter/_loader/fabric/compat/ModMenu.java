@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter._loader.fabric.compat;
 
 //? fabric {
 
-/*import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap;
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.render.internal.JupiterConfigListScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
@@ -23,4 +23,3 @@ public class ModMenu implements ModMenuApi {
         return builder.build();
     }
 }
-*/

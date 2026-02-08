@@ -62,7 +62,7 @@ public class EnumSelectWidget<T extends Enum<T>> extends ObjectSelectionList<Enu
     protected int getScrollbarPosition() {
         return this.getRight() - 8;
     }
-   //?} else {
+    //?} else {
     /*@Override
     protected int getScrollbarPosition() {
         return this.x1 - 8;

@@ -2,11 +2,11 @@ package com.iafenvoy.jupiter.network;
 
 // @formatter:off
 //? neoforge {
-import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
- //?}
+/*import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
+ *///?}
 //? fabric {
-/*import com.iafenvoy.jupiter._loader.fabric.network.ClientNetworkHelperImpl;
-*///?}
+import com.iafenvoy.jupiter._loader.fabric.network.ClientNetworkHelperImpl;
+//?}
 //? forge {
 /*import com.iafenvoy.jupiter._loader.forge.network.ClientNetworkHelperImpl;
 *///?}

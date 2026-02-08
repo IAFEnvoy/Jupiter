@@ -31,16 +31,7 @@ dependencies {
             parchment("org.parchmentmc.data:parchment-${property("deps.parchment")}@zip")
     })
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
-
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
-    var fabricApiVersion = property("deps.fabric-api") as String
-    include(fabricApi.module("fabric-api-base", fabricApiVersion))
-    include(fabricApi.module("fabric-networking-api-v1", fabricApiVersion))
-    if (stonecutter.eval(stonecutter.current.version, "<=1.21.8"))
-        include(fabricApi.module("fabric-resource-loader-v0", fabricApiVersion))
-    else
-        include(fabricApi.module("fabric-resource-loader-v1", fabricApiVersion))
-
     modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
 
     modCompileOnly("com.electronwill.night-config:core:3.8.2")
@@ -126,6 +117,7 @@ publishMods {
         projectId = property("publish.modrinth") as String
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.addAll(supportedMinecraftVersions)
+        requires("fabric-api")
         optional("forge-config-api-port")
         optional("cloth-config")
     }
@@ -134,6 +126,7 @@ publishMods {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.addAll(supportedMinecraftVersions)
+        requires("fabric-api")
         optional("forge-config-api-port")
         optional("cloth-config")
     }

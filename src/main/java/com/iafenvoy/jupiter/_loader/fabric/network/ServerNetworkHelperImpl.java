@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter._loader.fabric.network;
 
 //? fabric {
 
-/*import com.iafenvoy.jupiter.network.ServerNetworkHelper;
+import com.iafenvoy.jupiter.network.ServerNetworkHelper;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,8 +12,8 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
  //?} else {
-/^import net.minecraft.resources.ResourceLocation;
-^///?}
+/*import net.minecraft.resources.ResourceLocation;
+*///?}
 
 public class ServerNetworkHelperImpl implements ServerNetworkHelper {
     //? >=1.20.5 {
@@ -36,7 +36,7 @@ public class ServerNetworkHelperImpl implements ServerNetworkHelper {
         });
     }
      //?} else {
-    /^@Override
+    /*@Override
     public void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
         ServerPlayNetworking.send(player, id, buf);
     }
@@ -45,6 +45,5 @@ public class ServerNetworkHelperImpl implements ServerNetworkHelper {
     public void registerReceiver(ResourceLocation id, Handler handler) {
         ServerPlayNetworking.registerGlobalReceiver(id, (server, player, listener, buf, sender) -> server.execute(handler.handle(server, player, buf)));
     }
-    ^///?}
+    *///?}
 }
-*/

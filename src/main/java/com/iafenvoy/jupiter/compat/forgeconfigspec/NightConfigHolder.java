@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+
 import org.jetbrains.annotations.Nullable;
 
 //WARNING!!! DO NOT try to understand how these code work!!!
@@ -52,7 +53,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
 
     @Override
     public Component getTitle() {
-        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable(String.format("jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT))));
+        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable(String.format(Locale.ROOT, "jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT))));
     }
 
     @Override
