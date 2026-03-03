@@ -53,7 +53,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
 
     @Override
     public Component getTitle() {
-        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId)).append(" ").append(TextUtil.translatable(String.format(Locale.ROOT, "jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT))));
+        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId, true)).append(" ").append(TextUtil.translatable(String.format(Locale.ROOT, "jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT))));
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
                 Object defaultValue = spec.getDefault();
                 try {
                     String translateKey = Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey);
-                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatableWithFallback(translateKey, TextFormatter.formatToTitleCase(translateKey)), entry, defaultValue, value, JupiterUtils.packPredicate(spec::test));
+                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatableWithFallback(translateKey, TextFormatter.formatToTitleCase(translateKey, false)), entry, defaultValue, value, JupiterUtils.packPredicate(spec::test));
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {
@@ -108,7 +108,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
                     Jupiter.LOGGER.error("Cannot load key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side, e);
                 }
             } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config) {
-                Component name = TextUtil.translatableWithFallback(entry.getKey(), TextFormatter.formatToTitleCase(entry.getKey()));
+                Component name = TextUtil.translatableWithFallback(entry.getKey(), TextFormatter.formatToTitleCase(entry.getKey(), false));
                 group.addEntry(ConfigGroupEntry.builder(name, this.buildGroup(entry.getKey(), name, spec, config)).key(entry.getKey()).build());
             }
         }

@@ -1,12 +1,15 @@
 package com.iafenvoy.jupiter.util;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class TextFormatter {
-    public static String formatToTitleCase(String input) {
+    public static String formatToTitleCase(String input, boolean ignoreTranslateKey) {
         if (input == null || input.trim().isEmpty()) return "";
-        if (input.contains(".")) return input;//Do not format translate key
-        String withSpaces = input.replaceAll("_", " ");
-        withSpaces = withSpaces.replaceAll("([a-z])([A-Z])", "$1 $2");
-        String[] words = withSpaces.split("\\s+");
+        if (input.contains("."))
+            if (ignoreTranslateKey) return input;//Do not format translate key
+            else input = Arrays.stream(input.split("\\.")).max(Comparator.naturalOrder()).orElse("");
+        String[] words = input.replaceAll("_", " ").replaceAll("([a-z])([A-Z])", "$1 $2").split("\\s+");
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < words.length; i++) {
             String word = words[i].toLowerCase();

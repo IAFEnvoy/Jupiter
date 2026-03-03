@@ -45,7 +45,7 @@ public final class ExtraConfigManager {
         return parent -> {
             Optional<EnumMap<ConfigSide, AbstractConfigContainer>> optional = find(modId);
             if (optional.isEmpty()) return null;
-            ConfigSelectScreen.Builder builder = ConfigSelectScreen.builder(TextUtil.literal(TextFormatter.formatToTitleCase(modId + "_configs")), parent).displayCommon();
+            ConfigSelectScreen.Builder builder = ConfigSelectScreen.builder(TextUtil.literal(TextFormatter.formatToTitleCase(modId + "_configs", true)), parent).displayCommon();
             for (Map.Entry<ConfigSide, AbstractConfigContainer> entry : optional.get().entrySet()) {
                 AbstractConfigContainer container = entry.getValue();
                 switch (entry.getKey()) {

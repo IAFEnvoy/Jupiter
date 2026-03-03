@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 //? >=1.19.3 {
 import net.minecraft.client.gui.components.Tooltip;
@@ -16,8 +17,12 @@ import net.minecraft.client.gui.components.Tooltip;
 /*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
  *///?}
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface JupiterScreen {
     int ENTRIES_PER_SCROLL = 2;

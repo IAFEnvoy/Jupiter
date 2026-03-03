@@ -27,7 +27,7 @@ public interface TextUtil {
         //?} else >=1.19 {
         /*return Component.translatable(text, args);
          *///?} else {
-        /*return new TranslatableComponent(text,args);
+        /*return new TranslatableComponent(text, args);
          *///?}
     }
 }
