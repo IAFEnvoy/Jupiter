@@ -9,6 +9,7 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
+import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.util.RLUtil;
 import com.iafenvoy.jupiter.util.TextFormatter;
 import com.iafenvoy.jupiter.util.TextUtil;
@@ -129,7 +130,9 @@ public final class NightConfigHolder implements ExtraConfigHolder {
         //List
         if (Collection.class.isAssignableFrom(defaultValue.getClass()))
             //Some magic hack
-            if (validator.test(List.of(false)))
+            if (validator.test(List.of("")))//Check string first to avoid some authors don't write validator
+                this.<String, ListStringEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListStringEntry::builder);
+            else if (validator.test(List.of(false)))
                 this.<Boolean, ListBooleanEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListBooleanEntry::builder);
             else if (validator.test(List.of(0)))
                 this.<Integer, ListIntegerEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListIntegerEntry::builder);
@@ -137,14 +140,12 @@ public final class NightConfigHolder implements ExtraConfigHolder {
                 this.<Long, ListLongEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListLongEntry::builder);
             else if (validator.test(List.of(0D)))
                 this.<Double, ListDoubleEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListDoubleEntry::builder);
-            else if (validator.test(List.of("")))
-                this.<String, ListStringEntry.Builder>processCollectionEntry(holder, values, name, entry, defaultValue, value, ListStringEntry::builder);
             else {//This method is unstable and usually failed to get
                 Optional<?> any = ((List<?>) defaultValue).stream().findAny();
                 if (any.isPresent() && any.get().getClass().isEnum())
                     this.processEnumCollection(holder, values, name, entry, defaultValue, value, (Enum) any.get());
                 else {
-                    Jupiter.LOGGER.warn("Notice: Jupiter cannot resolve empty List<Enum> since technical issue in Java, it is recommended to add a value in default value list.");
+                    ConfigSpecLoader.meetEmptyEnumList();
                     holder.set(SeparatorEntry.builder().text("jupiter.screen.cannot_process_list_enum").tooltip(name));
                 }
             }
@@ -173,7 +174,8 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     @SuppressWarnings("unchecked")
     private <T, B extends ConfigBuilder<List<T>, ?, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
         B builder = entryProvider.apply(name, (List<T>) defaultValue);
-        builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value(new LinkedList<>((List<T>) value));
+        builder.callback((v, r, d) -> values.set(entry.getKey(), v));
+        if (value != null) builder.value(new LinkedList<>((List<T>) value));
         reference.set(builder);
     }
 

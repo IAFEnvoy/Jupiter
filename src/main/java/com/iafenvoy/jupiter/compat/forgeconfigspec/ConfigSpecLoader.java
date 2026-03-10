@@ -30,10 +30,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class ConfigSpecLoader {
+    private static int emptyEnumListCount = 0;
+
+    public static void meetEmptyEnumList() {
+        emptyEnumListCount++;
+    }
+
     public static Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> scanConfig() {
         Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> data = new LinkedHashMap<>();
         if (!JupiterSettings.INSTANCE.general.loadForgeConfigs.getValue()) return data;
         Collection<ModConfig> configs = /*? >=1.21 {*/ModConfigs.getFileMap().values()/*?} else {*//*ConfigTracker.INSTANCE.fileMap().values()*//*?}*/;
+        emptyEnumListCount = 0;
         for (ModConfig config : configs) {
             try {
                 //? >=1.21.1 {
@@ -41,9 +48,10 @@ public final class ConfigSpecLoader {
                 IConfigSpec.ILoadedConfig valueHolder = config.getLoadedConfig();
                 if (valueHolder == null) continue;
                 ConfigSide type = switch (config.getType()) {
-                    case COMMON, STARTUP -> ConfigSide.COMMON;
+                    case COMMON -> ConfigSide.COMMON;
                     case CLIENT -> ConfigSide.CLIENT;
                     case SERVER -> ConfigSide.SERVER;
+                    case STARTUP -> ConfigSide.STARTUP;
                 };
                 UnmodifiableConfig defaults = spec.getSpec();
                 CommentedConfig values = valueHolder.config();
@@ -53,9 +61,10 @@ public final class ConfigSpecLoader {
                 if (!(config.getSpec() instanceof /^? >=1.20.2 {^/ModConfigSpec/^?} else {^/ /^ForgeConfigSpec^//^?}^/ spec) || values == null)
                     continue;
                 ConfigSide type = switch (config.getType()) {
-                    case COMMON/^? >=1.20.5 {^/, STARTUP/^?}^/ -> ConfigSide.COMMON;
+                    case COMMON -> ConfigSide.COMMON;
                     case CLIENT -> ConfigSide.CLIENT;
                     case SERVER -> ConfigSide.SERVER;
+                    /^? >=1.20.5 {^/case STARTUP -> ConfigSide.STARTUP;/^?}^/
                 };
                 UnmodifiableConfig defaults = spec.getSpec();
                 Runnable saver = config::save;
@@ -69,6 +78,8 @@ public final class ConfigSpecLoader {
                 Jupiter.LOGGER.error("Failed to load config spec {}:{}:", config.getModId(), config.getType().extension(), e);
             }
         }
+        if (emptyEnumListCount > 0)
+            Jupiter.LOGGER.warn("Notice: Jupiter cannot resolve {} empty List<Enum> since technical issue in Java, it is recommended to add a value in default value list.", emptyEnumListCount);
         Jupiter.LOGGER.info("Config spec loading complete, found {} configs from {} mods.", data.values().stream().map(EnumMap::size).reduce(0, Integer::sum, Integer::sum), data.size());
         return data;
     }

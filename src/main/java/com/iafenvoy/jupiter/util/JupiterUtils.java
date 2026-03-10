@@ -1,7 +1,5 @@
 package com.iafenvoy.jupiter.util;
 
-import com.iafenvoy.jupiter.Jupiter;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.function.Predicate;

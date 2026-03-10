@@ -205,7 +205,7 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
         @Override
         public E build() {
             E e = this.buildInternal();
-            if (this.value != null) e.value = this.value;
+            if (this.value != null) e.setValue(this.value);
             return e;
         }
     }

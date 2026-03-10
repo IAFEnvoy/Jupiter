@@ -21,10 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
@@ -90,19 +87,19 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public Collection<? extends ConfigGroup> buildGroups() {
-        return List.of(this.buildGroup(this.getConfigId().toString(), String.format(Locale.ROOT, "%s.option", this.baseTranslateKey()), this.defaults, this.values));
+        return List.of(this.buildGroup(this.getConfigId().toString(), "", this.defaults, this.values));
     }
 
-    public <T> ConfigGroup buildGroup(String id, String baseKey, T defaults, T values) {
-        ConfigGroup group = new ConfigGroup(id, TextUtil.translatable(baseKey));
+    public <T> ConfigGroup buildGroup(String id, String parentKey, T defaults, T values) {
+        ConfigGroup group = new ConfigGroup(id, TextUtil.translatable(String.format(Locale.ROOT, "%s.category%s", this.baseTranslateKey(), parentKey)));
         for (Field field : defaults.getClass().getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
                 continue;
             try {
-                String nameKey = String.format(Locale.ROOT, "%s.%s", baseKey, field.getName());
+                String nameKey = String.format(Locale.ROOT, "%s.option%s.%s", this.baseTranslateKey(), parentKey, field.getName());
                 ConfigBuilder<?, ?, ?> builder = this.process(nameKey, defaults, values, field);
                 if (builder == null)
-                    builder = ConfigGroupEntry.builder(nameKey, this.buildGroup(field.getName(), nameKey, field.get(defaults), field.get(values)));
+                    builder = ConfigGroupEntry.builder(String.format(Locale.ROOT, "%s.category%s.%s", this.baseTranslateKey(), parentKey, field.getName()), this.buildGroup(field.getName(), String.format(Locale.ROOT, "%s.%s", parentKey, field.getName()), field.get(defaults), field.get(values)));
                 if (field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip.class) != null)
                     builder.tooltip(String.format(Locale.ROOT, "%s.@Tooltip", nameKey));
                 group.addEntry(builder.build());
@@ -160,8 +157,8 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     @SuppressWarnings("unchecked")
     private <V, T, B extends ConfigBuilder<List<T>, ?, B>> void processArrayEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, List<T>, B> entryProvider) {
         if (clazz.isAssignableFrom(field.getType().componentType())) {
-            B builder = entryProvider.apply(name, List.of(Utils.getUnsafely(field, defaults)));
-            builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v.toArray((T[]) Array.newInstance(clazz, 0)))).value(List.of(Utils.getUnsafely(field, values)));
+            B builder = entryProvider.apply(name, List.of(Objects.requireNonNullElseGet(Utils.getUnsafely(field, defaults), () -> (T[]) Array.newInstance(clazz, 0))));
+            builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v.toArray((T[]) Array.newInstance(clazz, 0)))).value(List.of(Objects.requireNonNullElseGet(Utils.getUnsafely(field, values), () -> (T[]) Array.newInstance(clazz, 0))));
             reference.set(builder);
         }
     }
@@ -169,8 +166,8 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     private <V, T, B extends ConfigBuilder<List<T>, ?, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, Component name, Field field, V defaults, V values, Class<T> clazz, BiFunction<Component, List<T>, B> entryProvider) {
         Class<?> actual = JupiterUtils.getGenericActualClass(field);
         if (actual != null && clazz.isAssignableFrom(actual)) {
-            B builder = entryProvider.apply(name, Utils.getUnsafely(field, defaults));
-            builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v)).value(Utils.getUnsafely(field, values));
+            B builder = entryProvider.apply(name, Objects.requireNonNullElseGet(Utils.getUnsafely(field, defaults), List::of));
+            builder.callback((v, r, d) -> Utils.setUnsafely(field, values, v)).value(Objects.requireNonNullElseGet(Utils.getUnsafely(field, values), List::of));
             reference.set(builder);
         }
     }
