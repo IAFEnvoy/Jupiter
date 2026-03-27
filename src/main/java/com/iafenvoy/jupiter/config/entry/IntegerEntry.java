@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
@@ -16,21 +15,6 @@ public class IntegerEntry extends BaseEntry<Integer> implements RangeConfigEntry
         super(builder);
         this.minValue = builder.minValue;
         this.maxValue = builder.maxValue;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public IntegerEntry(String nameKey, int defaultValue) {
-        this(nameKey, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public IntegerEntry(String nameKey, int defaultValue, int minValue, int maxValue) {
-        super(nameKey, defaultValue);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
     }
 
     @Override

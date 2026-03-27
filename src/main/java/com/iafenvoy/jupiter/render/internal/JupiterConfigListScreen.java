@@ -37,7 +37,7 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         super.init();
         if (!this.initialized) {
             this.initialized = true;
-            this.widget = new JupiterConfigListWidget(this, this.minecraft, this.width - 80, this.height - 80, 60/*? <=1.20.1 {*//*, this.width - 32*//*?}*/);
+            this.widget = new JupiterConfigListWidget(this, this.minecraft, this.width - 80, this.height - 80, 60);
         }
         this.widget.updateSize(this.width - 80, new HeaderAndFooterLayout(this, 50, 20));
         this.widget.setX(40);

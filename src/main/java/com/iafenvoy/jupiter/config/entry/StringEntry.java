@@ -4,20 +4,12 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
 public class StringEntry extends BaseEntry<String> implements TextFieldConfigEntry {
     protected StringEntry(Builder builder) {
         super(builder);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public StringEntry(String nameKey, String defaultValue) {
-        super(nameKey, defaultValue);
     }
 
     @Override

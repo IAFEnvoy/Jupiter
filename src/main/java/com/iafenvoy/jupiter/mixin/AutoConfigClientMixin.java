@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Supplier;
 
 @Pseudo
-@Mixin(value = AutoConfigClient.class, remap = false)
+@Mixin(AutoConfigClient.class)
 public class AutoConfigClientMixin {
     @Inject(method = "getConfigScreen", at = @At("RETURN"), cancellable = true)
     private static <T extends ConfigData> void hookConfigScreen(Class<T> configClass, Screen parent, CallbackInfoReturnable<Supplier<Screen>> cir) {

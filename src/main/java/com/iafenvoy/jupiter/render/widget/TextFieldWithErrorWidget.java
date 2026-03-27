@@ -4,6 +4,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 public class TextFieldWithErrorWidget extends EditBox {
     private boolean hasError = false;
@@ -13,7 +14,7 @@ public class TextFieldWithErrorWidget extends EditBox {
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    public void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         if (this.hasError) {
             this.setTextColorUneditable(0xFFFF0000);
             this.setEditable(false);

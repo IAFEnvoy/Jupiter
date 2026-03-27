@@ -85,13 +85,8 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
             BadgeRenderer.draw(extractor, this.client.font, x + 1, y + 16, Component.literal(side.getDisplayText()), side.getColor());
         }
 
-        //? >=1.21.9 {
         @Override
         public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
-            //?} else {
-        /*@Override
-        public boolean mouseClicked(double x, double y, int button) {
-            *///?}
             this.widget.setSelected(this);
             return false;
         }

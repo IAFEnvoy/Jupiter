@@ -128,12 +128,12 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor extractor, int mouseX, int mouseY, float a) {
         Identifier texture = this.getBackgroundTexture(this.minecraft.level != null);
-        if (texture == null) super.extractMenuBackground(extractor);
+        if (texture == null) super.extractBackground(extractor, mouseX, mouseY, a);
         else extractMenuBackgroundTexture(extractor, texture, mouseX, mouseY, 0.0F, 0.0F, this.width, this.height);
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(@NonNull GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
         super.extractRenderState(extractor, mouseX, mouseY, partialTicks);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);

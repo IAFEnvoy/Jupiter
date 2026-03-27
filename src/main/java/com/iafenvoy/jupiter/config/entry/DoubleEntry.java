@@ -4,28 +4,12 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
 public class DoubleEntry extends BaseEntry<Double> implements RangeConfigEntry<Double> {
     private final double minValue, maxValue;
     private final boolean useSlider = false;
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public DoubleEntry(String nameKey, double defaultValue) {
-        this(nameKey, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public DoubleEntry(String nameKey, double defaultValue, double minValue, double maxValue) {
-        super(nameKey, defaultValue);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-    }
 
     protected DoubleEntry(Builder builder) {
         super(builder);

@@ -10,7 +10,7 @@ public class SingleConfigScreen extends ConfigListScreen {
     private final AbstractConfigContainer container;
 
     public SingleConfigScreen(Screen parent, AbstractConfigContainer container, boolean client) {
-        super(parent, TitleStack.create(container.getTitle()), container.getConfigId(), container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/.getConfigs(), client);
+        super(parent, TitleStack.create(container.getTitle()), container.getConfigId(), container.getConfigTabs().getFirst().getConfigs(), client);
         this.container = container;
     }
 

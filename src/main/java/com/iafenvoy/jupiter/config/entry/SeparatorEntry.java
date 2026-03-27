@@ -5,50 +5,17 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SeparatorEntry implements ConfigEntry<Unit> {
-    private Component text = null, tooltip;
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public SeparatorEntry() {
-    }
+    private final Component text, tooltip;
 
     protected SeparatorEntry(Builder builder) {
         this.text = builder.text;
         this.tooltip = builder.tooltip;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public SeparatorEntry text(@NotNull String textKey) {
-        return this.text(Component.translatable(textKey, new Object[]{}));
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public SeparatorEntry text(@NotNull Component textKey) {
-        this.text = textKey;
-        return this;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public SeparatorEntry tooltip(String tooltipKey) {
-        return this.tooltip(Component.translatable(tooltipKey, new Object[]{}));
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public SeparatorEntry tooltip(Component tooltipKey) {
-        this.tooltip = tooltipKey;
-        return this;
     }
 
     @Override

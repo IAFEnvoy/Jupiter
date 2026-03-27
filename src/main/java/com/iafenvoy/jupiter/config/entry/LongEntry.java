@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
@@ -19,21 +18,6 @@ public class LongEntry extends BaseEntry<Long> implements RangeConfigEntry<Long>
         super(builder);
         this.minValue = builder.minValue;
         this.maxValue = builder.maxValue;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public LongEntry(String nameKey, Long defaultValue) {
-        this(nameKey, defaultValue, Long.MIN_VALUE, Long.MAX_VALUE);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public LongEntry(String nameKey, long defaultValue, long minValue, long maxValue) {
-        super(nameKey, defaultValue);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
     }
 
     @Override

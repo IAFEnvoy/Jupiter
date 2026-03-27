@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
@@ -12,12 +11,6 @@ import java.util.List;
 public class ListStringEntry extends ListBaseEntry<String> {
     protected ListStringEntry(Builder builder) {
         super(builder);
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public ListStringEntry(String nameKey, List<String> defaultValue) {
-        super(nameKey, defaultValue);
     }
 
     @Override

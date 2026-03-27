@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
@@ -14,13 +13,6 @@ import java.util.Objects;
 public class MapStringEntry extends MapBaseEntry<String> {
     protected MapStringEntry(Builder builder) {
         super(builder);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public MapStringEntry(String nameKey, Map<String, String> defaultValue) {
-        super(nameKey, defaultValue);
     }
 
     @Override

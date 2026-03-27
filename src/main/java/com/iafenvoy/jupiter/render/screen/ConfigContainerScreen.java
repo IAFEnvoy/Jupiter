@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
     public ConfigContainerScreen(Screen parent, AbstractConfigContainer container, boolean client) {
         super(parent, TitleStack.create(container.getTitle()), container.getConfigId(), client);
         this.container = container;
-        this.currentGroup = container.getConfigTabs().isEmpty() ? ConfigGroup.EMPTY : container.getConfigTabs()/*? >=1.20.5 {*/.getFirst()/*?} else {*//*.get(0)*//*?}*/;
+        this.currentGroup = container.getConfigTabs().isEmpty() ? ConfigGroup.EMPTY : container.getConfigTabs().getFirst();
         this.topBorder = 60;
     }
 
@@ -80,7 +81,7 @@ public class ConfigContainerScreen extends ConfigListScreen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(@NonNull GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
         super.extractRenderState(extractor, mouseX, mouseY, partialTicks);
         this.groupScrollBar.render(extractor, mouseX, mouseY, partialTicks, 10, 50, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
         if (this.groupScrollBar.isDragging()) this.updateTabPos();

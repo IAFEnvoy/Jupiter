@@ -13,7 +13,7 @@ public interface ServerNetworkHelper {
 
     <T extends CustomPacketPayload> void registerReceiver(CustomPacketPayload.Type<T> id, Handler<T> handler);
 
-    interface Handler/*? >=1.20.5 {*/<T extends CustomPacketPayload>/*?}*/ {
+    interface Handler<T extends CustomPacketPayload> {
         Runnable handle(MinecraftServer server, ServerPlayer player, T payload);
     }
 }

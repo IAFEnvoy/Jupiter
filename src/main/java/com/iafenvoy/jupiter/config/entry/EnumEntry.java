@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -13,24 +12,11 @@ import java.util.function.Function;
 
 public class EnumEntry<T extends Enum<T>> extends BaseEntry<T> {
     @Nullable
-    protected Function<T, Component> nameProvider;
+    protected final Function<T, Component> nameProvider;
 
     protected EnumEntry(Builder<T> builder) {
         super(builder);
         this.nameProvider = builder.nameProvider;
-    }
-
-    @SuppressWarnings({"unchecked", "removal"})
-    @Deprecated(forRemoval = true)
-    public EnumEntry(String nameKey, com.iafenvoy.jupiter.interfaces.IConfigEnumEntry defaultValue) {
-        this(nameKey, (T) defaultValue);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public EnumEntry(String nameKey, T defaultValue) {
-        super(nameKey, defaultValue);
     }
 
     @SuppressWarnings("unchecked")

@@ -2,7 +2,6 @@ package com.iafenvoy.jupiter.config;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.*;
 import net.minecraft.network.chat.Component;
 
@@ -30,15 +29,6 @@ public class ConfigGroup {
 
     public ConfigGroup addEntry(ConfigEntry<?> config) {
         this.configs.add(config);
-        this.cache = null;
-        return this;
-    }
-
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    @Comment("Use addEntry instead")
-    public ConfigGroup add(com.iafenvoy.jupiter.interfaces.IConfigEntry<?> config) {
-        this.configs.add((ConfigEntry<?>) config);
         this.cache = null;
         return this;
     }

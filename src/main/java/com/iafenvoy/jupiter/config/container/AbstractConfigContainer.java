@@ -103,22 +103,6 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
         return null;
     }
 
-    @Deprecated(forRemoval = true)
-    @Comment("Only call on saving to disk, not on network")
-    protected boolean shouldLoad(JsonObject obj) {
-        return true;
-    }
-
-    @Deprecated(forRemoval = true)
-    @Comment("Only call on saving to disk, not on network")
-    protected void readCustomData(JsonObject obj) {
-    }
-
-    @Deprecated(forRemoval = true)
-    @Comment("Only call on saving to disk, not on network")
-    protected void writeCustomData(JsonObject obj) {
-    }
-
     private static class GroupsCodec extends MapCodec<List<ConfigGroup>> {
         private final AbstractConfigContainer parent;
 

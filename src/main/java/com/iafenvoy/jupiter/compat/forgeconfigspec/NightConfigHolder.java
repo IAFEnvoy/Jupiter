@@ -83,7 +83,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
         ConfigGroup group = new ConfigGroup(id, groupName);
         for (UnmodifiableConfig.Entry entry : defaults.entrySet()) {
             Object entryValue = entry.getValue(), value = values.get(entry.getKey());
-            if (entryValue instanceof /*? >=1.20.2 {*/ ModConfigSpec/*?} else {*/ /*ForgeConfigSpec*//*?}*/.ValueSpec spec) {
+            if (entryValue instanceof ModConfigSpec.ValueSpec spec) {
                 Object defaultValue = spec.getDefault();
                 try {
                     String translateKey = Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey);
@@ -151,7 +151,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     private <T, B extends ConfigBuilder<T, ?, B>> void processEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, Class<T> clazz, BiFunction<Component, T, B> entryProvider) {
         if (clazz.isAssignableFrom(defaultValue.getClass()) && clazz.isAssignableFrom(value.getClass())) {
             B builder = entryProvider.apply(name, (T) defaultValue);
-            builder.callback((v, r, d) -> values.set(entry.getKey(), v)).value((T) value);
+            builder.callback((v, _, _) -> values.set(entry.getKey(), v)).value((T) value);
             reference.set(builder);
         }
     }
@@ -161,7 +161,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
         if (clazz.isEnum() && clazz.isAssignableFrom(defaultValue.getClass()) && value instanceof String valueStr) {
             Class<T> testClazz = (Class<T>) clazz;
             EnumEntry.Builder<T> builder = EnumEntry.builder(name, (T) defaultValue);
-            builder.callback((v, r, d) -> values.set(entry.getKey(), v.name())).value(Enum.valueOf(testClazz, valueStr));
+            builder.callback((v, _, _) -> values.set(entry.getKey(), v.name())).value(Enum.valueOf(testClazz, valueStr));
             reference.set(builder);
         }
     }
@@ -169,7 +169,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     @SuppressWarnings("unchecked")
     private <T, B extends ConfigBuilder<List<T>, ?, B>> void processCollectionEntry(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, BiFunction<Component, List<T>, B> entryProvider) {
         B builder = entryProvider.apply(name, (List<T>) defaultValue);
-        builder.callback((v, r, d) -> values.set(entry.getKey(), v));
+        builder.callback((v, _, _) -> values.set(entry.getKey(), v));
         if (value != null) builder.value(new LinkedList<>((List<T>) value));
         reference.set(builder);
     }
@@ -178,7 +178,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     private <T extends Enum<T>> void processEnumCollection(AtomicReference<ConfigBuilder<?, ?, ?>> reference, CommentedConfig values, Component name, UnmodifiableConfig.Entry entry, Object defaultValue, Object value, T any) {
         Class<T> clazz = any.getDeclaringClass();
         ListEnumEntry.Builder<T> builder = ListEnumEntry.builder(name, ((List<T>) defaultValue), any);
-        builder.callback((v, r, d) -> values.set(entry.getKey(), v.stream().map(Enum::name).toList())).value(new LinkedList<>(((List<String>) value).stream().map(x -> Enum.valueOf(clazz, x)).toList()));
+        builder.callback((v, _, _) -> values.set(entry.getKey(), v.stream().map(Enum::name).toList())).value(new LinkedList<>(((List<String>) value).stream().map(x -> Enum.valueOf(clazz, x)).toList()));
         reference.set(builder);
     }
 }

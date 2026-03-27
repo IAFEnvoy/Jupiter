@@ -3,20 +3,12 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 
 public class BooleanEntry extends BaseEntry<Boolean> {
     protected BooleanEntry(Builder builder) {
         super(builder);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public BooleanEntry(String nameKey, boolean defaultValue) {
-        super(nameKey, defaultValue);
     }
 
     @Override

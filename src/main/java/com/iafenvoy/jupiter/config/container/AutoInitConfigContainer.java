@@ -45,7 +45,7 @@ public class AutoInitConfigContainer extends FileConfigContainer {
             if (!this.loaded) {
                 this.loaded = true;
                 for (Field field : this.getClass().getFields())
-                    if (ConfigEntry.class.isAssignableFrom(field.getType()) || com.iafenvoy.jupiter.interfaces.IConfigEntry.class.isAssignableFrom(field.getType()))
+                    if (ConfigEntry.class.isAssignableFrom(field.getType()))
                         try {
                             this.category.addEntry((ConfigEntry<?>) field.get(this));
                         } catch (Exception e) {

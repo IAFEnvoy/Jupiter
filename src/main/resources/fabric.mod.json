@@ -29,7 +29,7 @@
     "${mod_id}.mixins.json"
   ],
   "depends": {
-    "minecraft": [${supported_minecraft_versions}],
+    "minecraft": [${fabric_supported_minecraft_versions}],
     "fabric-api": "*"
   }
 }

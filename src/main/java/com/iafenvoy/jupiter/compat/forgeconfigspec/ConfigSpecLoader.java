@@ -29,11 +29,10 @@ public final class ConfigSpecLoader {
     public static Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> scanConfig() {
         Map<String, EnumMap<ConfigSide, AbstractConfigContainer>> data = new LinkedHashMap<>();
         if (!JupiterSettings.INSTANCE.general.loadForgeConfigs.getValue()) return data;
-        Collection<ModConfig> configs = /*? >=1.21 {*/ModConfigs.getFileMap().values()/*?} else {*//*ConfigTracker.INSTANCE.fileMap().values()*//*?}*/;
+        Collection<ModConfig> configs = ModConfigs.getFileMap().values();
         emptyEnumListCount = 0;
         for (ModConfig config : configs) {
             try {
-                //? >=1.21.1 {
                 if (!(config.getSpec() instanceof ModConfigSpec spec)) continue;
                 IConfigSpec.ILoadedConfig valueHolder = config.getLoadedConfig();
                 if (valueHolder == null) continue;
@@ -46,19 +45,6 @@ public final class ConfigSpecLoader {
                 UnmodifiableConfig defaults = spec.getSpec();
                 CommentedConfig values = valueHolder.config();
                 Runnable saver = valueHolder::save;
-                //?} else {
-                /*CommentedConfig values = config.getConfigData();
-                if (!(config.getSpec() instanceof /^? >=1.20.2 {^/ModConfigSpec/^?} else {^/ /^ForgeConfigSpec^//^?}^/ spec) || values == null)
-                    continue;
-                ConfigSide type = switch (config.getType()) {
-                    case COMMON -> ConfigSide.COMMON;
-                    case CLIENT -> ConfigSide.CLIENT;
-                    case SERVER -> ConfigSide.SERVER;
-                    /^? >=1.20.5 {^/case STARTUP -> ConfigSide.STARTUP;/^?}^/
-                };
-                UnmodifiableConfig defaults = spec.getSpec();
-                Runnable saver = config::save;
-                *///?}
                 AbstractConfigContainer container = new ExtraConfigWrapper(new NightConfigHolder(config.getModId(), type, config.getFileName(), defaults, values, saver));
                 ConfigManager.getInstance().registerConfigHandler(container);
                 if (config.getType() != ModConfig.Type.CLIENT)

@@ -3,26 +3,22 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
-import com.iafenvoy.jupiter.util.Comment;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public abstract class BaseEntry<T> implements ConfigEntry<T> {
     protected final Component name;
-    @Nullable
-    protected String key;
-    @Nullable
-    protected Component tooltip = null;
-    protected boolean visible;
     protected final T defaultValue;
+    @Nullable
+    protected final String key;
+    @Nullable
+    protected Component tooltip;
     protected T value;
-    protected boolean restartRequired;
+    protected final boolean visible, restartRequired;
     protected final List<ValueChangeCallback<T>> callbacks = new ArrayList<>();
 
     protected BaseEntry(Builder<T, ?, ?> builder) {
@@ -36,43 +32,6 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
         this.value = this.newDefaultValue();
     }
 
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public BaseEntry(@NotNull String nameKey, T defaultValue) {
-        this.name = Component.translatable(nameKey, new Object[]{});
-        this.key = nameKey;
-        this.defaultValue = defaultValue;
-        this.value = this.newDefaultValue();
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public BaseEntry<T> visible(boolean visible) {
-        this.visible = visible;
-        return this;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public BaseEntry<T> json(String jsonKey) {
-        this.key = jsonKey;
-        return this;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public BaseEntry<T> callback(Consumer<T> callback) {
-        this.callbacks.add((v2, b1, b2) -> callback.accept(v2));
-        return this;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public BaseEntry<T> restartRequired() {
-        this.restartRequired = true;
-        return this;
-    }
-
     @Override
     public void registerCallback(ValueChangeCallback<T> callback) {
         this.callbacks.add(callback);
@@ -80,7 +39,6 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
 
     @Override
     public void setValue(T value) {
-        T oldValue = this.value;
         this.value = value;
         this.callbacks.forEach(x -> x.onValueChange(this.value, false, Objects.equals(this.value, this.defaultValue)));
     }
@@ -134,7 +92,7 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
 
         public Builder(String nameKey, T defaultValue) {
             this(Component.translatable(nameKey, new Object[]{}), defaultValue);
-            this.json(nameKey);
+            this.key(nameKey);
         }
 
         public Builder(Component name, T defaultValue) {
@@ -155,12 +113,6 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
         public B visible(boolean visible) {
             this.visible = visible;
             return this.self();
-        }
-
-        @Deprecated(forRemoval = true)
-        @Comment("Use key() instead")
-        public B json(String jsonKey) {
-            return this.key(jsonKey);
         }
 
         public B key(String key) {

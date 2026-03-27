@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -14,13 +13,6 @@ import java.util.Objects;
 public class IdentifierEntry extends BaseEntry<Identifier> implements TextFieldConfigEntry {
     protected IdentifierEntry(Builder builder) {
         super(builder);
-    }
-
-    @SuppressWarnings("removal")
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public IdentifierEntry(String nameKey, Identifier defaultValue) {
-        super(nameKey, defaultValue);
     }
 
     @Override

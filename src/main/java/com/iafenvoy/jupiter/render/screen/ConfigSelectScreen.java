@@ -2,10 +2,8 @@ package com.iafenvoy.jupiter.render.screen;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -23,17 +21,6 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
     private final AbstractConfigContainer common, client, server;
     private final boolean displayCommon;
 
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public ConfigSelectScreen(Component title, Screen parent, @Nullable FileConfigContainer serverConfig, @Nullable FileConfigContainer clientConfig) {
-        super(title);
-        this.parent = parent;
-        this.server = serverConfig;
-        this.client = clientConfig;
-        this.common = null;
-        this.displayCommon = false;
-    }
-
     protected ConfigSelectScreen(Component title, Screen parent, @Nullable AbstractConfigContainer common, @Nullable AbstractConfigContainer client, @Nullable AbstractConfigContainer server, boolean displayCommon) {
         super(title);
         this.parent = parent;
@@ -49,9 +36,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         int x = this.width / 2;
         int y = this.height / 2;
         //Back
-        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - (this.displayCommon ? 60 : 45), 200, 20, Component.translatable("jupiter.screen.back", new Object[]{}), button -> {
-            this.minecraft.setScreen(this.parent);
-        }));
+        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - (this.displayCommon ? 60 : 45), 200, 20, Component.translatable("jupiter.screen.back", new Object[]{}), button -> this.minecraft.setScreen(this.parent)));
 
         final boolean connectedToRemote = JupiterScreen.connectedToDedicatedServer();
 
@@ -76,13 +61,12 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
 
         String text1 = this.server != null ? "jupiter.screen.open_local_server" : "jupiter.screen.unavailable";
         this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y - (this.displayCommon ? 0 : 15), 95, 20, Component.translatable("jupiter.screen.local_server_config", new Object[]{}), button -> {
-            assert this.minecraft != null;
             assert this.server != null;
             this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.server, true));
         }, Component.translatable(text1, new Object[]{}))).active = this.server != null;
 
         Pair<Button, Consumer<Component>> serverPair = JupiterScreen.createButtonWithDynamicTooltip(this, x + 5, y - (this.displayCommon ? 0 : 15), 95, 20, Component.translatable("jupiter.screen.remove_server_config", new Object[]{}), button -> {
-            assert this.minecraft != null && this.server != null;
+            assert this.server != null;
             this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.server), false));
         }, Component.translatable("jupiter.screen.unavailable", new Object[]{}));
         this.addRenderableWidget(serverPair.getFirst()).active = this.server != null && connectedToRemote;
@@ -94,7 +78,6 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
 
         String text = this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.unavailable";
         this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y + (this.displayCommon ? 30 : 15), 200, 20, Component.translatable("jupiter.screen.client_config", new Object[]{}), button -> {
-            assert this.minecraft != null;
             assert this.client != null;
             this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.client, true));
         }, Component.translatable(text, new Object[]{}))).active = this.client != null;

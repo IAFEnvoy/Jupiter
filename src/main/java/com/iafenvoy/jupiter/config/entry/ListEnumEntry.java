@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config.entry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.iafenvoy.jupiter.util.EnumHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -16,13 +15,6 @@ public class ListEnumEntry<T extends Enum<T>> extends ListBaseEntry<T> {
     protected ListEnumEntry(Builder<T> builder) {
         super(builder);
         this.newValue = builder.newValue;
-    }
-
-    @Comment("Use builder instead")
-    @Deprecated(forRemoval = true)
-    public ListEnumEntry(String nameKey, List<T> defaultValue, T newValue) {
-        super(nameKey, defaultValue);
-        this.newValue = newValue;
     }
 
     @Override
