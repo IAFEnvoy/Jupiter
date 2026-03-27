@@ -1,7 +1,6 @@
 package com.iafenvoy.jupiter.render;
 
 import com.google.common.collect.ImmutableList;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -11,10 +10,11 @@ import net.minecraft.network.chat.MutableComponent;
 import java.util.List;
 
 public final class TitleStack {
-    private static final Component OMIT = TextUtil.literal("..."), SEPARATOR = TextUtil.literal(" -> ").withStyle(ChatFormatting.GRAY);
+    private static final Component OMIT = Component.literal("...");
+    private static final Component SEPARATOR = Component.literal(" -> ").withStyle(ChatFormatting.GRAY);
     private final Font font = Minecraft.getInstance().font;
     private final List<Component> titles;
-    private MutableComponent cachedTitle = TextUtil.empty();
+    private MutableComponent cachedTitle = Component.empty();
 
     private TitleStack(List<Component> titles) {
         this.titles = titles;
@@ -33,8 +33,8 @@ public final class TitleStack {
 
     public void cacheTitle(int width) {
         if (this.titles.isEmpty()) return;
-        MutableComponent part = TextUtil.empty();
-        this.cachedTitle = TextUtil.empty();
+        MutableComponent part = Component.empty();
+        this.cachedTitle = Component.empty();
         for (int i = this.titles.size() - 1; i >= 0; i--) {
             boolean first = i == this.titles.size() - 1;
             if (first) {
@@ -42,8 +42,8 @@ public final class TitleStack {
                 if (i > 0) this.cachedTitle.append(OMIT).append(SEPARATOR);
                 this.cachedTitle.append(part);
             } else {
-                part = TextUtil.empty().append(this.titles.get(i)).append(SEPARATOR).append(part);
-                MutableComponent component = TextUtil.empty();
+                part = Component.empty().append(this.titles.get(i)).append(SEPARATOR).append(part);
+                MutableComponent component = Component.empty();
                 if (i > 0) component.append(OMIT).append(SEPARATOR);
                 component.append(part);
                 if (this.font.width(component) > width) break;

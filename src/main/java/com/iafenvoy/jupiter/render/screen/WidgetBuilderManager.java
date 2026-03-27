@@ -1,23 +1,18 @@
 package com.iafenvoy.jupiter.render.screen;
 
-import com.iafenvoy.jupiter.Platform;
+import com.iafenvoy.jupiter.JupiterProxies;
 import com.iafenvoy.jupiter.config.entry.EntryBaseEntry;
 import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
 import com.iafenvoy.jupiter.render.widget.builder.*;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.Component;
-//? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
-//?} else {
-/*import com.iafenvoy.jupiter.render.widget.StringWidget;
- *///?}
+import net.minecraft.network.chat.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +34,7 @@ public class WidgetBuilderManager {
     static {
         register(ConfigTypes.SEPARATOR, SeparatorWidgetBuilder::new);
         register(ConfigTypes.CONFIG_GROUP, ConfigGroupWidgetBuilder::new);
-        register(ConfigTypes.BOOLEAN, (provider, config) -> new ButtonWidgetBuilder<>(provider, config, button -> config.setValue(!config.getValue()), () -> TextUtil.literal(config.getValue() ? "§atrue" : "§cfalse")));
+        register(ConfigTypes.BOOLEAN, (provider, config) -> new ButtonWidgetBuilder<>(provider, config, button -> config.setValue(!config.getValue()), () -> Component.literal(config.getValue() ? "§atrue" : "§cfalse")));
         register(ConfigTypes.INTEGER, TextFieldWidgetBuilder::new);
         register(ConfigTypes.LONG, TextFieldWidgetBuilder::new);
         register(ConfigTypes.DOUBLE, TextFieldWidgetBuilder::new);
@@ -71,7 +66,7 @@ public class WidgetBuilderManager {
         @Override
         public void addElements(Context context, int x, int y, int width, int height) {
             Font textRenderer = this.minecraft.font;
-            Component text = TextUtil.translatable("jupiter.screen.unregistered_widget", this.config.getClass().getSimpleName(), this.provider.getSource().jupiterCapability() ? "Jupiter" : Platform.resolveModName(this.provider.getConfigId().getNamespace()));
+            Component text = Component.translatable("jupiter.screen.unregistered_widget", this.config.getClass().getSimpleName(), this.provider.getSource().jupiterCapability() ? "Jupiter" : JupiterProxies.PLATFORM.resolveModName(this.provider.getConfigId().getNamespace()));
             this.textWidget = new StringWidget(20, y, textRenderer.width(text), height, text, textRenderer);
             context.addWidget(this.textWidget);
         }

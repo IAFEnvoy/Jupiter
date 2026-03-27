@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +39,7 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public BaseEntry(@NotNull String nameKey, T defaultValue) {
-        this.name = TextUtil.translatable(nameKey);
+        this.name = Component.translatable(nameKey, new Object[]{});
         this.key = nameKey;
         this.defaultValue = defaultValue;
         this.value = this.newDefaultValue();
@@ -93,7 +92,7 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
 
     @Override
     public Component getName() {
-        return this.restartRequired ? this.name.copy().append(" ").append(TextUtil.translatable("jupiter.screen.restart_required")) : this.name;
+        return this.restartRequired ? this.name.copy().append(" ").append(Component.translatable("jupiter.screen.restart_required", new Object[]{})) : this.name;
     }
 
     @Override
@@ -134,7 +133,7 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
         protected final List<ValueChangeCallback<T>> callbacks = new ArrayList<>();
 
         public Builder(String nameKey, T defaultValue) {
-            this(TextUtil.translatable(nameKey), defaultValue);
+            this(Component.translatable(nameKey, new Object[]{}), defaultValue);
             this.json(nameKey);
         }
 
@@ -177,7 +176,7 @@ public abstract class BaseEntry<T> implements ConfigEntry<T> {
 
         @Override
         public B tooltip(String tooltipKey) {
-            return this.tooltip(TextUtil.translatable(tooltipKey));
+            return this.tooltip(Component.translatable(tooltipKey, new Object[]{}));
         }
 
         @Override

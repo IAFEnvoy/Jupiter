@@ -18,6 +18,6 @@ public final class EnumHelper {
     }
 
     public static <T extends Enum<?>> Component getDisplayText(T value) {
-        return TextUtil.translatable(value.name());
+        return Component.translatable(value.name(), new Object[]{});
     }
 }

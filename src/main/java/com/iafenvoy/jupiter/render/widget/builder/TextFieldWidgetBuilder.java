@@ -40,7 +40,7 @@ public class TextFieldWidgetBuilder<T> extends WidgetBuilder<T> {
     public void updateCustom(boolean visible, int y) {
         if (this.widget == null) return;
         this.widget.visible = visible;
-        this.widget./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
+        this.widget.setY(y);
     }
 
     @Override

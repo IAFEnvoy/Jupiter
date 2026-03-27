@@ -3,7 +3,7 @@ package com.iafenvoy.jupiter.render.screen;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.TitleStack;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class SingleConfigScreen extends ConfigListScreen {
@@ -21,7 +21,7 @@ public class SingleConfigScreen extends ConfigListScreen {
     }
 
     @Override
-    protected @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+    protected @Nullable Identifier getBackgroundTexture(boolean ingame) {
         return this.container.getBackgroundTexture(ingame);
     }
 }

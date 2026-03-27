@@ -4,12 +4,12 @@ import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public interface ConfigMetaProvider {
-    ResourceLocation getConfigId();
+    Identifier getConfigId();
 
     String getPath();
 
@@ -21,9 +21,9 @@ public interface ConfigMetaProvider {
         return this instanceof AbstractConfigContainer container && ServerConfigManager.getServerConfigs().contains(container) ? ConfigSide.COMMON : ConfigSide.CLIENT;
     }
 
-    record SimpleProvider(ResourceLocation id, String path, boolean client) implements ConfigMetaProvider {
+    record SimpleProvider(Identifier id, String path, boolean client) implements ConfigMetaProvider {
         @Override
-        public ResourceLocation getConfigId() {
+        public Identifier getConfigId() {
             return this.id;
         }
 

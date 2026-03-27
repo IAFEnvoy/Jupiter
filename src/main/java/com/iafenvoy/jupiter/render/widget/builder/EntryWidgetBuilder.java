@@ -4,8 +4,8 @@ import com.iafenvoy.jupiter.config.entry.EntryBaseEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
@@ -25,7 +25,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
 
     @Override
     public void addCustomElements(Context context, int x, int y, int width, int height) {
-        this.keyWidget = new EditBox(this.minecraft.font, x, y, width / 2 - 5, height, TextUtil.empty());
+        this.keyWidget = new EditBox(this.minecraft.font, x, y, width / 2 - 5, height, Component.empty());
         this.keyWidget.setValue(this.config.getValue().getKey());
         this.keyWidget.setResponder(s -> this.config.setValue(new AbstractMap.SimpleEntry<>(s, this.config.getValue().getValue())));
         context.addWidget(this.keyWidget);
@@ -38,7 +38,7 @@ public class EntryWidgetBuilder<T> extends WidgetBuilder<Map.Entry<String, T>> {
     public void updateCustom(boolean visible, int y) {
         if (this.keyWidget != null) {
             this.keyWidget.visible = visible;
-            this.keyWidget./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
+            this.keyWidget.setY(y);
         }
         if (this.valueBuilder != null) this.valueBuilder.update(visible, y);
     }

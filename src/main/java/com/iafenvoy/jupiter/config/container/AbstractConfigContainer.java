@@ -6,12 +6,11 @@ import com.iafenvoy.jupiter.config.ConfigDataFixer;
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,19 +22,19 @@ import java.util.stream.Stream;
 public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     protected final List<ConfigGroup> configTabs = new ArrayList<>();
-    protected final ResourceLocation id;
+    protected final Identifier id;
     protected final Component title;
     protected final ConfigDataFixer dataFixer = new ConfigDataFixer();
     @Nullable
     private Codec<List<ConfigGroup>> codecCache;
 
-    public AbstractConfigContainer(ResourceLocation id, Component title) {
+    public AbstractConfigContainer(Identifier id, Component title) {
         this.id = id;
         this.title = title;
     }
 
     @Override
-    public ResourceLocation getConfigId() {
+    public Identifier getConfigId() {
         return this.id;
     }
 
@@ -44,7 +43,7 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     }
 
     public ConfigGroup createTab(String id, String translateKey) {
-        return this.createTab(id, TextUtil.translatable(translateKey));
+        return this.createTab(id, Component.translatable(translateKey, new Object[]{}));
     }
 
     public ConfigGroup createTab(String id, Component name) {
@@ -100,7 +99,7 @@ public abstract class AbstractConfigContainer implements ConfigMetaProvider {
     }
 
     @Nullable
-    public ResourceLocation getBackgroundTexture(boolean ingame) {
+    public Identifier getBackgroundTexture(boolean ingame) {
         return null;
     }
 

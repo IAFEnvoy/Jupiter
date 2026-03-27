@@ -2,7 +2,7 @@ package com.iafenvoy.jupiter.config.type;
 
 import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.mojang.datafixers.util.Unit;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
@@ -33,5 +33,5 @@ public interface ConfigTypes {
     ConfigType<Map<String, String>> MAP_STRING = new MapConfigType<>(STRING);
     ConfigType<Map<String, Integer>> MAP_INTEGER = new MapConfigType<>(INTEGER);
     ConfigType<Map<String, Double>> MAP_DOUBLE = new MapConfigType<>(DOUBLE);
-    ConfigType<ResourceLocation> RESOURCE_LOCATION = new SingleConfigType<>();
+    ConfigType<Identifier> RESOURCE_LOCATION = new SingleConfigType<>();
 }

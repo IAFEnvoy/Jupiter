@@ -4,8 +4,8 @@ import com.iafenvoy.jupiter.config.entry.ListBaseEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.dialog.ListDialog;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class ListWidgetBuilder<T> extends AbstractButtonWidgetBuilder<List<T>> {
     protected final ListBaseEntry<T> config;
 
     public ListWidgetBuilder(ConfigMetaProvider provider, ListBaseEntry<T> config) {
-        super(provider, config, () -> TextUtil.literal(String.valueOf(config.getValue())));
+        super(provider, config, () -> Component.literal(String.valueOf(config.getValue())));
         this.config = config;
     }
 

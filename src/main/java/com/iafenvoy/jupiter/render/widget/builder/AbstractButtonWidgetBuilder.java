@@ -31,7 +31,7 @@ public abstract class AbstractButtonWidgetBuilder<T> extends WidgetBuilder<T> {
     public void updateCustom(boolean visible, int y) {
         if (this.button == null) return;
         this.button.visible = visible;
-        this.button./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
+        this.button.setY(y);
     }
 
     @Override

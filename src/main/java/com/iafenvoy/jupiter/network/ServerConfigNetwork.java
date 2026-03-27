@@ -1,33 +1,25 @@
 package com.iafenvoy.jupiter.network;
 
 import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.JupiterProxies;
 import com.iafenvoy.jupiter.ServerConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-//? >=1.20.5 {
 import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
-//?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
- *///?}
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ServerConfigNetwork {
     public static void init() {
-        //? >=1.20.5 {
-        ServerNetworkHelper.INSTANCE.registerReceiver(ConfigRequestPayload.TYPE, (server, player, payload) -> onConfigRequest(server, player, payload.id()));
-        ServerNetworkHelper.INSTANCE.registerReceiver(ConfigSyncPayload.TYPE, (server, player, payload) -> onConfigSync(server, player, payload.id(), payload.compound()));
-        //?} else {
-        /*ServerNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_REQUEST_C2S, (server, player, buf) -> onConfigRequest(server, player, buf.readResourceLocation()));
-        ServerNetworkHelper.INSTANCE.registerReceiver(NetworkConstants.CONFIG_SYNC_C2S, (server, player, buf) -> onConfigSync(server, player, buf.readResourceLocation(), buf.readNbt()));
-        *///?}
+        JupiterProxies.SERVER_NETWORKING.registerReceiver(ConfigRequestPayload.TYPE, (server, player, payload) -> onConfigRequest(server, player, payload.id()));
+        JupiterProxies.SERVER_NETWORKING.registerReceiver(ConfigSyncPayload.TYPE, (server, player, payload) -> onConfigSync(server, player, payload.id(), payload.compound()));
     }
 
     //Will only return config data if player has permission || allow manually sync to client.
-    private static Runnable onConfigRequest(MinecraftServer server, ServerPlayer player, ResourceLocation id) {
+    private static Runnable onConfigRequest(MinecraftServer server, ServerPlayer player, Identifier id) {
         Jupiter.LOGGER.info("Player {} request to get config {}", player.getName().getString(), id);
         boolean b = ServerConfigManager.checkPermission(id, server, player, false);
         CompoundTag compound;
@@ -38,19 +30,11 @@ public class ServerConfigNetwork {
                 b = false;
             } else compound = data.serializeNbt();
         } else compound = new CompoundTag();
-        //? >=1.20.5 {
         boolean finalB = b;
-        return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, new ConfigSyncPayload(id, finalB, compound));
-        //?} else {
-        /*FriendlyByteBuf buf = ByteBufHelper.create();
-        buf.writeResourceLocation(id);
-        buf.writeBoolean(b);
-        buf.writeNbt(compound);
-        return () -> ServerNetworkHelper.INSTANCE.sendToPlayer(player, NetworkConstants.CONFIG_SYNC_S2C, buf);
-        *///?}
+        return () -> JupiterProxies.SERVER_NETWORKING.sendToPlayer(player, new ConfigSyncPayload(id, finalB, compound));
     }
 
-    private static Runnable onConfigSync(MinecraftServer server, ServerPlayer player, ResourceLocation id, CompoundTag data) {
+    private static Runnable onConfigSync(MinecraftServer server, ServerPlayer player, Identifier id, CompoundTag data) {
         Jupiter.LOGGER.info("Player {} request to change config {}", player.getName().getString(), id);
         return () -> {
             if (ServerConfigManager.checkPermission(id, server, player, true)) {
@@ -62,7 +46,7 @@ public class ServerConfigNetwork {
                     Jupiter.LOGGER.info("Player {} changed config {}", player.getName().getString(), id);
                 }
             } else
-                ServerNetworkHelper.INSTANCE.sendToPlayer(player, /*? >=1.20.5 {*/new ConfigErrorPayload()/*?} else {*//*NetworkConstants.CONFIG_ERROR_S2C, ByteBufHelper.create()*//*?}*/);
+                JupiterProxies.SERVER_NETWORKING.sendToPlayer(player, new ConfigErrorPayload());
         };
     }
 }

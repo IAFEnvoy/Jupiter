@@ -8,7 +8,7 @@ import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.ExtraConfigWrapper;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
 import com.iafenvoy.jupiter.mixin.AutoConfigAccessor;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;

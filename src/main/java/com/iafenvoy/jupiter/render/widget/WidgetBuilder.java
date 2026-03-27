@@ -4,16 +4,13 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-//? >=1.19.3 {
-import net.minecraft.client.gui.components.StringWidget;
-//?}
 
 import java.util.function.Consumer;
 
@@ -32,9 +29,9 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
 
     public void addDialogElements(Context context, String text, int x, int y, int width, int height) {
         Font font = this.minecraft.font;
-        this.textWidget = new StringWidget(20, y, font.width(text), height, TextUtil.literal(text), font);
+        this.textWidget = new StringWidget(20, y, font.width(text), height, Component.literal(text), font);
         context.addWidget(this.textWidget);
-        this.resetButton = JupiterScreen.createButton(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.remove"), button -> {
+        this.resetButton = JupiterScreen.createButton(x + width - 50, y, 50, height, Component.translatable("jupiter.screen.button.remove", new Object[]{}), button -> {
             this.config.reset();
             this.refresh();
         });
@@ -48,7 +45,7 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
         Component component = this.config.getName();
         this.textWidget = new StringWidget(20, y, font.width(component), height, component, font);
         context.addWidget(this.textWidget);
-        this.resetButton = JupiterScreen.createButton(x + width - 50, y, 50, height, TextUtil.translatable("jupiter.screen.button.reset"), button -> {
+        this.resetButton = JupiterScreen.createButton(x + width - 50, y, 50, height, Component.translatable("jupiter.screen.button.reset", new Object[]{}), button -> {
             this.config.reset();
             this.refresh();
         });
@@ -71,11 +68,11 @@ public abstract class WidgetBuilder<T> implements JupiterScreen {
     public void update(boolean visible, int y) {
         if (this.textWidget != null) {
             this.textWidget.visible = this.textWidget.active = visible;
-            this.textWidget./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
+            this.textWidget.setY(y);
         }
         if (this.resetButton != null) {
             this.resetButton.visible = visible;
-            this.resetButton./*? >=1.19.3 {*/setY/*?} else {*//*y =*//*?}*/(y);
+            this.resetButton.setY(y);
         }
         this.updateCustom(visible, y);
     }

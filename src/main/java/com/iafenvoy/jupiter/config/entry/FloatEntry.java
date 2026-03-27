@@ -4,7 +4,6 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.RangeConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 

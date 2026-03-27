@@ -8,20 +8,21 @@ import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
 import com.iafenvoy.jupiter.util.JupiterUtils;
-import com.iafenvoy.jupiter.util.RLUtil;
-import com.iafenvoy.jupiter.util.TextUtil;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigManager;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.util.Utils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
@@ -43,8 +44,8 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     }
 
     @Override
-    public ResourceLocation getConfigId() {
-        return RLUtil.id(this.modId, "config");
+    public Identifier getConfigId() {
+        return Identifier.fromNamespaceAndPath(this.modId, "config");
     }
 
     @Override
@@ -58,7 +59,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
 
     @Override
     public Component getTitle() {
-        return TextUtil.translatable(String.format(Locale.ROOT, "%s.title", this.baseTranslateKey()));
+        return Component.translatable(String.format(Locale.ROOT, "%s.title", this.baseTranslateKey()), new Object[]{});
     }
 
     @Override
@@ -77,12 +78,12 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     }
 
     @Override
-    public @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+    public @Nullable Identifier getBackgroundTexture(boolean ingame) {
         Config.Gui.Background background = this.values.getClass().getAnnotation(Config.Gui.Background.class);
         if (background == null) return null;
         String id = background.value();
         if (Config.Gui.Background.TRANSPARENT.equals(id)) return null;
-        return RLUtil.tryParse(id);
+        return Identifier.tryParse(id);
     }
 
     @Override
@@ -91,7 +92,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     }
 
     public <T> ConfigGroup buildGroup(String id, String parentKey, T defaults, T values) {
-        ConfigGroup group = new ConfigGroup(id, TextUtil.translatable(String.format(Locale.ROOT, "%s.category%s", this.baseTranslateKey(), parentKey)));
+        ConfigGroup group = new ConfigGroup(id, Component.translatable(String.format(Locale.ROOT, "%s.category%s", this.baseTranslateKey(), parentKey), new Object[]{}));
         for (Field field : defaults.getClass().getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()) || !field.canAccess(defaults) || field.getAnnotation(me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded.class) != null)
                 continue;
@@ -113,7 +114,7 @@ public final class ClothConfigHolder<D extends ConfigData> implements ExtraConfi
     @SuppressWarnings("unchecked")
     private <T> ConfigBuilder<?, ?, ?> process(String nameKey, T defaults, T values, Field field) {
         AtomicReference<ConfigBuilder<?, ?, ?>> holder = new AtomicReference<>(null);
-        Component name = TextUtil.translatable(nameKey);
+        Component name = Component.translatable(nameKey, new Object[]{});
         //Simple
         this.processEntry(holder, name, field, defaults, values, Boolean.class, BooleanEntry::builder);
         this.processEntry(holder, name, field, defaults, values, Integer.class, IntegerEntry::builder);

@@ -3,15 +3,10 @@ package com.iafenvoy.jupiter.render.widget.builder;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.Component;
-//? >=1.19.3 {
 import net.minecraft.client.gui.components.StringWidget;
-//?} else {
-/*import com.iafenvoy.jupiter.render.widget.StringWidget;
- *///?}
+import net.minecraft.network.chat.Component;
 
 public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
     public SeparatorWidgetBuilder(ConfigMetaProvider provider, ConfigEntry<Unit> config) {
@@ -26,7 +21,7 @@ public class SeparatorWidgetBuilder extends WidgetBuilder<Unit> {
         if (this.config.getName() == null) {
             int w = font.width("-"), k = 0;
             while ((k + 1) * w <= width) k++;
-            text = TextUtil.literal("-".repeat(k));
+            text = Component.literal("-".repeat(k));
         } else text = this.config.getName();
         this.textWidget = new StringWidget(20, y, font.width(text), height, text, font);
         context.addWidget(this.textWidget);

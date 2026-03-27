@@ -7,18 +7,11 @@ import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.WidgetBuilderManager;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
-import com.iafenvoy.jupiter.util.TextUtil;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
-import org.jetbrains.annotations.NotNull;
-//? >=1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
- *///?}
-//? >=1.20 {
-import net.minecraft.client.gui.GuiGraphics;
-//?} else {
-/*import com.mojang.blaze3d.vertex.PoseStack;
- *///?}
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,8 +29,8 @@ public abstract class AbstractListDialog<T, S> extends Dialog<T> {
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
-        this.addRenderableWidget(JupiterScreen.createButton(this.width - 80, 5, 20, ENTRY_HEIGHT, TextUtil.literal("+"), button -> {
+        this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, Component.literal("<"), button -> this.onClose()));
+        this.addRenderableWidget(JupiterScreen.createButton(this.width - 80, 5, 20, ENTRY_HEIGHT, Component.literal("+"), button -> {
             this.addNewValue();
             this.rebuildWidgets();
         }));
@@ -64,8 +57,8 @@ public abstract class AbstractListDialog<T, S> extends Dialog<T> {
     }
 
     @Override
-    public void resize(@NotNull Minecraft minecraft, int width, int height) {
-        super.resize(minecraft, width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         this.calculateMaxItems();
         this.updateItemPos();
     }
@@ -90,39 +83,29 @@ public abstract class AbstractListDialog<T, S> extends Dialog<T> {
     }
 
     @Override
-    public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.itemScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, 30, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
+    public void extractRenderState(@NonNull GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
+        super.extractRenderState(extractor, mouseX, mouseY, partialTicks);
+        this.itemScrollBar.render(extractor, mouseX, mouseY, partialTicks, this.width - 18, 30, 8, this.height - 50, (this.configPerPage + this.itemScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
         if (this.itemScrollBar.isDragging()) this.updateItemPos();
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-        *///?} else {
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        //?}
         if (button == 0 && this.itemScrollBar.wasMouseOver()) {
             this.itemScrollBar.setIsDragging(true);
             this.updateItemPos();
             return true;
         }
-        boolean b = super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        boolean b = super.mouseClicked(event, isDoubleClick);
         if (!b) this.setFocused(null);
         return b;
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-        *///?} else {
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        //?}
         if (button == 0) this.itemScrollBar.setIsDragging(false);
-        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        return super.mouseReleased(event);
     }
 }

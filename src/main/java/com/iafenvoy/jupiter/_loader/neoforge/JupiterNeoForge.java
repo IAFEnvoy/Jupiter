@@ -1,58 +1,36 @@
 package com.iafenvoy.jupiter._loader.neoforge;
 
-//? neoforge {
-/*import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.Jupiter;
+import com.iafenvoy.jupiter.JupiterProxies;
 import com.iafenvoy.jupiter.ServerConfigManager;
+import com.iafenvoy.jupiter._loader.neoforge.network.NeoForgeClientNetworkHelper;
+import com.iafenvoy.jupiter._loader.neoforge.network.NeoForgeServerNetworkHelper;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-//? <=1.20.6 {
-/^import net.neoforged.neoforge.common.NeoForge;
- ^///?}
-//? >=1.20.5 {
-import com.iafenvoy.jupiter._loader.neoforge.network.ServerNetworkHelperImpl;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-
-import java.util.Map;
-//?}
-//? <=1.21.6 && >=1.20.5 {
-import com.iafenvoy.jupiter._loader.neoforge.network.ClientNetworkHelperImpl;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
-//?}
-//? >=1.21.4 {
-/^import com.iafenvoy.jupiter.util.RLUtil;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
-^///?} else {
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
-//?}
-//? >=1.20.5 {
-import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-//?} else {
-/^import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufC2S;
-import com.iafenvoy.jupiter._loader.neoforge.network.packet.ByteBufS2C;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
-^///?}
+
+import java.util.Map;
 
 @Mod(Jupiter.MOD_ID)
-//? >=1.21 {
 @EventBusSubscriber
-        //?} elif >=1.20.5 {
-/^@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
- ^///?} else {
-/^@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
- ^///?}
-public class JupiterNeoForge {
+public final class JupiterNeoForge {
     public JupiterNeoForge() {
-        Jupiter.init(!FMLEnvironment./^? >=1.21.9 {^//^isProduction()^//^?} else {^/production/^?}^/);
-        //? <=1.20.6 {
-        /^NeoForge.EVENT_BUS.addListener(JupiterNeoForge::registerServerListener);
-         ^///?}
+        JupiterProxies.PLATFORM = new NeoForgePlatform();
+        JupiterProxies.CLIENT_NETWORKING = new NeoForgeClientNetworkHelper();
+        JupiterProxies.SERVER_NETWORKING = new NeoForgeServerNetworkHelper();
+
+        Jupiter.init(!FMLEnvironment.isProduction());
+        NeoForge.EVENT_BUS.addListener(JupiterNeoForge::registerServerListener);
     }
 
     @SubscribeEvent
@@ -60,27 +38,15 @@ public class JupiterNeoForge {
         Jupiter.process();
     }
 
-    //? >=1.20.5 {
     @SubscribeEvent
     public static void registerNetwork(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
-        for (Map.Entry<CustomPacketPayload.Type<CustomPacketPayload>, StreamCodec<FriendlyByteBuf, CustomPacketPayload>> entry : ServerNetworkHelperImpl.TYPES.entrySet())
-            registrar.playBidirectional(entry.getKey(), entry.getValue(), /^? >=1.21.7 {^//^ServerNetworkHelperImpl::handleData^//^?} else {^/new DirectionalPayloadHandler<>(ClientNetworkHelperImpl::handleData, ServerNetworkHelperImpl::handleData)/^?}^/);
+        for (Map.Entry<CustomPacketPayload.Type<CustomPacketPayload>, StreamCodec<FriendlyByteBuf, CustomPacketPayload>> entry : NeoForgeServerNetworkHelper.TYPES.entrySet())
+            registrar.playBidirectional(entry.getKey(), entry.getValue(), NeoForgeServerNetworkHelper::handleData);
     }
-    //?} else {
-    /^@SubscribeEvent
-    public static void register(RegisterPayloadHandlerEvent event) {
-        final IPayloadRegistrar registrar = event.registrar(Jupiter.MOD_ID).versioned("1");
-        registrar.play(ByteBufC2S.ID, ByteBufC2S::decode, handler -> handler.server(ByteBufC2S::handle));
-        registrar.play(ByteBufS2C.ID, ByteBufS2C::decode, handler -> handler.client(ByteBufS2C::handle));
-    }
-    ^///?}
 
-    //? >=1.21 {
     @SubscribeEvent
-            //?}
-    public static void registerServerListener(/^? >=1.21.4 {^//^AddServerReloadListenersEvent^//^?} else {^/AddReloadListenerEvent/^?}^/ event) {
-        event.addListener( /^? >=1.21.4 {^//^RLUtil.id("server_config_reload"), ^//^?}^/new ServerConfigManager());
+    public static void registerServerListener(AddServerReloadListenersEvent event) {
+        event.addListener(Identifier.fromNamespaceAndPath(Jupiter.MOD_ID, "server_config_reload"), new ServerConfigManager());
     }
 }
-*/

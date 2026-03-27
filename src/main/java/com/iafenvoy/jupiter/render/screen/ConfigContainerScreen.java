@@ -4,18 +4,11 @@ import com.iafenvoy.jupiter.config.ConfigGroup;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.HorizontalScrollBar;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-//? >=1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
- *///?}
-//? >=1.20 {
-import net.minecraft.client.gui.GuiGraphics;
-//?} else {
-/*import com.mojang.blaze3d.vertex.PoseStack;
- *///?}
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -65,8 +58,8 @@ public class ConfigContainerScreen extends ConfigListScreen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY,/*? >=1.20.2 {*/double scrollX,/*?}*/ double scrollY) {
-        if (super.mouseScrolled(mouseX, mouseY,/*? >=1.20.2 {*/scrollX,/*?}*/ scrollY)) return true;
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)) return true;
         if (mouseX >= 10 && mouseX <= this.width - 20 && mouseY >= 25 && mouseY <= 60) {
             this.groupScrollBar.setValue(this.groupScrollBar.getValue() + (scrollY > 0 ? -20 : 20));
             this.updateTabPos();
@@ -82,57 +75,47 @@ public class ConfigContainerScreen extends ConfigListScreen {
     }
 
     @Override
-    protected @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+    protected @Nullable Identifier getBackgroundTexture(boolean ingame) {
         return this.container.getBackgroundTexture(ingame);
     }
 
     @Override
-    public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.groupScrollBar.render(graphics, mouseX, mouseY, partialTicks, 10, 50, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
+    public void extractRenderState(GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
+        super.extractRenderState(extractor, mouseX, mouseY, partialTicks);
+        this.groupScrollBar.render(extractor, mouseX, mouseY, partialTicks, 10, 50, this.width - 20, 8, this.width + this.groupScrollBar.getMaxValue());
         if (this.groupScrollBar.isDragging()) this.updateTabPos();
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-        *///?} else {
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        //?}
         if (button == 0 && this.groupScrollBar.wasMouseOver()) {
             this.groupScrollBar.setIsDragging(true);
             this.updateTabPos();
             return true;
         }
-        return super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        return super.mouseClicked(event, isDoubleClick);
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-        *///?} else {
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        //?}
         if (button == 0) this.groupScrollBar.setIsDragging(false);
-        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        return super.mouseReleased(event);
     }
 
-    public static class TabButton extends Button {
+    public static class TabButton extends Button.Plain {
         private final ConfigGroup group;
         private final int baseX;
 
         public TabButton(ConfigGroup group, int baseX, int y, int width, int height, Consumer<TabButton> listener) {
-            super(baseX, y, width, height, group.getName(), button -> listener.accept((TabButton) button)/*? >=1.19.3 {*/, DEFAULT_NARRATION/*?}*/);
+            super(baseX, y, width, height, group.getName(), button -> listener.accept((TabButton) button), DEFAULT_NARRATION);
             this.group = group;
             this.baseX = baseX;
         }
 
         public void updatePos(int offsetX) {
-            this./*? >= 1.19.3 {*/setX/*?} else {*//*x =*//*?}*/(this.baseX - offsetX);
+            this.setX(this.baseX - offsetX);
         }
     }
 }

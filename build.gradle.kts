@@ -1,3 +1,6 @@
+import java.util.LinkedList
+import java.util.stream.Stream
+
 plugins {
     id("net.neoforged.moddev")
     id("dev.kikugie.postprocess.jsonlang")
@@ -13,11 +16,16 @@ jsonlang {
 }
 
 repositories {
-    maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+    maven("https://maven.fabricmc.net/") { name = "Fabric" }
+    maven("https://maven.terraformersmc.com/") { name = "ModMenu" }
     maven("https://maven.shedaniel.me/") { name = "Cloth Config API" }
 }
 
 dependencies {
+    compileOnly("net.fabricmc:fabric-loader:${property("deps.fabric-loader")}")
+    compileOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric-api")}")
+    compileOnly("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
+
     implementation("me.shedaniel.cloth:cloth-config-neoforge:${property("deps.cloth_config_version")}")
 }
 
@@ -69,21 +77,18 @@ tasks {
 
 java {
     withSourcesJar()
-    val javaCompat = if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) JavaVersion.VERSION_21
-    else throw IllegalArgumentException("This template only support NeoForge on 1.20.5+ but version ${stonecutter.current.version} received!")
-    sourceCompatibility = javaCompat
-    targetCompatibility = javaCompat
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
-val supportedMinecraftVersions: List<String> = com.google.common.collect.ImmutableList.builder<String>()
-    .addAll(
-        (property("publish.additionalVersions") as String?)
-            ?.split(",")
-            ?.map { it.trim() }
-            ?.filter { it.isNotEmpty() }
-            ?: emptyList())
-    .add(stonecutter.current.version)
-    .build()
+val supportedMinecraftVersions = LinkedList<String>()
+supportedMinecraftVersions.addAll(
+    (property("publish.additionalVersions") as String?)
+        ?.split(",")
+        ?.map { it.trim() }
+        ?.filter { it.isNotEmpty() }
+        ?: emptyList())
+supportedMinecraftVersions.add(stonecutter.current.version)
 
 tasks.named<ProcessResources>("processResources") {
     val props = HashMap<String, String>().apply {
@@ -115,6 +120,7 @@ publishMods {
     version = "${property("mod.version")}-${property("deps.minecraft")}-neoforge"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
     modLoaders.add("neoforge")
+    modLoaders.add("fabric")
 
     modrinth {
         projectId = property("publish.modrinth") as String

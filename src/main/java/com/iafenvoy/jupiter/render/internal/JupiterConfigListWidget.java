@@ -5,23 +5,14 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.BadgeRenderer;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? >=1.21.9 {
-/*import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
-*///?}
-//? >=1.20 {
-import net.minecraft.client.gui.GuiGraphics;
-//?} else {
-/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
-import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +24,9 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
     private final List<Entry> entries = new ArrayList<>();
     private String filter = "";
 
-    public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y/*? <=1.20.1 {*//*, int bottom*//*?}*/) {
-        super(client, width, height, y,/*? <=1.20.1 {*//*bottom,*//*?}*/ 32);
+    public JupiterConfigListWidget(JupiterConfigListScreen screen, Minecraft client, int width, int height, int y) {
+        super(client, width, height, y, 32);
         this.screen = screen;
-        //? <=1.20.1 {
-        /*this.setRenderTopAndBottom(false);
-         *///?}
     }
 
     public void update() {
@@ -58,22 +46,10 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
         this.updateEntries();
     }
 
-    //? >=1.21.4 {
-    /*@Override
+    @Override
     protected int scrollBarX() {
         return this.getRight() - 8;
     }
-    *///?} else if >=1.20.2 {
-    @Override
-    protected int getScrollbarPosition() {
-        return this.getRight() - 8;
-    }
-    //?} else {
-    /*@Override
-    protected int getScrollbarPosition() {
-        return this.x1 - 8;
-    }
-    *///?}
 
     @Override
     public int getRowWidth() {
@@ -96,35 +72,26 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
             this.handler = handler;
         }
 
-        //? >=1.21.9 {
-        /*@Override
-        public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean isHovering, float partialTick) {
-            int x = this.getX(), y = this.getY();
-            *///?} else >=1.20 {
         @Override
-        public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-            //?} else {
-        /*@Override
-        public void render(@NotNull PoseStack poseStack, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-            JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
-            *///?}
-            graphics.drawString(this.client.font, this.handler.getTitle(), x + 65, y + 1, 0xFFFFFFFF);
-            graphics.drawString(this.client.font, this.handler.getConfigId().toString(), x + 65, y + 1 + 9, 0xFF7F7F7F);
-            graphics.drawString(this.client.font, this.handler.getPath(), x + 65, y + 1 + 18, 0xFF7F7F7F);
+        public void extractContent(GuiGraphicsExtractor extractor, int mouseX, int mouseY, boolean isHovering, float partialTick) {
+            int x = this.getX(), y = this.getY();
+            extractor.text(this.client.font, this.handler.getTitle(), x + 65, y + 1, 0xFFFFFFFF);
+            extractor.text(this.client.font, this.handler.getConfigId().toString(), x + 65, y + 1 + 9, 0xFF7F7F7F);
+            extractor.text(this.client.font, this.handler.getPath(), x + 65, y + 1 + 18, 0xFF7F7F7F);
             //Badges
             ConfigSource source = this.handler.getSource();
             ConfigSide side = this.handler.getSide();
-            BadgeRenderer.draw(graphics, this.client.font, x + 1, y + 1, source.name(), source.color());
-            BadgeRenderer.draw(graphics, this.client.font, x + 1, y + 16, TextUtil.literal(side.getDisplayText()), side.getColor());
+            BadgeRenderer.draw(extractor, this.client.font, x + 1, y + 1, source.name(), source.color());
+            BadgeRenderer.draw(extractor, this.client.font, x + 1, y + 16, Component.literal(side.getDisplayText()), side.getColor());
         }
 
         //? >=1.21.9 {
-        /*@Override
-        public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
-            *///?} else {
         @Override
+        public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClicked) {
+            //?} else {
+        /*@Override
         public boolean mouseClicked(double x, double y, int button) {
-            //?}
+            *///?}
             this.widget.setSelected(this);
             return false;
         }
@@ -135,7 +102,7 @@ public class JupiterConfigListWidget extends ObjectSelectionList<JupiterConfigLi
 
         @Override
         public @NotNull Component getNarration() {
-            return TextUtil.empty();
+            return Component.empty();
         }
 
         public boolean match(String filter) {//FIXME::WTF

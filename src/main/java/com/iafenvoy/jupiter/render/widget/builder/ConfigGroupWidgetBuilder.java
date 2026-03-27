@@ -6,12 +6,12 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.ConfigListScreen;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 public class ConfigGroupWidgetBuilder extends AbstractButtonWidgetBuilder<ConfigGroup> {
     public ConfigGroupWidgetBuilder(ConfigMetaProvider provider, ConfigEntry<ConfigGroup> config) {
-        super(provider, config, () -> TextUtil.translatable("jupiter.screen.edit"));
+        super(provider, config, () -> Component.translatable("jupiter.screen.edit", new Object[]{}));
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.iafenvoy.jupiter.api;
 
 import com.iafenvoy.jupiter.ConfigManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface JupiterConfigEntry {
-    ResourceLocation getId();
+    Identifier getId();
 
     default void initializeCommonConfig(ConfigManager manager) {
     }

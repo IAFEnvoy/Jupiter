@@ -9,20 +9,10 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.ExtraConfigWrapper;
 import com.iafenvoy.jupiter.internal.JupiterSettings;
-//? >=1.21 {
 import net.neoforged.fml.config.IConfigSpec;
-import net.neoforged.fml.config.ModConfigs;
-//?} else >= 1.20.2 {
-/*import net.neoforged.fml.config.ConfigTracker;
- *///?}
-//? >= 1.20.2 {
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.config.ModConfigs;
 import net.neoforged.neoforge.common.ModConfigSpec;
-//?} else {
-/*import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.config.ConfigTracker;
-*///?}
 
 import java.util.Collection;
 import java.util.EnumMap;

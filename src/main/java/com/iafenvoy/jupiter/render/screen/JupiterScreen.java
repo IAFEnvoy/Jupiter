@@ -5,24 +5,15 @@ import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.network.chat.Component;
-import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
-//? >=1.19.3 {
-import net.minecraft.client.gui.components.Tooltip;
-//?} else {
-/*import com.iafenvoy.jupiter.render.widget.SimpleButtonTooltip;
- *///?}
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public interface JupiterScreen {
     int ENTRIES_PER_SCROLL = 2;
@@ -47,23 +38,13 @@ public interface JupiterScreen {
     }
 
     static Button createButtonWithTooltip(Screen self, int x, int y, int width, int height, Component text, Button.OnPress onPress, @Nullable Component tooltip) {
-        //? >=1.19.3 {
         Button.Builder builder = Button.builder(text, onPress).bounds(x, y, width, height);
         if (tooltip != null) builder.tooltip(Tooltip.create(tooltip));
         return builder.build();
-        //?} else {
-        /*if (tooltip == null) return new Button(x, y, width, height, text, onPress);
-        else return new Button(x, y, width, height, text, onPress, new SimpleButtonTooltip(self, tooltip));
-        *///?}
     }
 
     static Pair<Button, Consumer<Component>> createButtonWithDynamicTooltip(Screen self, int x, int y, int width, int height, Component text, Button.OnPress onPress, Component tooltip) {
-        //? >=1.19.3 {
         Button button = createButtonWithTooltip(self, x, y, width, height, text, onPress, tooltip);
         return Pair.of(button, c -> button.setTooltip(Tooltip.create(c)));
-        //?} else {
-        /*SimpleButtonTooltip serverButtonTooltip = new SimpleButtonTooltip(self, tooltip);
-       return Pair.of(new Button(x, y, width, height, text, onPress, serverButtonTooltip), serverButtonTooltip::setTooltip);
-        *///?}
     }
 }

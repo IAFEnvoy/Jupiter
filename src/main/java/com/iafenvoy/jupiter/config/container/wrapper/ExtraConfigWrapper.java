@@ -5,17 +5,15 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import it.unimi.dsi.fastutil.booleans.Boolean2ObjectFunction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 public class ExtraConfigWrapper extends AbstractConfigContainer {
     private final ConfigSide side;
     private final ConfigSource source;
     private final String filePath;
     private final Runnable saveCaller;
-    private final Boolean2ObjectFunction<ResourceLocation> backgroundTextureProvider;
+    private final Boolean2ObjectFunction<Identifier> backgroundTextureProvider;
 
     public ExtraConfigWrapper(ExtraConfigHolder holder) {
         super(holder.getConfigId(), holder.getTitle());
@@ -52,7 +50,7 @@ public class ExtraConfigWrapper extends AbstractConfigContainer {
     }
 
     @Override
-    public @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+    public @Nullable Identifier getBackgroundTexture(boolean ingame) {
         return this.backgroundTextureProvider.get(ingame);
     }
 

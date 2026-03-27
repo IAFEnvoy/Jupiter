@@ -1,41 +1,41 @@
 package com.iafenvoy.jupiter.config.entry;
 
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
+import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
-import com.iafenvoy.jupiter.config.interfaces.TextFieldConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 
-public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implements TextFieldConfigEntry {
-    protected ResourceLocationEntry(Builder builder) {
+public class IdentifierEntry extends BaseEntry<Identifier> implements TextFieldConfigEntry {
+    protected IdentifierEntry(Builder builder) {
         super(builder);
     }
 
     @SuppressWarnings("removal")
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
-    public ResourceLocationEntry(String nameKey, ResourceLocation defaultValue) {
+    public IdentifierEntry(String nameKey, Identifier defaultValue) {
         super(nameKey, defaultValue);
     }
 
     @Override
-    public ConfigType<ResourceLocation> getType() {
+    public ConfigType<Identifier> getType() {
         return ConfigTypes.RESOURCE_LOCATION;
     }
 
     @Override
-    public ConfigEntry<ResourceLocation> newInstance() {
+    public ConfigEntry<Identifier> newInstance() {
         return new Builder(this).build();
     }
 
     @Override
-    public Codec<ResourceLocation> getCodec() {
-        return ResourceLocation.CODEC;
+    public Codec<Identifier> getCodec() {
+        return Identifier.CODEC;
     }
 
     @Override
@@ -45,27 +45,27 @@ public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implement
 
     @Override
     public void setValueFromString(String s) {
-        this.setValue(Objects.requireNonNull(ResourceLocation.tryParse(s)));
+        this.setValue(Objects.requireNonNull(Identifier.tryParse(s)));
     }
 
-    public static Builder builder(Component name, ResourceLocation defaultValue) {
+    public static Builder builder(Component name, Identifier defaultValue) {
         return new Builder(name, defaultValue);
     }
 
-    public static Builder builder(String nameKey, ResourceLocation defaultValue) {
+    public static Builder builder(String nameKey, Identifier defaultValue) {
         return new Builder(nameKey, defaultValue);
     }
 
-    public static class Builder extends BaseEntry.Builder<ResourceLocation, ResourceLocationEntry, Builder> {
-        public Builder(Component name, ResourceLocation defaultValue) {
+    public static class Builder extends BaseEntry.Builder<Identifier, IdentifierEntry, Builder> {
+        public Builder(Component name, Identifier defaultValue) {
             super(name, defaultValue);
         }
 
-        public Builder(String nameKey, ResourceLocation defaultValue) {
+        public Builder(String nameKey, Identifier defaultValue) {
             super(nameKey, defaultValue);
         }
 
-        public Builder(ResourceLocationEntry parent) {
+        public Builder(IdentifierEntry parent) {
             super(parent);
         }
 
@@ -75,8 +75,8 @@ public class ResourceLocationEntry extends BaseEntry<ResourceLocation> implement
         }
 
         @Override
-        protected ResourceLocationEntry buildInternal() {
-            return new ResourceLocationEntry(this);
+        protected IdentifierEntry buildInternal() {
+            return new IdentifierEntry(this);
         }
     }
 }

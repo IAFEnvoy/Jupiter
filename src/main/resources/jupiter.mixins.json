@@ -7,7 +7,7 @@
     "AutoConfigAccessor"
   ],
   "client": [
-    "AutoConfigMixin"
+    "AutoConfigClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

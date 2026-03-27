@@ -1,8 +1,9 @@
 package com.iafenvoy.jupiter.test;
 
+import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.FileConfigContainer;
 import com.iafenvoy.jupiter.config.entry.*;
-import com.iafenvoy.jupiter.util.RLUtil;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ public class TestConfig extends FileConfigContainer {
     public static final TestConfig INSTANCE = new TestConfig();
 
     public TestConfig() {
-        super(RLUtil.id("test"), "jupiter.test", "./config/jupiter.json");
+        super(Identifier.fromNamespaceAndPath(Jupiter.MOD_ID, "test"), "jupiter.test", "./config/jupiter.json");
     }
 
     @Override

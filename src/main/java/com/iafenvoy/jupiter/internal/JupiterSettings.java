@@ -4,7 +4,7 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.AutoInitConfigContainer;
 import com.iafenvoy.jupiter.config.entry.BooleanEntry;
 import com.iafenvoy.jupiter.config.entry.EnumEntry;
-import com.iafenvoy.jupiter.util.RLUtil;
+import net.minecraft.resources.Identifier;
 
 import java.util.Locale;
 
@@ -13,7 +13,7 @@ public class JupiterSettings extends AutoInitConfigContainer {
     public final General general = new General();
 
     private JupiterSettings() {
-        super(RLUtil.id("jupiter"), "jupiter.screen.config.title", "./config/jupiter.json");
+        super(Identifier.fromNamespaceAndPath(Jupiter.MOD_ID, "jupiter"), "jupiter.screen.config.title", "./config/jupiter.json");
     }
 
     private static String name(String category, String name) {

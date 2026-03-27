@@ -9,25 +9,17 @@ import com.iafenvoy.jupiter.config.ConfigSide;
 import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.config.interfaces.ConfigBuilder;
-import com.iafenvoy.jupiter.internal.JupiterSettings;
-import com.iafenvoy.jupiter.util.RLUtil;
-import com.iafenvoy.jupiter.util.TextFormatter;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.iafenvoy.jupiter.util.JupiterUtils;
+import com.iafenvoy.jupiter.util.TextFormatter;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-//? >= 1.20.2 {
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
-//?} else {
-/*import net.minecraftforge.common.ForgeConfigSpec;
- *///?}
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-
-import org.jetbrains.annotations.Nullable;
 
 //WARNING!!! DO NOT try to understand how these code work!!!
 public final class NightConfigHolder implements ExtraConfigHolder {
@@ -48,13 +40,13 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     }
 
     @Override
-    public ResourceLocation getConfigId() {
-        return RLUtil.id(this.modId, this.side.name().toLowerCase(Locale.ROOT));
+    public Identifier getConfigId() {
+        return Identifier.fromNamespaceAndPath(this.modId, this.side.name().toLowerCase(Locale.ROOT));
     }
 
     @Override
     public Component getTitle() {
-        return TextUtil.literal(TextFormatter.formatToTitleCase(this.modId, true)).append(" ").append(TextUtil.translatable(String.format(Locale.ROOT, "jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT))));
+        return Component.literal(TextFormatter.formatToTitleCase(this.modId, true)).append(" ").append(Component.translatable(String.format(Locale.ROOT, "jupiter.screen.%s_config", this.side.name().toLowerCase(Locale.ROOT)), new Object[]{}));
     }
 
     @Override
@@ -78,7 +70,7 @@ public final class NightConfigHolder implements ExtraConfigHolder {
     }
 
     @Override
-    public @Nullable ResourceLocation getBackgroundTexture(boolean ingame) {
+    public @Nullable Identifier getBackgroundTexture(boolean ingame) {
         return null;
     }
 
@@ -95,7 +87,8 @@ public final class NightConfigHolder implements ExtraConfigHolder {
                 Object defaultValue = spec.getDefault();
                 try {
                     String translateKey = Objects.requireNonNullElseGet(spec.getTranslationKey(), entry::getKey);
-                    ConfigBuilder<?, ?, ?> builder = this.process(values, TextUtil.translatableWithFallback(translateKey, TextFormatter.formatToTitleCase(translateKey, false)), entry, defaultValue, value, JupiterUtils.packPredicate(spec::test));
+                    String fallback = TextFormatter.formatToTitleCase(translateKey, false);
+                    ConfigBuilder<?, ?, ?> builder = this.process(values, Component.translatableWithFallback(translateKey, fallback, new Object[]{}), entry, defaultValue, value, JupiterUtils.packPredicate(spec::test));
                     if (builder == null)
                         Jupiter.LOGGER.warn("Cannot find suitable entry for key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side);
                     else {
@@ -109,7 +102,9 @@ public final class NightConfigHolder implements ExtraConfigHolder {
                     Jupiter.LOGGER.error("Cannot load key={}, type={} in config={}:{}", entry.getKey(), defaultValue.getClass().getName(), this.modId, this.side, e);
                 }
             } else if (entryValue instanceof UnmodifiableConfig spec && value instanceof CommentedConfig config) {
-                Component name = TextUtil.translatableWithFallback(entry.getKey(), TextFormatter.formatToTitleCase(entry.getKey(), false));
+                String text = entry.getKey();
+                String fallback = TextFormatter.formatToTitleCase(entry.getKey(), false);
+                Component name = Component.translatableWithFallback(text, fallback, new Object[]{});
                 group.addEntry(ConfigGroupEntry.builder(name, this.buildGroup(entry.getKey(), name, spec, config)).key(entry.getKey()).build());
             }
         }

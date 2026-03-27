@@ -6,7 +6,6 @@ import com.iafenvoy.jupiter.config.interfaces.ValueChangeCallback;
 import com.iafenvoy.jupiter.config.type.ConfigType;
 import com.iafenvoy.jupiter.config.type.ConfigTypes;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
@@ -29,7 +28,7 @@ public class SeparatorEntry implements ConfigEntry<Unit> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public SeparatorEntry text(@NotNull String textKey) {
-        return this.text(TextUtil.translatable(textKey));
+        return this.text(Component.translatable(textKey, new Object[]{}));
     }
 
     @Comment("Use builder instead")
@@ -42,7 +41,7 @@ public class SeparatorEntry implements ConfigEntry<Unit> {
     @Comment("Use builder instead")
     @Deprecated(forRemoval = true)
     public SeparatorEntry tooltip(String tooltipKey) {
-        return this.tooltip(TextUtil.translatable(tooltipKey));
+        return this.tooltip(Component.translatable(tooltipKey, new Object[]{}));
     }
 
     @Comment("Use builder instead")
@@ -118,7 +117,7 @@ public class SeparatorEntry implements ConfigEntry<Unit> {
         }
 
         public Builder text(String textKey) {
-            return this.text(TextUtil.translatable(textKey));
+            return this.text(Component.translatable(textKey, new Object[]{}));
         }
 
         public Builder text(Component text) {
@@ -128,7 +127,7 @@ public class SeparatorEntry implements ConfigEntry<Unit> {
 
         @Override
         public Builder tooltip(String tooltipKey) {
-            return this.tooltip(TextUtil.translatable(tooltipKey));
+            return this.tooltip(Component.translatable(tooltipKey, new Object[]{}));
         }
 
         @Override

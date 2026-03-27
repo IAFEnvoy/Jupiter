@@ -4,8 +4,8 @@ import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.dialog.MapDialog;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public class MapWidgetBuilder<T> extends AbstractButtonWidgetBuilder<Map<String,
     protected final MapBaseEntry<T> config;
 
     public MapWidgetBuilder(ConfigMetaProvider provider, MapBaseEntry<T> config) {
-        super(provider, config, () -> TextUtil.literal(String.valueOf(config.getValue())));
+        super(provider, config, () -> Component.literal(String.valueOf(config.getValue())));
         this.config = config;
     }
 

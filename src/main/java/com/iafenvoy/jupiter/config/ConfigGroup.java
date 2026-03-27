@@ -3,7 +3,6 @@ package com.iafenvoy.jupiter.config;
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.util.Comment;
-import com.iafenvoy.jupiter.util.TextUtil;
 import com.mojang.serialization.*;
 import net.minecraft.network.chat.Component;
 
@@ -13,7 +12,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ConfigGroup {
-    public static final ConfigGroup EMPTY = new ConfigGroup("", TextUtil.empty());
+    public static final ConfigGroup EMPTY = new ConfigGroup("", Component.empty());
     private final String id;
     private final Component name;
     private final List<ConfigEntry<?>> configs;

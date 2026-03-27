@@ -6,8 +6,8 @@ import com.iafenvoy.jupiter.config.ConfigSource;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.render.screen.ConfigSelectScreen;
 import com.iafenvoy.jupiter.util.TextFormatter;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.*;
 import java.util.function.Function;
@@ -45,7 +45,7 @@ public final class ExtraConfigManager {
         return parent -> {
             Optional<EnumMap<ConfigSide, AbstractConfigContainer>> optional = find(modId);
             if (optional.isEmpty()) return null;
-            ConfigSelectScreen.Builder builder = ConfigSelectScreen.builder(TextUtil.literal(TextFormatter.formatToTitleCase(modId + "_configs", true)), parent).displayCommon();
+            ConfigSelectScreen.Builder builder = ConfigSelectScreen.builder(Component.literal(TextFormatter.formatToTitleCase(modId + "_configs", true)), parent).displayCommon();
             for (Map.Entry<ConfigSide, AbstractConfigContainer> entry : optional.get().entrySet()) {
                 AbstractConfigContainer container = entry.getValue();
                 switch (entry.getKey()) {

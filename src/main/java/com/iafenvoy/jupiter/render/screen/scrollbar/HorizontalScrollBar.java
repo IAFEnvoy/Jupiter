@@ -1,11 +1,6 @@
 package com.iafenvoy.jupiter.render.screen.scrollbar;
 
-//? >=1.20 {
-import net.minecraft.client.gui.GuiGraphics;
- //?} else {
-/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
-import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.util.Mth;
 
 public class HorizontalScrollBar {
@@ -53,19 +48,16 @@ public class HorizontalScrollBar {
         this.dragging = isDragging;
     }
 
-    public void render(/*? >=1.20 {*/GuiGraphics graphics/*?} else {*//*PoseStack poseStack*//*?}*/, int mouseX, int mouseY, float partialTicks, int x, int y, int width, int height, int totalWidth) {
-        //? <=1.19.4 {
-        /*JupiterRenderContext graphics = JupiterRenderContext.wrapPoseStack(poseStack);
-        *///?}
+    public void render(GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks, int x, int y, int width, int height, int totalWidth) {
         if (this.renderScrollbarBackground)
-            graphics.fill(x, y, x + width, y + height, this.backgroundColor);
+            extractor.fill(x, y, x + width, y + height, this.backgroundColor);
         if (totalWidth > 0) {
             int slideWidth = width - 2;
             float relative = Math.min(1.0F, (float) slideWidth / (float) totalWidth);
             int barWidth = (int) (relative * slideWidth);
             int barTravel = slideWidth - barWidth;
             int barPosition = x + 1 + (this.maxValue > 0 ? (int) ((this.currentValue / (float) this.maxValue) * barTravel) : 0);
-            graphics.fill(barPosition, y + 1, barPosition + barWidth, y + height - 1, this.foregroundColor);
+            extractor.fill(barPosition, y + 1, barPosition + barWidth, y + height - 1, this.foregroundColor);
             this.mouseOver = mouseY > y && mouseY < y + height && mouseX > barPosition && mouseX < barPosition + barWidth;
             this.handleDrag(mouseX, barTravel);
         }

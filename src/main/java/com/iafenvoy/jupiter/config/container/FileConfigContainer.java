@@ -2,9 +2,8 @@ package com.iafenvoy.jupiter.config.container;
 
 import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.ConfigSource;
-import com.iafenvoy.jupiter.util.TextUtil;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -14,11 +13,11 @@ import java.nio.file.Path;
 public abstract class FileConfigContainer extends AbstractConfigContainer {
     protected final String path;
 
-    public FileConfigContainer(ResourceLocation id, String titleKey, String path) {
-        this(id, TextUtil.translatable(titleKey), path);
+    public FileConfigContainer(Identifier id, String titleKey, String path) {
+        this(id, Component.translatable(titleKey, new Object[]{}), path);
     }
 
-    public FileConfigContainer(ResourceLocation id, Component title, String path) {
+    public FileConfigContainer(Identifier id, Component title, String path) {
         super(id, title);
         this.path = path;
     }

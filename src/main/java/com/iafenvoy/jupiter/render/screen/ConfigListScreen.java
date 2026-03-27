@@ -7,26 +7,17 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
-import com.iafenvoy.jupiter.util.TextUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
-//? >=1.21.9 {
-/*import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-*///?}
-//? >=1.20 {
-import net.minecraft.client.gui.GuiGraphics;
-        //?} else {
-/*import com.iafenvoy.jupiter.render.JupiterRenderContext;
-import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -37,7 +28,7 @@ import java.util.Objects;
 public class ConfigListScreen extends Screen implements JupiterScreen {
     private final Screen parent;
     private final TitleStack titleStack;
-    private final ResourceLocation id;
+    private final Identifier id;
     private final boolean client;
     protected final List<WidgetBuilder<?>> configWidgets = new ArrayList<>();
     protected final VerticalScrollBar entryScrollBar = new VerticalScrollBar();
@@ -45,13 +36,13 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     protected int topBorder = 30;
     private int configPerPage, textMaxLength;
 
-    public ConfigListScreen(Screen parent, TitleStack titleStack, ResourceLocation id, List<ConfigEntry<?>> entries, boolean client) {
+    public ConfigListScreen(Screen parent, TitleStack titleStack, Identifier id, List<ConfigEntry<?>> entries, boolean client) {
         this(parent, titleStack, id, client);
         this.entries = entries;
     }
 
-    public ConfigListScreen(Screen parent, TitleStack titleStack, ResourceLocation id, boolean client) {
-        super(TextUtil.empty());
+    public ConfigListScreen(Screen parent, TitleStack titleStack, Identifier id, boolean client) {
+        super(Component.empty());
         this.parent = parent;
         this.titleStack = titleStack;
         this.id = id;
@@ -62,25 +53,18 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
     protected void init() {
         super.init();
         this.titleStack.cacheTitle(this.width - this.font.width(this.getCurrentEditText()) - 70);
-        this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, TextUtil.literal("<"), button -> this.onClose()));
+        this.addRenderableWidget(JupiterScreen.createButton(10, 5, 20, ENTRY_HEIGHT, Component.literal("<"), button -> this.onClose()));
         this.calculateMaxEntries();
-        this.textMaxLength = Mth.clamp(this.entries.stream().filter(x -> x instanceof BaseEntry).map(ConfigEntry::getName).filter(Objects::nonNull).map(t -> this.font.width(t)).max(Comparator.naturalOrder()).orElse(0) + 30, this.width / 2, this.width - 150);
+        this.textMaxLength = Mth.clamp(this.entries.stream().filter(x -> x instanceof BaseEntry).map(ConfigEntry::getName).filter(Objects::nonNull).map(this.font::width).max(Comparator.naturalOrder()).orElse(0) + 30, this.width / 2, this.width - 150);
         this.configWidgets.clear();
         this.configWidgets.addAll(this.entries.stream().map(c -> WidgetBuilderManager.get(new ConfigMetaProvider.SimpleProvider(this.id, "%ERROR%", this.client), c)).toList());
         this.configWidgets.forEach(b -> b.addElements(new WidgetBuilder.Context(this, this::addRenderableWidget, this.titleStack), this.textMaxLength, 0, Math.max(10, this.width - this.textMaxLength - 30), ENTRY_HEIGHT));
         this.updateEntryPos();
     }
 
-    //? <=1.18.2 {
-    /*protected void rebuildWidgets() {
-        this.clearWidgets();
-        this.init();
-    }
-    *///?}
-
     @Override
-    public void resize(@NotNull Minecraft minecraft, int width, int height) {
-        super.resize(minecraft, width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         this.calculateMaxEntries();
         this.updateEntryPos();
     }
@@ -110,24 +94,19 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
         return this.configWidgets.stream().filter(widget -> widget.isMouseOver(mouseX, mouseY)).findFirst().map(WidgetBuilder::getConfig).orElse(null);
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean keyPressed(KeyEvent event) {
         int keyCode = event.key();
-        *///?} else {
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        //?}
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
             this.onClose();
             return true;
         }
-        return super.keyPressed(/*? >=1.21.9 {*//*event*//*?} else {*/keyCode, scanCode, modifiers/*?}*/);
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY,/*? >=1.20.2 {*/double scrollX,/*?}*/ double scrollY) {
-        if (super.mouseScrolled(mouseX, mouseY,/*? >=1.20.2 {*/scrollX,/*?}*/ scrollY)) return true;
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)) return true;
         if (mouseY >= this.topBorder) {
             this.entryScrollBar.setValue(this.entryScrollBar.getValue() + (scrollY > 0 ? -1 : 1) * ENTRIES_PER_SCROLL);
             this.updateEntryPos();
@@ -138,119 +117,53 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
 
     @Override
     public void onClose() {
-        assert this.minecraft != null;
         this.minecraft.setScreen(this.parent);
     }
 
     @Nullable
-    protected ResourceLocation getBackgroundTexture(boolean ingame) {
+    protected Identifier getBackgroundTexture(boolean ingame) {
         return null;
     }
 
-    //? >=1.20.5 {
     @Override
-    protected void renderMenuBackground(@NotNull GuiGraphics guiGraphics, int x, int y, int width, int height) {
-        assert this.minecraft != null;
-        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
-        if (texture == null) super.renderMenuBackground(guiGraphics, x, y, width, height);
-        else renderMenuBackgroundTexture(guiGraphics, texture, x, y, 0.0F, 0.0F, width, height);
+    public void extractBackground(@NonNull GuiGraphicsExtractor extractor, int mouseX, int mouseY, float a) {
+        Identifier texture = this.getBackgroundTexture(this.minecraft.level != null);
+        if (texture == null) super.extractMenuBackground(extractor);
+        else extractMenuBackgroundTexture(extractor, texture, mouseX, mouseY, 0.0F, 0.0F, this.width, this.height);
     }
-    //?} else >=1.20.2 {
-    /*@Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        assert this.minecraft != null;
-        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
-        if (texture == null) super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        else {
-            guiGraphics.setColor(0.25F, 0.25F, 0.25F, 1);
-            guiGraphics.blit(texture, 0, 0, 0, 0, 0, this.width, this.height, 32, 32);
-            guiGraphics.setColor(1, 1, 1, 1);
-        }
-    }
-    *///?} else >=1.20 {
-    /*@Override
-    public void renderBackground(GuiGraphics guiGraphics) {
-        assert this.minecraft != null;
-        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
-        if (texture == null) super.renderBackground(guiGraphics);
-        else {
-            guiGraphics.setColor(0.25F, 0.25F, 0.25F, 1);
-            guiGraphics.blit(texture, 0, 0, 0, 0, 0, this.width, this.height, 32, 32);
-            guiGraphics.setColor(1, 1, 1, 1);
-        }
-    }
-    *///?} else {
-    /*@Override
-    public void renderBackground(PoseStack poseStack) {
-        assert this.minecraft != null;
-        ResourceLocation texture = this.getBackgroundTexture(this.minecraft.level != null);
-        if (texture == null) super.renderBackground(poseStack);
-        else {
-            RenderSystem.setShaderTexture(0, texture);
-            RenderSystem.setShaderColor(0.25F, 0.25F, 0.25F, 1);
-            blit(poseStack, 0, 0, 0, 0, 0, this.width, this.height, 32, 32);
-            RenderSystem.setShaderColor(1, 1, 1, 1);
-        }
-    }
-    *///?}
 
     @Override
-    public void render(@NotNull /*? >=1.20 {*/GuiGraphics/*?} else {*//*PoseStack*//*?}*/ graphics, int mouseX, int mouseY, float partialTicks) {
-        //? <=1.20.1 {
-        /*this.renderBackground(graphics);
-         *///?}
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void extractRenderState(GuiGraphicsExtractor extractor, int mouseX, int mouseY, float partialTicks) {
+        super.extractRenderState(extractor, mouseX, mouseY, partialTicks);
         String currentText = this.getCurrentEditText();
         int textWidth = this.font.width(currentText);
-        //? >=1.20 {
-        graphics.drawString(this.font, this.getTitle(), 40, 10, -1, true);
-        graphics.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
-        //?} else {
-        /*JupiterRenderContext context = JupiterRenderContext.wrapPoseStack(graphics);
-        context.drawString(this.font, this.getTitle(), 40, 10, -1);
-        context.drawString(this.font, currentText, this.width - textWidth - 10, 10, -1);
-        *///?}
-        this.entryScrollBar.render(graphics, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - this.topBorder - 10, (this.configPerPage + this.entryScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
+        extractor.text(this.font, this.getTitle(), 40, 10, -1, true);
+        extractor.text(this.font, currentText, this.width - textWidth - 10, 10, -1);
+        this.entryScrollBar.render(extractor, mouseX, mouseY, partialTicks, this.width - 18, this.topBorder, 8, this.height - this.topBorder - 10, (this.configPerPage + this.entryScrollBar.getMaxValue()) * (ENTRY_HEIGHT + ENTRY_SEPARATOR));
         if (this.entryScrollBar.isDragging()) this.updateEntryPos();
         ConfigEntry<?> entry = this.getMouseOverEntry(mouseX, mouseY);
         if (entry != null && entry.getTooltip() != null)
-            //? >=1.21.6 {
-            /*graphics.setTooltipForNextFrame(entry.getTooltip(), mouseX, mouseY);
-             *///?} else >=1.19.3 {
-            this.setTooltipForNextRenderPass(entry.getTooltip());
-        //?} else {
-        /*this.renderTooltip(graphics, entry.getTooltip(), mouseX, mouseY);
-         *///?}
+            extractor.setTooltipForNextFrame(entry.getTooltip(), mouseX, mouseY);
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         int button = event.button();
-        *///?} else {
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        //?}
         if (button == 0 && this.entryScrollBar.wasMouseOver()) {
             this.entryScrollBar.setIsDragging(true);
             this.updateEntryPos();
             return true;
         }
-        boolean b = super.mouseClicked(/*? >=1.21.9 {*//*event, isDoubleClick*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        boolean b = super.mouseClicked(event, isDoubleClick);
         if (!b) this.setFocused(null);
         return b;
     }
 
-    //? >=1.21.9 {
-    /*@Override
+    @Override
     public boolean mouseReleased(MouseButtonEvent event) {
         int button = event.button();
-        *///?} else {
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        //?}
         if (button == 0) this.entryScrollBar.setIsDragging(false);
-        return super.mouseReleased(/*? >=1.21.9 {*//*event*//*?} else {*/mouseX, mouseY, button/*?}*/);
+        return super.mouseReleased(event);
     }
 
     protected String getCurrentEditText() {

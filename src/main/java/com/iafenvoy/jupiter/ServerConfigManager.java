@@ -3,11 +3,12 @@ package com.iafenvoy.jupiter;
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.util.CopyOnWriteHashMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.server.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ServerConfigManager implements ResourceManagerReloadListener {
-    private static final Map<ResourceLocation, ServerConfigHolder> CONFIGS = new CopyOnWriteHashMap<>();
+    private static final Map<Identifier, ServerConfigHolder> CONFIGS = new CopyOnWriteHashMap<>();
 
     public static void registerServerConfig(AbstractConfigContainer data, PermissionChecker checker) {
         registerServerConfig(data, checker, false);
@@ -26,13 +27,13 @@ public class ServerConfigManager implements ResourceManagerReloadListener {
     }
 
     @Nullable
-    public static AbstractConfigContainer getConfig(ResourceLocation id) {
+    public static AbstractConfigContainer getConfig(Identifier id) {
         ServerConfigHolder holder = CONFIGS.get(id);
         if (holder == null) return null;
         return holder.data;
     }
 
-    public static boolean checkPermission(ResourceLocation id, MinecraftServer server, ServerPlayer player, boolean modify) {
+    public static boolean checkPermission(Identifier id, MinecraftServer server, ServerPlayer player, boolean modify) {
         ServerConfigHolder holder = CONFIGS.get(id);
         if (holder == null) return false;
         return !modify && holder.allowManualSync || holder.checker.check(server, player);
@@ -54,8 +55,8 @@ public class ServerConfigManager implements ResourceManagerReloadListener {
         PermissionChecker ALWAYS_TRUE = (server, player) -> true;
         PermissionChecker ALWAYS_FALSE = (server, player) -> false;
         PermissionChecker IS_DEDICATE_SERVER = (server, player) -> server.isDedicatedServer();
-        PermissionChecker IS_LOCAL_GAME = (server, player) -> server.isSingleplayerOwner(player./*? >=1.21.9 {*//*nameAndId*//*?} else {*/getGameProfile/*?}*/());
-        PermissionChecker IS_OPERATOR = (server, player) -> IS_LOCAL_GAME.check(server, player) || player.hasPermissions(server./*? >=1.21.9 {*//*operatorUserPermissionLevel*//*?} else {*/getOperatorUserPermissionLevel/*?}*/());
+        PermissionChecker IS_LOCAL_GAME = (server, player) -> server.isSingleplayerOwner(player.nameAndId());
+        PermissionChecker IS_OPERATOR = (server, player) -> IS_LOCAL_GAME.check(server, player) || player.permissions().hasPermission(new Permission.HasCommandLevel(server.operatorUserPermissions().level()));
 
         boolean check(MinecraftServer server, ServerPlayer player);
     }
