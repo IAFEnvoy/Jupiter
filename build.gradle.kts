@@ -89,8 +89,8 @@ tasks.named<ProcessResources>("processResources") {
         this["mod_repo_url"] = project.property("mod.repo_url") as String
         this["mod_license"] = project.property("mod.license") as String
         this["mod_logo"] = project.property("mod.logo") as String
-        this["neoforge_supported_minecraft_versions"] = supportedMinecraftVersions.joinToString(",") { x -> "[${x}]" }
-        this["fabric_supported_minecraft_versions"] =  supportedMinecraftVersions.joinToString(",") { x -> "\"${x}\"" }
+        this["minecraft_version_range_neoforge"] = project.property("deps.minecraft_version_range_neoforge") as String
+        this["minecraft_version_range_fabric"] = project.property("deps.minecraft_version_range_fabric") as String
     }
 
     filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml")) {
@@ -115,17 +115,10 @@ publishMods {
         projectId = property("publish.modrinth") as String
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.addAll(supportedMinecraftVersions)
-        optional("cloth-config")
-        optional("forge-config-api-port")
-        optional("fabric-api")
     }
 
     curseforge {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
-        minecraftVersions.addAll(supportedMinecraftVersions)
-        optional("cloth-config")
-        optional("forge-config-api-port")
-        optional("fabric-api")
     }
 }

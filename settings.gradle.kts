@@ -20,8 +20,8 @@ stonecutter {
             vers(version, version).buildscript = "build.gradle.kts"
         }
 
-        match("26.1")
+        match("26.1.2")
 
-        vcsVersion = "26.1"
+        vcsVersion = "26.1.2"
     }
 }
