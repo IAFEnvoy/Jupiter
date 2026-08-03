@@ -115,5 +115,7 @@ publishMods {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
         minecraftVersions.addAll(supportedMinecraftVersions)
+        clientRequired = true
+        serverRequired = true
     }
 }
