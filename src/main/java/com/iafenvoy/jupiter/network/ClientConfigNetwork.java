@@ -6,6 +6,7 @@ import com.iafenvoy.jupiter.network.payload.ConfigErrorPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigRequestPayload;
 import com.iafenvoy.jupiter.network.payload.ConfigSyncPayload;
 import com.iafenvoy.jupiter.util.Comment;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.nbt.CompoundTag;
@@ -30,20 +31,18 @@ public class ClientConfigNetwork {
     }
 
     public static void init() {
-        JupiterProxies.CLIENT_NETWORKING.registerReceiver(ConfigSyncPayload.TYPE, (client, payload) -> onConfigSync(payload.id(), payload.allow(), payload.compound()));
-        JupiterProxies.CLIENT_NETWORKING.registerReceiver(ConfigErrorPayload.TYPE, (minecraft, buf) -> onConfigError(minecraft));
+        JupiterProxies.CLIENT_NETWORKING.registerReceiver(ConfigSyncPayload.TYPE, (_, payload) -> onConfigSync(payload.id(), payload.allow(), payload.compound()));
+        JupiterProxies.CLIENT_NETWORKING.registerReceiver(ConfigErrorPayload.TYPE, (_, _) -> onConfigError());
     }
 
     private static Runnable onConfigSync(Identifier id, boolean allow, CompoundTag data) {
         Consumer<CompoundTag> callback = CALLBACKS.get(id);
         if (callback == null) return null;
-        if (allow) {
-            return () -> callback.accept(data);
-        } else
-            return () -> callback.accept(null);
+        if (allow) return () -> callback.accept(data);
+        else return () -> callback.accept(null);
     }
 
-    private static Runnable onConfigError(Minecraft minecraft) {
-        return () -> minecraft.getToastManager().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title", new Object[]{}), Component.translatable("jupiter.toast.upload_config_error_content", new Object[]{})));
+    private static Runnable onConfigError() {
+        return () -> MinecraftHelper.getToastManager().addToast(new SystemToast(SystemToast.SystemToastId.WORLD_ACCESS_FAILURE, Component.translatable("jupiter.toast.upload_config_error_title", new Object[]{}), Component.translatable("jupiter.toast.upload_config_error_content", new Object[]{})));
     }
 }

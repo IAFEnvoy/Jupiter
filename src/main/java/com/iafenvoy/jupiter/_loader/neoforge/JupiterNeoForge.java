@@ -14,7 +14,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -30,7 +29,6 @@ public final class JupiterNeoForge {
         JupiterProxies.SERVER_NETWORKING = new NeoForgeServerNetworkHelper();
 
         Jupiter.init(!FMLEnvironment.isProduction());
-        NeoForge.EVENT_BUS.addListener(JupiterNeoForge::registerServerListener);
     }
 
     @SubscribeEvent

@@ -4,6 +4,7 @@ import com.iafenvoy.jupiter.config.entry.MapBaseEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
 import com.iafenvoy.jupiter.render.screen.dialog.MapDialog;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -19,6 +20,6 @@ public class MapWidgetBuilder<T> extends AbstractButtonWidgetBuilder<Map<String,
 
     @Override
     protected Button createButton(Context context, int x, int y, int width, int height) {
-        return JupiterScreen.createButton(x, y, width, height, this.nameSupplier.get(), button -> this.minecraft.setScreen(new MapDialog<>(context.parent(), context.push(this.config.getName()), this.provider, this.config)));
+        return JupiterScreen.createButton(x, y, width, height, this.nameSupplier.get(), _ -> MinecraftHelper.openScreen(new MapDialog<>(context.parent(), context.push(this.config.getName()), this.provider, this.config)));
     }
 }

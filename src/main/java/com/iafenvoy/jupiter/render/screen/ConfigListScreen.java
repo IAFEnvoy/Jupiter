@@ -7,6 +7,7 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.scrollbar.VerticalScrollBar;
 import com.iafenvoy.jupiter.render.widget.WidgetBuilder;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
@@ -117,7 +118,8 @@ public class ConfigListScreen extends Screen implements JupiterScreen {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(this.parent);
+        super.onClose();
+        MinecraftHelper.openScreen(this.parent);
     }
 
     @Nullable

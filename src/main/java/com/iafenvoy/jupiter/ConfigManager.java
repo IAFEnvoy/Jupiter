@@ -2,7 +2,6 @@ package com.iafenvoy.jupiter;
 
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.util.CopyOnWriteHashMap;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -10,11 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ConfigManager implements ResourceManagerReloadListener {
     private static final ConfigManager INSTANCE = new ConfigManager();
 
-    private final Map<Identifier, AbstractConfigContainer> configHandlers = new CopyOnWriteHashMap<>();
+    private final Map<Identifier, AbstractConfigContainer> configHandlers = new ConcurrentHashMap<>();
 
     public static ConfigManager getInstance() {
         return INSTANCE;

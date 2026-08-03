@@ -6,6 +6,7 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.screen.ConfigListScreen;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -17,6 +18,6 @@ public class ConfigGroupWidgetBuilder extends AbstractButtonWidgetBuilder<Config
     @Override
     protected Button createButton(Context context, int x, int y, int width, int height) {
         ConfigGroup group = this.config.getValue();
-        return JupiterScreen.createButton(x, y, width, height, this.nameSupplier.get(), button -> this.minecraft.setScreen(new ConfigListScreen(context.parent(), context.push(group.getName()), this.provider.getConfigId(), group.getConfigs(), this.provider.getSide() == ConfigSide.CLIENT)));
+        return JupiterScreen.createButton(x, y, width, height, this.nameSupplier.get(), _ -> MinecraftHelper.openScreen(new ConfigListScreen(context.parent(), context.push(group.getName()), this.provider.getConfigId(), group.getConfigs(), this.provider.getSide() == ConfigSide.CLIENT)));
     }
 }

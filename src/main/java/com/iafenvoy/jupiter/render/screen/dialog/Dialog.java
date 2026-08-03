@@ -4,6 +4,7 @@ import com.iafenvoy.jupiter.config.interfaces.ConfigEntry;
 import com.iafenvoy.jupiter.config.interfaces.ConfigMetaProvider;
 import com.iafenvoy.jupiter.render.TitleStack;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -43,6 +44,7 @@ public class Dialog<T> extends Screen implements JupiterScreen {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(this.parent);
+        super.onClose();
+        MinecraftHelper.openScreen(this.parent);
     }
 }

@@ -6,6 +6,7 @@ import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
 import com.iafenvoy.jupiter.render.screen.JupiterScreen;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -50,14 +51,14 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
         this.editLocalButton = this.addRenderableWidget(JupiterScreen.createButton(this.width - 205, 25, 80, 20, Component.translatable("jupiter.screen.edit_local", new Object[]{}), button -> {
             JupiterConfigListWidget.Entry handler = this.widget.getSelected();
             if (handler != null)
-                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, handler.getConfigContainer(), false));
+                MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, handler.getConfigContainer(), false));
         }));
         this.editRemoteButton = this.addRenderableWidget(JupiterScreen.createButton(this.width - 120, 25, 80, 20, Component.translatable("jupiter.screen.edit_remote", new Object[]{}), button -> {
             JupiterConfigListWidget.Entry handler = this.widget.getSelected();
             if (handler != null) {
                 AbstractConfigContainer container = handler.getConfigContainer();
                 if (this.remoteCache.containsKey(container))
-                    this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.remoteCache.get(container), false));
+                    MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, this.remoteCache.get(container), false));
             }
         }));
         this.updateButtonState();
@@ -93,6 +94,6 @@ public class JupiterConfigListScreen extends Screen implements JupiterScreen {
     @Override
     public void onClose() {
         super.onClose();
-        this.minecraft.setScreen(this.parent);
+        MinecraftHelper.openScreen(this.parent);
     }
 }

@@ -2,7 +2,6 @@ package com.iafenvoy.jupiter;
 
 import com.iafenvoy.jupiter.compat.ExtraConfigManager;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
-import com.iafenvoy.jupiter.util.CopyOnWriteHashMap;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,9 +13,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerConfigManager implements ResourceManagerReloadListener {
-    private static final Map<Identifier, ServerConfigHolder> CONFIGS = new CopyOnWriteHashMap<>();
+    private static final Map<Identifier, ServerConfigHolder> CONFIGS = new ConcurrentHashMap<>();
 
     public static void registerServerConfig(AbstractConfigContainer data, PermissionChecker checker) {
         registerServerConfig(data, checker, false);

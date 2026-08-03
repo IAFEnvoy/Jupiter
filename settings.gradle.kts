@@ -21,6 +21,7 @@ stonecutter {
         }
 
         match("26.1.2")
+        match("26.2")
 
         vcsVersion = "26.1.2"
     }

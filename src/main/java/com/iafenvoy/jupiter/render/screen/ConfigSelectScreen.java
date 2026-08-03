@@ -4,6 +4,7 @@ import com.iafenvoy.jupiter.Jupiter;
 import com.iafenvoy.jupiter.config.container.AbstractConfigContainer;
 import com.iafenvoy.jupiter.config.container.wrapper.RemoteConfigWrapper;
 import com.iafenvoy.jupiter.network.ClientConfigNetwork;
+import com.iafenvoy.jupiter.util.MinecraftHelper;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -36,20 +37,20 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         int x = this.width / 2;
         int y = this.height / 2;
         //Back
-        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - (this.displayCommon ? 60 : 45), 200, 20, Component.translatable("jupiter.screen.back", new Object[]{}), button -> this.minecraft.setScreen(this.parent)));
+        this.addRenderableWidget(JupiterScreen.createButton(x - 100, y - (this.displayCommon ? 60 : 45), 200, 20, Component.translatable("jupiter.screen.back", new Object[]{}), _ -> MinecraftHelper.openScreen(this.parent)));
 
         final boolean connectedToRemote = JupiterScreen.connectedToDedicatedServer();
 
         if (this.displayCommon) {
             String text = this.common != null ? "jupiter.screen.open_local_common" : "jupiter.screen.unavailable";
-            this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y - 30, 95, 20, Component.translatable("jupiter.screen.local_common_config", new Object[]{}), button -> {
+            this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y - 30, 95, 20, Component.translatable("jupiter.screen.local_common_config", new Object[]{}), _ -> {
                 assert this.common != null;
-                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.common, true));
+                MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, this.common, true));
             }, Component.translatable(text, new Object[]{}))).active = this.common != null;
 
-            Pair<Button, Consumer<Component>> commonPair = JupiterScreen.createButtonWithDynamicTooltip(this, x + 5, y - 30, 95, 20, Component.translatable("jupiter.screen.remote_common_config", new Object[]{}), button -> {
+            Pair<Button, Consumer<Component>> commonPair = JupiterScreen.createButtonWithDynamicTooltip(this, x + 5, y - 30, 95, 20, Component.translatable("jupiter.screen.remote_common_config", new Object[]{}), _ -> {
                 assert this.common != null;
-                this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.common), false));
+                MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.common), false));
             }, Component.translatable("jupiter.screen.unavailable", new Object[]{}));
             this.addRenderableWidget(commonPair.getFirst()).active = this.common != null && connectedToRemote;
             if (this.common != null)
@@ -62,12 +63,12 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         String text1 = this.server != null ? "jupiter.screen.open_local_server" : "jupiter.screen.unavailable";
         this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y - (this.displayCommon ? 0 : 15), 95, 20, Component.translatable("jupiter.screen.local_server_config", new Object[]{}), button -> {
             assert this.server != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.server, true));
+            MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, this.server, true));
         }, Component.translatable(text1, new Object[]{}))).active = this.server != null;
 
         Pair<Button, Consumer<Component>> serverPair = JupiterScreen.createButtonWithDynamicTooltip(this, x + 5, y - (this.displayCommon ? 0 : 15), 95, 20, Component.translatable("jupiter.screen.remove_server_config", new Object[]{}), button -> {
             assert this.server != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.server), false));
+            MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, new RemoteConfigWrapper(this.server), false));
         }, Component.translatable("jupiter.screen.unavailable", new Object[]{}));
         this.addRenderableWidget(serverPair.getFirst()).active = this.server != null && connectedToRemote;
         if (this.server != null)
@@ -79,7 +80,7 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
         String text = this.client != null ? "jupiter.screen.open_client" : "jupiter.screen.unavailable";
         this.addRenderableWidget(JupiterScreen.createButtonWithTooltip(this, x - 100, y + (this.displayCommon ? 30 : 15), 200, 20, Component.translatable("jupiter.screen.client_config", new Object[]{}), button -> {
             assert this.client != null;
-            this.minecraft.setScreen(JupiterScreen.getConfigScreen(this, this.client, true));
+            MinecraftHelper.openScreen(JupiterScreen.getConfigScreen(this, this.client, true));
         }, Component.translatable(text, new Object[]{}))).active = this.client != null;
     }
 
@@ -109,7 +110,8 @@ public class ConfigSelectScreen extends Screen implements JupiterScreen {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(this.parent);
+        super.onClose();
+        MinecraftHelper.openScreen(this.parent);
     }
 
     @Override
